@@ -1,0 +1,12 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+permissions: write-all
+
+jobs:
+  build:
+    uses: './.github/workflows/my-reusable-workflow.yml'
