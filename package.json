@@ -1,6 +1,7 @@
 {
   "name": "wareraapi",
   "version": "1.0.0",
+  "homepage": "https://kallewatsch.github.io/wareraAPI",
   "main": "index.js",
   "scripts": {
     "predeploy": "npm run build",
