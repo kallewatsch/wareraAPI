@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export const initialState = {
-    data: 'miau'
+    data: 'miau',
+    freeMUs: []
 }
 
 export const appSlice = createSlice({
@@ -9,10 +10,15 @@ export const appSlice = createSlice({
     initialState: initialState,
     reducers: {
         setData(state, action) {
-            console.log(action.payload)
             return {
                 ...state,
                 data: action.payload
+            }
+        },
+        setFreeMUs(state, action) {
+            return {
+                ...state,
+                freeMUs: action.payload
             }
         }
     }
@@ -21,6 +27,7 @@ export const appSlice = createSlice({
 
 export const {
     setData,
+    setFreeMUs
 } = appSlice.actions
 
 

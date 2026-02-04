@@ -12,17 +12,19 @@ export const MUs = () => {
 
 
     const handleGetMU = event => {
-        dispatch(setData("soon"))
-        /* getRegionById(data).then(result => {
+        //dispatch(setData("soon"))
+        let data = {muId: "697636e86fe3abaeb1a1c4a6"}
+        getMU(data).then(result => {
             dispatch(setData(result.data.result.data))
-        }) */
+        })
     }
 
     const handleGetMUsPaginated = event => {
-        dispatch(setData("soon"))
-        /* getBattles().then(result => {
+        //dispatch(setData("soon"))
+        let data = {orgId: "6813b6e73e57e0601e792aa9", limit: 20}
+        getMUsPaginated(data).then(result => {
             dispatch(setData(result.data.result.data))
-        }) */
+        })
     }
 
     return <>

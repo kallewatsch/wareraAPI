@@ -21,6 +21,7 @@ import MUs from "./components/MUs"
 import Transactions from "./components/Transactions"
 import Upgrade from "./components/Upgrade"
 import Workers from "./components/Workers"
+import FreeGermanMUs from "./components/FreeGermanMUs"
 
 export const App = () => {
     const [getMuById] = useLazyGetMuByIdQuery()
@@ -51,6 +52,7 @@ export const App = () => {
         <Upgrade />
         <Workers />
         <textarea value={JSON.stringify(dataState.data, null, 2)} cols="80" rows="20" style={{ "width": "100%" }} readOnly/>
+        <div style={{"textAlign": "center"}}><FreeGermanMUs /></div>
     </>
 }
 

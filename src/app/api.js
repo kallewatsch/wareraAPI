@@ -300,13 +300,13 @@ export const wareraApi = createApi({
             }
         }),
         getMusPaginated: builder.query({
-            query: ({ muId }) => {
+            query: (data) => {
                 // TODO: there are multiple params
-                let trpcData = {muId: muId}
+                //let trpcData = {muId: muId}
                 return {
                     url: 'mu.getManyPaginated',
                     method: 'GET',
-                    params: { input: JSON.stringify(trpcData) }
+                    params: { input: JSON.stringify(data) }
                 }
             }
         }),
