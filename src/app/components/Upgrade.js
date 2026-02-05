@@ -1,5 +1,6 @@
 import React from "react"
 import { useDispatch } from 'react-redux'
+import Button from "react-bootstrap/Button"
 import { useLazyGetUpgradeQuery } from "../api"
 import { setData } from "../appSlice"
 
@@ -16,7 +17,7 @@ export const Upgrade = () => {
     }
 
     return <>
-        <button onClick={handleGetUpgrade}>getUpgrade</button>
+        <Button onClick={handleGetUpgrade}>getUpgrade</Button>
     </>
 }
 

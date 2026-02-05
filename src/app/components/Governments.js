@@ -1,25 +1,35 @@
-import React from "react"
+import React, { useState } from "react"
 import { useDispatch } from 'react-redux'
+import InputGroup from "react-bootstrap/InputGroup"
+import Form from "react-bootstrap/Form"
+import Button from "react-bootstrap/Button"
 import { useLazyGetGovernmentByIdQuery } from "../api"
 import { setData } from "../appSlice"
 
 export const Governments = () => {
 
     const [getGovernment] = useLazyGetGovernmentByIdQuery()
+    const [countryId, setCountryId] = useState('')
 
     const dispatch = useDispatch()
-    let data = {
-            countryId: '6813b6d446e731854c7ac79c'
-        }
+
+    const handleChange = event => {
+        setCountryId(event.target.value)
+    }
 
     const handleGetGovernment = event => {
-        getGovernment(data).then(result => {
-            dispatch(setData(result.data.result.data))
+        getGovernment({ countryId }).then(result => {
+            let data = result.error ? result.error : result.data.result.data
+            dispatch(setData(data))
         })
     }
 
     return <>
-        <button onClick={handleGetGovernment}>getGovernment</button>
+        <InputGroup>
+            <Button onClick={handleGetGovernment} disabled={!countryId}>getGovernment</Button>
+            <Form.Control onChange={handleChange} placeholder="Enter Country ID" />
+        </InputGroup>
+
     </>
 }
 

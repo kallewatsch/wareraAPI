@@ -1,5 +1,6 @@
 import React from "react"
 import { useDispatch } from 'react-redux'
+import Button from "react-bootstrap/Button"
 import { useLazyGetBattleByIdQuery, useLazyGetBattleLiveQuery, useLazyGetBattlesQuery } from "../api"
 import { setData } from "../appSlice"
 
@@ -33,9 +34,9 @@ export const Battles = () => {
     }
 
     return <>
-        <button onClick={handleGetBattle}>getBattle</button>
-        <button onClick={handleGetBattleLive}>getBattleLive</button>
-        <button onClick={handleGetBattles}>getBattles</button>
+        <Button onClick={handleGetBattle}>getBattle</Button>
+        <Button onClick={handleGetBattleLive}>getBattleLive</Button>
+        <Button onClick={handleGetBattles}>getBattles</Button>
     </>
 }
 

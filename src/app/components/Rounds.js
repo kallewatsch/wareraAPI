@@ -1,5 +1,6 @@
 import React from "react"
 import { useDispatch } from 'react-redux'
+import Button from "react-bootstrap/Button"
 import { useLazyGetRoundByIdQuery, useLazyGetRoundLastHitsQuery } from "../api"
 import { setData } from "../appSlice"
 
@@ -26,8 +27,8 @@ export const Rounds = () => {
     }
 
     return <>
-        <button onClick={handleGetRegionById}>getRound</button>
-        <button onClick={handleGetRegions}>getRounds</button>
+        <Button onClick={handleGetRegionById}>getRound</Button>
+        <Button onClick={handleGetRegions}>getRounds</Button>
     </>
 }
 

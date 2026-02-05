@@ -1,5 +1,6 @@
 import React from "react"
 import { useDispatch } from 'react-redux'
+import Button from "react-bootstrap/Button"
 import { useLazyGetWorkersQuery, useLazyGetWorkersTotalQuery } from "../api"
 import { setData } from "../appSlice"
 
@@ -25,8 +26,8 @@ export const Workers = () => {
     }
 
     return <>
-        <button onClick={handleGetWorkers}>getWorkers</button>
-        <button onClick={handleGetWorkersTotal}>getWorkersTotal</button>
+        <Button onClick={handleGetWorkers}>getWorkers</Button>
+        <Button onClick={handleGetWorkersTotal}>getWorkersTotal</Button>
     </>
 }
 

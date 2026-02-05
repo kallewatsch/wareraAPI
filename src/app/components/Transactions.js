@@ -1,5 +1,6 @@
 import React from "react"
 import { useDispatch } from 'react-redux'
+import Button from "react-bootstrap/Button"
 import { useLazyGetTransactionsQuery } from "../api"
 import { setData } from "../appSlice"
 
@@ -17,7 +18,7 @@ export const Transactions = () => {
     }
 
     return <>
-        <button onClick={handleGetTransactions}>getTransactions</button>
+        <Button onClick={handleGetTransactions}>getTransactions</Button>
     </>
 }
 

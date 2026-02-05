@@ -1,5 +1,6 @@
 import React from "react"
 import { useDispatch } from 'react-redux'
+import Button from "react-bootstrap/Button"
 import { useLazyGetGameDatesQuery, useLazyGetGameConfigQuery } from "../api"
 import { setData } from "../appSlice"
 
@@ -26,8 +27,8 @@ export const GameConfig = () => {
 
 
     return <>
-        <button onClick={handleGetDates}>getDates</button>
-        <button onClick={handleGetConfig}>getConfig</button>
+        <Button onClick={handleGetDates}>getDates</Button>
+        <Button onClick={handleGetConfig}>getConfig</Button>
     </>
 }
 

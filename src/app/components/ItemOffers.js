@@ -1,23 +1,34 @@
-import React from "react"
+import React, { useState } from "react"
 import { useDispatch } from 'react-redux'
+import InputGroup from "react-bootstrap/InputGroup"
+import Form from "react-bootstrap/Form"
+import Button from "react-bootstrap/Button"
 import { useLazyGetItemOfferQuery } from "../api"
 import { setData } from "../appSlice"
 
 export const ItemOffers = () => {
 
     const [getItemOffer] = useLazyGetItemOfferQuery()
+    const [itemOfferId, setItemOfferId] = useState('')
 
     const dispatch = useDispatch()
 
+    const handleChange = event => {
+        setItemOfferId(event.target.value)
+    }
+
     const handleGetItemOffer = event => {
-        dispatch(setData("soon"))
-        /* getBattles().then(result => {
-            dispatch(setData(result.data.result.data))
-        }) */
+        getItemOffer({}).then(result => {
+            let data = result.error ? result.error : result.data.result.data
+            dispatch(setData(data))
+        })
     }
 
     return <>
-        <button onClick={handleGetItemOffer}>getItemOffer</button>
+        <InputGroup>
+            <Button onClick={handleGetItemOffer} disabled={!itemOfferId}>getItemOffer</Button>
+            <Form.Control onChange={handleChange} placeholder="Enter ItemOffer ID" />
+        </InputGroup>
     </>
 }
 

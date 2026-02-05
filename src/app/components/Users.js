@@ -1,5 +1,6 @@
 import React from "react"
 import { useDispatch } from 'react-redux'
+import Button from "react-bootstrap/Button"
 import { useLazyGetUserQuery, useLazyGetUsersByCountryQuery } from "../api"
 import { setData } from "../appSlice"
 
@@ -25,8 +26,8 @@ export const Users = () => {
     }
 
     return <>
-        <button onClick={handleGetUser}>getUser</button>
-        <button onClick={handleGetUsersByCountry}>getUserByCountry</button>
+        <Button onClick={handleGetUser}>getUser</Button>
+        <Button onClick={handleGetUsersByCountry}>getUserByCountry</Button>
     </>
 }
 

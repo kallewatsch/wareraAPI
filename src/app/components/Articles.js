@@ -1,5 +1,6 @@
 import React from "react"
 import { useDispatch } from 'react-redux'
+import Button from "react-bootstrap/Button"
 import { useLazyGetArticleQuery, useLazyGetArticlesPaginatedQuery } from "../api"
 import { setData } from "../appSlice"
 
@@ -25,8 +26,8 @@ export const Articles = () => {
     }
 
     return <>
-        <button onClick={handleGetArticle}>getArticle</button>
-        <button onClick={handleGetArticlesPaginated}>getArticlesPaginated</button>
+        <Button onClick={handleGetArticle}>getArticle</Button>
+        <Button onClick={handleGetArticlesPaginated}>getArticlesPaginated</Button>
     </>
 }
 

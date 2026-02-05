@@ -1,4 +1,5 @@
 import React from "react"
+import Button from "react-bootstrap/Button"
 import { useDispatch } from 'react-redux'
 import { useLazyGetMuByIdQuery, useLazyGetMusPaginatedQuery } from "../api"
 import { setData } from "../appSlice"
@@ -28,8 +29,8 @@ export const MUs = () => {
     }
 
     return <>
-        <button onClick={handleGetMU}>getMU</button>
-        <button onClick={handleGetMUsPaginated}>getMUsPaginated</button>
+        <Button onClick={handleGetMU}>getMU</Button>
+        <Button onClick={handleGetMUsPaginated}>getMUsPaginated</Button>
     </>
 }
 

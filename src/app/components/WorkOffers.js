@@ -1,5 +1,6 @@
 import React from "react"
 import { useDispatch } from 'react-redux'
+import Button from "react-bootstrap/Button"
 import { useLazyGetWorkOfferQuery, useLazyGetWorkOfferByCompanyQuery, useLazyGetWorkOffersPaginatedQuery } from "../api"
 import { setData } from "../appSlice"
 
@@ -33,9 +34,9 @@ export const WorkOffers = () => {
     }
 
     return <>
-        <button onClick={handleGetWorkOffer}>getWorkOffer</button>
-        <button onClick={handleGetWorkOffersByCompany}>getWorkOfferByCompany</button>
-        <button onClick={handleGetWorkOffersPaginated}>getWorkOffersPaginated</button>
+        <Button onClick={handleGetWorkOffer}>getWorkOffer</Button>
+        <Button onClick={handleGetWorkOffersByCompany}>getWorkOfferByCompany</Button>
+        <Button onClick={handleGetWorkOffersPaginated}>getWorkOffersPaginated</Button>
     </>
 }
 

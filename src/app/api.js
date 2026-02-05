@@ -11,19 +11,16 @@ export const wareraApi = createApi({
     endpoints: (builder) => ({
         getCompanyById: builder.query({
             query: ({ companyId }) => {
-                let trpcData = {companyId: companyId}
                 return {
                     url: 'company.getById',
                     method: 'GET',
-                    params: { input: JSON.stringify(trpcData) }
+                    params: { input: JSON.stringify({companyId}) }
                 }
             }
         }),
         getCompanies: builder.query({
             // TODO: there is multiple paramters
             query: (data) => {
-                //let trpcData = {companyId: companyId}
-                console.log(data)
                 return {
                     url: 'company.getCompanies',
                     method: 'GET',
@@ -33,11 +30,10 @@ export const wareraApi = createApi({
         }),
         getCountryById: builder.query({
             query: ({ countryId }) => {
-                let trpcData = {countryId: countryId}
                 return {
                     url: 'country.getCountryById',
                     method: 'GET',
-                    params: { input: JSON.stringify(trpcData) }
+                    params: { input: JSON.stringify({countryId}) }
                 }
             }
         }),
@@ -51,22 +47,20 @@ export const wareraApi = createApi({
         }),
         getEventsPaginated: builder.query({
             // TODO: theres are multiple parameters
-            query: ({ companyId }) => {
-                let trpcData = {}
+            query: (data) => {
                 return {
                     url: 'event.getEventsPaginated',
                     method: 'GET',
-                    params: { input: JSON.stringify(trpcData) }
+                    params: { input: JSON.stringify(data) }
                 }
             }
         }),
         getGovernmentById: builder.query({
             query: ({ countryId }) => {
-                let trpcData = {countryId: countryId}
                 return {
                     url: 'government.getByCountryId',
                     method: 'GET',
-                    params: { input: JSON.stringify(trpcData) }
+                    params: { input: JSON.stringify({ countryId }) }
                 }
             }
         }),
@@ -160,13 +154,13 @@ export const wareraApi = createApi({
             }
         }),
         getTopOrders: builder.query({
-            query: ({ roundId }) => {
+            query: (data) => {
                 // TODO: there are multiple params
-                let trpcData = {roundId: roundId}
+                //let trpcData = {roundId: roundId}
                 return {
-                    url: 'tradingOrder.getToporders',
+                    url: 'tradingOrder.getTopOrders',
                     method: 'GET',
-                    params: { input: JSON.stringify(trpcData) }
+                    params: { input: JSON.stringify(data) }
                 }
             }
         }),

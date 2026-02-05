@@ -1,5 +1,6 @@
 import React from "react"
 import { useDispatch } from 'react-redux'
+import Button from "react-bootstrap/Button"
 import { useLazyGetRankingQuery } from "../api"
 import { setData } from "../appSlice"
 
@@ -17,7 +18,7 @@ export const Rankings = () => {
     }
 
     return <>
-        <button onClick={handleGetRanking}>getRanking</button>
+        <Button onClick={handleGetRanking}>getRanking</Button>
     </>
 }
 

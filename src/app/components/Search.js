@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { useDispatch } from 'react-redux'
+import Button from "react-bootstrap/Button"
 import { useLazySearchAnythingQuery } from "../api"
 import { setData } from "../appSlice"
 
@@ -15,14 +16,15 @@ export const Search = () => {
     }
 
     const handleSearch = event => {
-        search({searchText}).then(result => {
-            dispatch(setData(result.data.result.data))
+        search({ searchText }).then(result => {
+            let data = result.error ? result.error : result.data.result.data
+            dispatch(setData(data))
         })
     }
 
     return <>
         <input type="text" onChange={handleChange} />
-        <button onClick={handleSearch}>search</button>
+        <Button onClick={handleSearch}>search</Button>
     </>
 }
 

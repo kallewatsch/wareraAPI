@@ -1,5 +1,8 @@
-import React from "react"
+import React, { useState } from "react"
 import { useDispatch } from 'react-redux'
+import InputGroup from "react-bootstrap/InputGroup"
+import Form from "react-bootstrap/Form"
+import Button from "react-bootstrap/Button"
 import { useLazyGetRegionByIdQuery, useLazyGetRegionsQuery } from "../api"
 import { setData } from "../appSlice"
 
@@ -7,10 +10,12 @@ export const Regions = () => {
 
     const [getRegions] = useLazyGetRegionsQuery()
     const [getRegionById] = useLazyGetRegionByIdQuery()
+    const [regionId, setRegionId] = useState('')
 
     const dispatch = useDispatch()
-    let data = {
-            regionId: '6813b7049403bc4170a5d6de'
+
+    const handleChange = event => {
+        setRegionId(event.target.value)
     }
 
     const handleGetRegions = event => {
@@ -20,14 +25,19 @@ export const Regions = () => {
     }
 
     const handleGetRegionById = event => {
-        getRegionById(data).then(result => {
-            dispatch(setData(result.data.result.data))
+        getRegionById({ regionId }).then(result => {
+            let data = result.error ? result.error : result.data.result.data
+            dispatch(setData(data))
         })
     }
 
     return <>
-        <button onClick={handleGetRegionById}>getRegion</button>
-        <button onClick={handleGetRegions}>getRegions</button>
+        <InputGroup>
+            <Button onClick={handleGetRegionById} disabled={!regionId}>getRegion</Button>
+            <Form.Control onChange={handleChange} placeholder="Enter Region ID" />
+        </InputGroup>
+
+        <Button onClick={handleGetRegions}>getRegions</Button>
     </>
 }
 
