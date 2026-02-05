@@ -1,15 +1,13 @@
 const webpack = require('webpack');
-//require('dotenv').config({ path: './.env' });
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 //const CopyPlugin = require("copy-webpack-plugin");
 
 //const isProd = false
 
-module.exports = (env, argv ) => ({
+module.exports = {
     //devtool: isProd ? false : 'source-map',
     output: {
-        publicPath: argv.mode === 'production' ? '/wareraAPI' : '/',
         path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js'
     },
@@ -56,15 +54,7 @@ module.exports = (env, argv ) => ({
     plugins: [
         new HtmlWebPackPlugin({
             template: './src/index.html',
-        })/* ,
-        new webpack.DefinePlugin({
-            "process.env": JSON.stringify(process.env),
-        }),
-        new CopyPlugin({
-            patterns: [
-                { from: "public" }
-            ]
-        }) */
+        })
     ],
     watchOptions: {
         poll: 1000, // Check for changes every second
@@ -80,4 +70,4 @@ module.exports = (env, argv ) => ({
         },
         historyApiFallback: true
     }
-});
+};
