@@ -6,9 +6,10 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 //const isProd = false
 
-module.exports = {
+module.exports = (env, argv ) => ({
     //devtool: isProd ? false : 'source-map',
     output: {
+        publicPath: argv.mode === 'production' ? '/wareraAPI' : '/',
         path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js'
     },
@@ -79,4 +80,4 @@ module.exports = {
         },
         historyApiFallback: true
     }
-};
+});
