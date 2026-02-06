@@ -7,7 +7,7 @@ import { useLazyGetMusPaginatedQuery, useLazyGetUserQuery, useLazyGetUsersByCoun
 import { addMus, setData, setFreeMUs, setIsLoading, setUsers, addUsers } from "../appSlice"
 
 
-export const FreeGermanMUs = () => {
+export const FreeMUs = () => {
 
     const [getMUsPaginated] = useLazyGetMusPaginatedQuery()
     const [getUsersPaginated] = useLazyGetUsersByCountryQuery()
@@ -65,7 +65,7 @@ export const FreeGermanMUs = () => {
         dispatch(setFreeMUs(freeMUs))
     }
 
-    const countryOptions = countries && countries.result.data.map((country, i) => <option key={`country-${i}`} value={country._id}>{country.name}</option>)
+    const countryOptions = countries && countries.map((country, i) => <option key={`country-${i}`} value={country._id}>{country.name}</option>)
 
     return <>
         <InputGroup>
@@ -82,4 +82,4 @@ export const FreeGermanMUs = () => {
 
 }
 
-export default FreeGermanMUs
+export default FreeMUs

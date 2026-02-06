@@ -28,7 +28,7 @@ import MUs from "./components/MUs"
 import Transactions from "./components/Transactions"
 import Upgrade from "./components/Upgrade"
 import Workers from "./components/Workers"
-import FreeGermanMUs from "./components/FreeGermanMUs"
+import FreeMUs from "./components/FreeMUs"
 import Navigation from "./components/Navigation"
 import Home from "./components/Home"
 
@@ -45,7 +45,7 @@ const router = createHashRouter(
         },
         {
             path: "/freemus",
-            element: <FreeGermanMUs />
+            element: <FreeMUs />
         },
         {
             path: "/search",
@@ -141,7 +141,8 @@ export const App = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(setCountries(countries))
+        if (!countries) return;
+        dispatch(setCountries(countries.result.data))
     }, [countries])
 
     return <>
