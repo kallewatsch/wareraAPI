@@ -13,6 +13,7 @@ export const FreeMUs = () => {
     const [getUsersPaginated] = useLazyGetUsersByCountryQuery()
     const { data: dataState, countries, isLoading, mus, freeMUs, users } = useSelector(state => state.app)
     const [countryId, setCountryId] = useState('')
+    const [countryName, setCountryName] = useState('')
     const dispatch = useDispatch()
 
 
@@ -48,6 +49,7 @@ export const FreeMUs = () => {
     const handleChangeCountry = event => {
         dispatch(setUsers([]))
         setCountryId(event.target.value)
+        setCountryName(event.target.options[event.target.selectedIndex].text)
     }
 
     const handleGetFreeMus = event => {
@@ -59,9 +61,6 @@ export const FreeMUs = () => {
             let slots = `${item.members.length}/${item.activeUpgradeLevels.dormitories*5}`
             return { url: `https://app.warera.io/mu/${item._id}`, name: item.name, slots }
         })
-
-        
-
         dispatch(setFreeMUs(freeMUs))
     }
 
@@ -69,12 +68,14 @@ export const FreeMUs = () => {
 
     return <>
         <InputGroup>
-            <Button onClick={handleGetFreeMus} variant={isLoading ? 'warning' : 'success'} disabled={isLoading || !countryId}>{isLoading ? 'loading' : 'getFreeMUs'}</Button>
+            <Button onClick={handleGetFreeMus} variant={isLoading ? 'warning' : 'success'}
+                disabled={isLoading || !countryId}>{isLoading ? 'loading' : countryId ? 'show' : 'select country'}</Button>
             <Form.Select value={countryId} onChange={handleChangeCountry}>
                 <option>Select Country</option>
                 {countryOptions}
             </Form.Select>
         </InputGroup>
+        {freeMUs && countryId && <h3>There are {freeMUs.length} MUs with free slots for country {countryName}</h3>}
         <ul>
             {freeMUs.map((mu, i) => (<li key={i}><a href={mu.url} target="_blank">{mu.name} | {mu.slots}</a></li>))}
         </ul>
