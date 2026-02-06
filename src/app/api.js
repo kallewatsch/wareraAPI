@@ -252,13 +252,12 @@ export const wareraApi = createApi({
             }
         }),
         getUsersByCountry: builder.query({
-            query: ({ userId}) => {
+            query: (data) => {
                 // TODO: there are multiple params
-                let trpcData = {userId: userId}
                 return {
                     url: 'user.getUsersByCountry',
                     method: 'GET',
-                    params: { input: JSON.stringify(trpcData) }
+                    params: { input: JSON.stringify(data) }
                 }
             }
         }),
@@ -355,6 +354,7 @@ export const {
     useLazyGetCompaniesQuery,
     useLazyGetCountryByIdQuery,
     useLazyGetAllCountriesQuery,
+    useGetAllCountriesQuery,
     useLazyGetEventsPaginatedQuery,
     useLazyGetGovernmentByIdQuery,
     useLazyGetRegionByIdQuery,
@@ -377,6 +377,7 @@ export const {
     useLazyGetGameConfigQuery,
     useLazyGetUserQuery,
     useLazyGetUsersByCountryQuery,
+    useGetUsersByCountryQuery,
     useLazyGetArticleQuery,
     useLazyGetArticlesPaginatedQuery,
     useLazyGetMuByIdQuery,

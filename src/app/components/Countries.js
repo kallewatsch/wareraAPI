@@ -1,43 +1,31 @@
-import React, { useState } from "react"
-import { useDispatch } from 'react-redux'
+import React from "react"
+import { useDispatch, useSelector } from 'react-redux'
 import InputGroup from "react-bootstrap/InputGroup"
 import Form from "react-bootstrap/Form"
-import Button from "react-bootstrap/Button"
-import { useLazyGetCountryByIdQuery, useLazyGetAllCountriesQuery } from "../api"
+import { useLazyGetCountryByIdQuery, useGetAllCountriesQuery } from "../api"
 import { setData } from "../appSlice"
 
 export const Countries = () => {
 
-    const [getCountries] = useLazyGetAllCountriesQuery()
     const [getCountryById] = useLazyGetCountryByIdQuery()
-    const [countryId, setCountryId] = useState('')
-
+    const { countries } = useSelector(state => state.app)
     const dispatch = useDispatch()
 
     const handleChange = event => {
-        setCountryId(event.target.value)
-    }
-
-    const handleGetCountryById = event => {
-        getCountryById({countryId}).then(result => {
-            let data = result.error ? result.error : result.data.result.data
-            dispatch(setData(data))
-        })
-    }
-
-    const handleGetCountries = event => {
-        getCountries().then(result => {
+        getCountryById({ countryId: event.target.value }).then(result => {
             let data = result.error ? result.error : result.data.result.data
             dispatch(setData(data))
         })
     }
 
     return <>
+
         <InputGroup>
-            <Button onClick={handleGetCountryById} disabled={!countryId}>getCountryById</Button>
-            <Form.Control onChange={handleChange} placeholder="Enter Country ID" />
+            <Form.Select onChange={handleChange}>
+                <option value="">Select Country</option>
+                {countries && countries.result.data.map((item, i) => <option value={item._id} key={`countryCode-${i}`}>{item.name}</option>)}
+            </Form.Select>
         </InputGroup>
-        <Button onClick={handleGetCountries}>getCountries</Button>
     </>
 }
 

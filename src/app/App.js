@@ -1,9 +1,12 @@
-import React from "react"
+import React, { useEffect } from "react"
 import {
     createHashRouter,
     RouterProvider
 } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import Accordion from "react-bootstrap/Accordion"
+import { useGetAllCountriesQuery } from "./api"
+import { setCountries } from "./appSlice"
 import Search from "./components/Search"
 import Companies from "./components/Companies"
 import Countries from "./components/Countries"
@@ -27,6 +30,8 @@ import Upgrade from "./components/Upgrade"
 import Workers from "./components/Workers"
 import FreeGermanMUs from "./components/FreeGermanMUs"
 import Navigation from "./components/Navigation"
+import Home from "./components/Home"
+
 
 const router = createHashRouter(
     [
@@ -36,6 +41,10 @@ const router = createHashRouter(
         }, */
         {
             path: "/",
+            element: <Home />
+        },
+        {
+            path: "/freemus",
             element: <FreeGermanMUs />
         },
         {
@@ -127,13 +136,26 @@ const router = createHashRouter(
 
 export const App = () => {
 
+    const { data: countries, error, isLoading } = useGetAllCountriesQuery()
     const dataState = useSelector(state => state.app)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setCountries(countries))
+    }, [countries])
 
     return <>
         <Navigation />
         <RouterProvider router={router} />
-        <textarea value={JSON.stringify(dataState.data, null, 2)} cols="80" rows="20" style={{ "width": "100%" }} readOnly />
+        <Accordion>
+            <Accordion.Item eventKey="0">
+                <Accordion.Header>Show JSON Data</Accordion.Header>
+                <Accordion.Body>
+                    <textarea value={JSON.stringify(dataState.data, null, 2)} cols="80" rows="20" style={{ "width": "100%" }} readOnly />
+                </Accordion.Body>
+            </Accordion.Item>
+        </Accordion>
         </>
 }
 
-export default App
+        export default App
