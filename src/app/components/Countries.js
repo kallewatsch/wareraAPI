@@ -23,7 +23,7 @@ export const Countries = () => {
         <InputGroup>
             <Form.Select onChange={handleChange}>
                 <option value="">Select Country</option>
-                {countries && countries.result.data.map((item, i) => <option value={item._id} key={`countryCode-${i}`}>{item.name}</option>)}
+                {countries && countries.map((item, i) => <option value={item._id} key={`countryCode-${i}`}>{item.name}</option>)}
             </Form.Select>
         </InputGroup>
     </>
