@@ -14,8 +14,12 @@ export const Regions = () => {
 
     const dispatch = useDispatch()
 
+    /* const handleSelect = eventKey => {
+        console.log(event)
+    } */
+
     const handleSetActiveKeyAndScroll = key => {
-        if (key == activeKey) {
+        if (key == activeKey || !key) {
             setActiveKey("")
         } else {
             setActiveKey(key)
@@ -47,7 +51,7 @@ export const Regions = () => {
 
     return <>
         <Button onClick={handleGetRegions}>getRegions</Button>
-        <Accordion activeKey={activeKey}>
+        <Accordion activeKey={activeKey} onSelect={handleSetActiveKeyAndScroll}>
             {sortedRegions.map((region, i) => {
                 let regionProps = Object.assign({}, { ...region }, {setActiveKeyAndScroll: handleSetActiveKeyAndScroll })
                 return <Region key={i} {...regionProps} />
