@@ -3,6 +3,7 @@ import { useSelector } from "react-redux"
 import Accordion from "react-bootstrap/Accordion"
 import ListGroup from "react-bootstrap/ListGroup"
 import ListGroupItem from "react-bootstrap/ListGroupItem"
+import SimpleStats from "./SimpleStats"
 
 /* 
 {
@@ -61,7 +62,7 @@ import ListGroupItem from "react-bootstrap/ListGroupItem"
 
 
 export const Region = (props) => {
-    const { name, mainCity, neighbors, country, initialCountry, setActiveKeyAndScroll } = props
+    const { name, mainCity, neighbors, country, initialCountry, setActiveKeyAndScroll, ...todoProps } = props
     const { regions, countries } = useSelector(state => state.app)
     const neighborNames = regions && neighbors.map(n => regions[n].name)
     const countryCurrent = countries && countries.find(c => c._id == country)
@@ -77,6 +78,7 @@ export const Region = (props) => {
                 <ListGroup>
                     {neighborNames.map((name, i) => <Accordion.Button key={i} as={ListGroupItem} onClick={() => setActiveKeyAndScroll(name.replace(/\s/g, ""))}>{name}</Accordion.Button>)}
                 </ListGroup>
+                <SimpleStats {...todoProps} />
             </Accordion.Body>
         </Accordion.Item>
     )
