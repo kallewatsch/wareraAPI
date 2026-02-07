@@ -1,43 +1,58 @@
 import React, { useState } from "react"
-import { useDispatch } from 'react-redux'
-import InputGroup from "react-bootstrap/InputGroup"
-import Form from "react-bootstrap/Form"
+import { useSelector, useDispatch } from 'react-redux'
 import Button from "react-bootstrap/Button"
-import { useLazyGetRegionByIdQuery, useLazyGetRegionsQuery } from "../api"
-import { setData } from "../appSlice"
+import Accordion from "react-bootstrap/Accordion"
+import { useLazyGetRegionsQuery } from "../api"
+import { setRegions } from "../appSlice"
+import Region from "./Region"
 
 export const Regions = () => {
 
-    const [getRegions] = useLazyGetRegionsQuery()
-    const [getRegionById] = useLazyGetRegionByIdQuery()
-    const [regionId, setRegionId] = useState('')
+    const [getRegions, { data: regionsData, error: regionsError, isLoading: regionsIsLoading }] = useLazyGetRegionsQuery()
+    const { regions } = useSelector(state => state.app)
+    const [activeKey, setActiveKey] = useState()
 
     const dispatch = useDispatch()
 
-    const handleChange = event => {
-        setRegionId(event.target.value)
+    const handleSetActiveKeyAndScroll = key => {
+        if (key == activeKey) {
+            setActiveKey("")
+        } else {
+            setActiveKey(key)
+            setTimeout(() => {
+                const el = document.getElementById(key)
+                el.scrollIntoView({
+                    behavior: "smooth",
+                    block: "end",
+                    inline: "nearest",
+                })
+            }, 500)
+        }
     }
 
-    const handleGetRegions = event => {
-        getRegions().then(result => {
-            dispatch(setData(result.data.result.data))
-        })
+    const handleGetRegions = async event => {
+        try {
+            const { result: { data: regions } } = await getRegions().unwrap()
+            dispatch(setRegions(regions))
+        } catch (err) {
+            console.log(err)
+        } finally {
+            console.log("done")
+        }
     }
 
-    const handleGetRegionById = event => {
-        getRegionById({ regionId }).then(result => {
-            let data = result.error ? result.error : result.data.result.data
-            dispatch(setData(data))
-        })
-    }
+    const sortedRegions = regions && Object.keys(regions)
+        .map(region => regions[region])
+        .sort((a, b) => a.code > b.code ? 1 : a.code < b.code ? -1 : 0)
 
     return <>
-        <InputGroup>
-            <Button onClick={handleGetRegionById} disabled={!regionId}>getRegion</Button>
-            <Form.Control onChange={handleChange} placeholder="Enter Region ID" />
-        </InputGroup>
-
         <Button onClick={handleGetRegions}>getRegions</Button>
+        <Accordion activeKey={activeKey}>
+            {sortedRegions.map((region, i) => {
+                let regionProps = Object.assign({}, { ...region }, {setActiveKeyAndScroll: handleSetActiveKeyAndScroll })
+                return <Region key={i} {...regionProps} />
+            })}
+        </Accordion>
     </>
 }
 
