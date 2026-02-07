@@ -1,31 +1,36 @@
-import React from "react"
+import React, { useState } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import InputGroup from "react-bootstrap/InputGroup"
 import Form from "react-bootstrap/Form"
 import { useLazyGetCountryByIdQuery, useGetAllCountriesQuery } from "../api"
 import { setData } from "../appSlice"
+import SimpleStats from "./SimpleStats"
 
 export const Countries = () => {
 
     const [getCountryById] = useLazyGetCountryByIdQuery()
     const { countries } = useSelector(state => state.app)
+    const [countryId, setCountryId] = useState('')
     const dispatch = useDispatch()
 
     const handleChange = event => {
-        getCountryById({ countryId: event.target.value }).then(result => {
-            let data = result.error ? result.error : result.data.result.data
-            dispatch(setData(data))
-        })
+        setCountryId(event.target.value)
     }
 
-    return <>
+    const country = countries && countries.find(country => country._id == countryId)
 
+    return <>
         <InputGroup>
-            <Form.Select onChange={handleChange}>
+            <Form.Select onChange={handleChange} value={countryId}>
                 <option value="">Select Country</option>
                 {countries && countries.map((item, i) => <option value={item._id} key={`countryCode-${i}`}>{item.name}</option>)}
             </Form.Select>
         </InputGroup>
+        {country && <><img
+            alt={country.name}
+            src={`https://app.warera.io/images/flags/${country.code}.svg?v=16`} />
+            <span>{country.name}</span>
+            <SimpleStats {...country} /></>}
     </>
 }
 
