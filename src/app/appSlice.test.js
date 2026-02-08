@@ -24,20 +24,28 @@ describe("appSlice", () => {
             companies: []
         })
     })
-    /* it("should return initialState", () => {
+    it("should return initialState", () => {
         expect(reducer(undefined, {})).toEqual(initialState)
     })
-    it("should handle setLoggedIn", () => {
-        expect(reducer(initialState, setLoggedIn(true))).toEqual({
+    it("should handle setData", () => {
+        let foo = {bar: 'baz'}
+        expect(reducer(initialState, setData(foo))).toEqual({
             ...initialState,
-            loggedIn: true
+            data: foo
         })
     })
-    it("should handle setAccessToken", () => {
-        const token = 'foo'
-        expect(reducer(initialState, setAccessToken(token))).toEqual({
+    it("should handle setFreeMUs", () => {
+        const mus = []
+        expect(reducer(initialState, setFreeMUs(mus))).toEqual({
             ...initialState,
-            accessToken: token
+            freeMUs: mus
         })
-    }) */
+    })
+    it("should handle setCountries", () => {
+        const data = [{foo: 'bar'}, {abc: '123'}]
+        expect(reducer(initialState, setCountries(data))).toEqual({
+            ...initialState,
+            countries: data
+        })
+    })
 })

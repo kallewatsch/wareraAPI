@@ -16,7 +16,8 @@ const routes = [
     "prices",
     "tradingorders",
     "itemoffers",
-    "mus"
+    "mus",
+    "warplaner"
 ]
 
 const disabledRoutes = [

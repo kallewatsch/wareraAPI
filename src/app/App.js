@@ -32,6 +32,7 @@ import Workers from "./components/Workers"
 import FreeMUs from "./components/FreeMUs"
 import Navigation from "./components/Navigation"
 import Home from "./components/Home"
+import WarPlaner from "./components/WarPlaner"
 
 
 const router = createHashRouter(
@@ -131,6 +132,10 @@ const router = createHashRouter(
         {
             path: "/workers",
             element: <Workers />
+        },
+        {
+            path: "/warplaner",
+            element: <WarPlaner />
         }
     ]
 )
@@ -150,14 +155,14 @@ export const App = () => {
         <Container>
             <Navigation />
             <RouterProvider router={router} />
-            <Accordion>
+            {/* <Accordion>
                 <Accordion.Item eventKey="0">
                     <Accordion.Header>Show JSON Data</Accordion.Header>
                     <Accordion.Body>
                         <textarea value={JSON.stringify(dataState.data, null, 2)} cols="80" rows="20" style={{ "width": "100%" }} readOnly />
                     </Accordion.Body>
                 </Accordion.Item>
-            </Accordion>
+            </Accordion> */}
         </Container>
     )
 
