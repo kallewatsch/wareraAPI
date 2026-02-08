@@ -5,7 +5,9 @@ export const SimpleStats = props => {
 
     return (
         <Table>
-            {Object.keys(props).map((key,i) =><tr><td>{key}</td><td><pre>{JSON.stringify(props[key], null, 2)}</pre></td></tr>)}
+            <tbody>
+                {Object.keys(props).map((key, i) => <tr key={i}><td>{key}</td><td><pre>{JSON.stringify(props[key], null, 2)}</pre></td></tr>)}
+            </tbody>
         </Table>
     )
 
