@@ -7,7 +7,8 @@ export const initialState = {
     mus: [],
     isLoading: false,
     users: [],
-    regions: []
+    regions: [],
+    companies: []
 }
 
 export const appSlice = createSlice({
@@ -63,6 +64,12 @@ export const appSlice = createSlice({
                 ...state,
                 regions: action.payload
             }
+        },
+        setCompanies(state, action) {
+            return {
+                ...state,
+                companies: action.payload
+            }
         }
     }
 })
@@ -76,7 +83,8 @@ export const {
     setIsLoading,
     setUsers,
     addUsers,
-    setRegions
+    setRegions,
+    setCompanies
 } = appSlice.actions
 
 
