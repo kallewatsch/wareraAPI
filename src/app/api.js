@@ -326,13 +326,11 @@ export const wareraApi = createApi({
             }
         }),
         getWorkers: builder.query({
-            query: ({ muId }) => {
-                // TODO: there are multiple params
-                let trpcData = {muId: muId}
+            query: (data) => {
                 return {
                     url: 'worker.getWorkers',
                     method: 'GET',
-                    params: { input: JSON.stringify(trpcData) }
+                    params: { input: JSON.stringify(data) }
                 }
             }
         }),
@@ -384,6 +382,7 @@ export const {
     useLazyGetMusPaginatedQuery,
     useLazyGetTransactionsQuery,
     useLazyGetUpgradeQuery,
+    useGetWorkersQuery,
     useLazyGetWorkersQuery,
     useLazyGetWorkersTotalQuery
 } = wareraApi

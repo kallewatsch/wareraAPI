@@ -4,6 +4,7 @@ import {
     RouterProvider
 } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
+import Container from "react-bootstrap/Container"
 import Accordion from "react-bootstrap/Accordion"
 import { useGetAllCountriesQuery } from "./api"
 import { setCountries } from "./appSlice"
@@ -145,18 +146,21 @@ export const App = () => {
         dispatch(setCountries(countries.result.data))
     }, [countries])
 
-    return <>
-        <Navigation />
-        <RouterProvider router={router} />
-        <Accordion>
-            <Accordion.Item eventKey="0">
-                <Accordion.Header>Show JSON Data</Accordion.Header>
-                <Accordion.Body>
-                    <textarea value={JSON.stringify(dataState.data, null, 2)} cols="80" rows="20" style={{ "width": "100%" }} readOnly />
-                </Accordion.Body>
-            </Accordion.Item>
-        </Accordion>
-        </>
+    return (
+        <Container>
+            <Navigation />
+            <RouterProvider router={router} />
+            <Accordion>
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header>Show JSON Data</Accordion.Header>
+                    <Accordion.Body>
+                        <textarea value={JSON.stringify(dataState.data, null, 2)} cols="80" rows="20" style={{ "width": "100%" }} readOnly />
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
+        </Container>
+    )
+
 }
 
-        export default App
+export default App
