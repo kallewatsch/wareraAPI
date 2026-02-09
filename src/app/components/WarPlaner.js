@@ -1,11 +1,13 @@
 import React, { useState } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import Col from "react-bootstrap/Col"
 import Row from "react-bootstrap/Row"
 import Button from "react-bootstrap/Button"
 import Modal from "react-bootstrap/Modal"
 import InputGroup from "react-bootstrap/InputGroup"
 import Form from "react-bootstrap/Form"
-import { useSelector } from "react-redux"
+import WarPlanerCompare from "./WarPlanerCompare"
+import { setWarPlaner } from "../appSlice"
 
 
 export const foo = (arr, key, val, target) => {
@@ -14,6 +16,18 @@ export const foo = (arr, key, val, target) => {
     return res[target] || val
 }
 
+export const getAllies = countries => {
+    return countries.map(country => country.allies)
+        .flat()
+        .reduce((unique, item) => unique.includes(item) ? unique : [...unique, item], [])
+}
+
+export const getNations = (countries, idsFriendly, idsHostile) => {
+    const nations = countries.filter(country => idsFriendly.some(id => id == country._id))
+    const alliesIds = getAllies(nations)
+    const alliesIdsClean = alliesIds.filter(item => idsHostile.every(id => id != item))
+    return [...nations, ...countries.filter(country => alliesIdsClean.some(id => id == country._id))]
+}
 
 export const MyModal = props => {
 
@@ -36,7 +50,11 @@ export const MyModal = props => {
             <Modal.Body>
                 <Form.Select onChange={handleChange}>
                     <option value="">Select Country</option>
-                    {countries.map((country, i) => <option key={i} value={country._id}>{country.name}</option>)}
+                    {countries
+                        .sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
+                        .map((country, i) =>
+                            <option key={i} value={country._id}>{country.name}</option>
+                        )}
                 </Form.Select>
             </Modal.Body>
             <Modal.Footer>
@@ -54,15 +72,13 @@ export const MyModal = props => {
 
 export const WarPlaner = () => {
 
-    const { countries } = useSelector(state => state.app)
+    const { countries, warplaner } = useSelector(state => state.app)
     const [showAttackers, setShowAttackers] = useState(false)
     const [attackers, setAttackers] = useState([])
     const [showDefenders, setShowDefenders] = useState(false)
     const [defenders, setDefenders] = useState([])
 
-    const handleCloseAttackersModal = event => {
-        setShowAttackers(false)
-    }
+    const dispatch = useDispatch()
 
     const addAttacker = attacker => {
         setAttackers([...attackers, attacker])
@@ -86,6 +102,26 @@ export const WarPlaner = () => {
         setDefenders([...updatedDefenders])
     }
 
+    const handleCompare = event => {
+
+        const allAttackers = getNations(countries, attackers, defenders)
+        const allDefenders = getNations(countries, defenders, attackers)
+        dispatch(setWarPlaner({
+            attackers: {
+                ids: attackers,
+                countries: allAttackers
+            },
+            defenders: {
+                ids: defenders,
+                countries: allDefenders
+            }
+        }))
+
+        /* const weeklyDamgeAttackers = allAttackers.reduce((acc, cur) => acc + cur.rankings.weeklyCountryDamages.value, 0)
+        const weeklyDamageDefenders = allDefenders.reduce((acc, cur) => acc + cur.rankings.weeklyCountryDamages.value, 0) */
+    }
+
+
     const remainigCountries = countries && countries.filter(country =>
         attackers.every(id => id != country._id) && defenders.every(id => id != country._id)
     )
@@ -102,36 +138,50 @@ export const WarPlaner = () => {
 
     return (
         <>
-            <Row>
-                <Col>
-                    <h5>Attackers</h5>
-                    {attackers && attackers.map((x, i) => {
-                        return (
-                            <InputGroup key={i}>
-                                <InputGroup.Text>{foo(countries, '_id', x, 'name')}</InputGroup.Text>
-                                <Button onClick={() => removeAttacker()}>remove</Button>
-                            </InputGroup>
-                        )
-                    })}
-                    <Button onClick={() => setShowAttackers(true)}>Add Attacker</Button>
-                </Col>
-                <Col>
-                    <h5>Defenders</h5>
-                    {defenders && defenders.map((x, i) => {
-                        return (
-                            <InputGroup key={i}>
-                                <InputGroup.Text>{foo(countries, '_id', x, 'name')}</InputGroup.Text>
-                                <Button onClick={() => removeDefender()}>remove</Button>
-                            </InputGroup>
-                        )
-                    })}
-                    <Button onClick={() => setShowDefenders(true)}>Add Defender</Button>
-                </Col>
-            </Row>
-            <Row>
-                <Button disabled={!attackers.length || !defenders.length}>Compare</Button>
-                <p><b>TODO: move state to redux, component to show useful attacker/defenders data</b></p>
-            </Row>
+
+            {!warplaner.attackers.ids.length || !warplaner.defenders.ids.length
+                ? (
+                    <>
+                        <Row>
+                            <Col>
+                                <h5>Attackers</h5>
+                                {attackers && attackers.map((x, i) => {
+                                    return (
+                                        <InputGroup key={i}>
+                                            <InputGroup.Text>{foo(countries, '_id', x, 'name')}</InputGroup.Text>
+                                            <Button onClick={() => removeAttacker()}>remove</Button>
+                                        </InputGroup>
+                                    )
+                                })}
+                                <Button onClick={() => setShowAttackers(true)}>Add Attacker</Button>
+                            </Col>
+                            <Col>
+                                <h5>Defenders</h5>
+                                {defenders && defenders.map((x, i) => {
+                                    return (
+                                        <InputGroup key={i}>
+                                            <InputGroup.Text>{foo(countries, '_id', x, 'name')}</InputGroup.Text>
+                                            <Button onClick={() => removeDefender()}>remove</Button>
+                                        </InputGroup>
+                                    )
+                                })}
+                                <Button onClick={() => setShowDefenders(true)}>Add Defender</Button>
+                            </Col>
+                        </Row>
+                        <Row><Col>
+                            <Button disabled={!attackers.length || !defenders.length} onClick={handleCompare}>Compare</Button>
+                        </Col></Row>
+                    </>
+                )
+                : (
+                    <WarPlanerCompare attackers={warplaner.attackers}
+                        defenders={warplaner.defenders} />
+                )
+            }
+
+            {/* <Button disabled={!attackers.length || !defenders.length} onClick={handleCompareNations}>Compare</Button> */}
+            <p><b>TODO: what about allies which are defenders and attackers at the same time?</b></p>
+
             <MyModal {...attackersModalProps} />
             <MyModal {...defendersModalProps} />
         </>

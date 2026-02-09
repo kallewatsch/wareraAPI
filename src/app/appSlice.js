@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { initialStateWarplaner } from '../mocks/initialStateWarplaner'
 
 export const initialState = {
     data: 'miau',
@@ -8,7 +9,17 @@ export const initialState = {
     isLoading: false,
     users: [],
     regions: [],
-    companies: []
+    companies: [],
+    warplaner: /* initialStateWarplaner */{
+        attackers: {
+            ids: [],
+            countries: []
+        },
+        defenders: {
+            ids: [],
+            countries: []
+        }
+    }
 }
 
 export const appSlice = createSlice({
@@ -70,6 +81,21 @@ export const appSlice = createSlice({
                 ...state,
                 companies: action.payload
             }
+        },
+        setWarPlaner(state, action) {
+            return {
+                ...state,
+                warplaner: action.payload
+            }
+        },
+        resetWarPlaner(state, action) {
+            return {
+                ...state,
+                warplaner: {
+                    attackers: {ids: [], countries: []},
+                    defenders: {ids: [], countries: []}
+                }
+            }
         }
     }
 })
@@ -84,7 +110,9 @@ export const {
     setUsers,
     addUsers,
     setRegions,
-    setCompanies
+    setCompanies,
+    setWarPlaner,
+    resetWarPlaner
 } = appSlice.actions
 
 
