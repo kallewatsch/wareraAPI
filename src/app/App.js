@@ -32,7 +32,7 @@ import Workers from "./components/Workers"
 import FreeMUs from "./components/FreeMUs"
 import Navigation from "./components/Navigation"
 import Home from "./components/Home"
-import WarPlaner from "./components/WarPlaner"
+import WarPlaner from "./components/warplaner/WarPlaner"
 
 
 const router = createHashRouter(
@@ -136,7 +136,11 @@ const router = createHashRouter(
         {
             path: "/warplaner",
             element: <WarPlaner />
-        }
+        },
+        /* {
+            path: "/jobcenter",
+            element: <Jobcenter />
+        } */
     ]
 )
 

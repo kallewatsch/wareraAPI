@@ -18,7 +18,7 @@ export const CountryDiplomacy = props => {
     const { countries } = useSelector(state => state.app)
 
     const objs = [
-        { arr: allies, variant: "success" },
+        { arr: allies, variant: "success"},
         { arr: warsWith, variant: "warning" },
         { arr: enemy ? [enemy] : enemy, variant: "danger" }
     ]

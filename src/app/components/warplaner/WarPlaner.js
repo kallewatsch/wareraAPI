@@ -6,8 +6,9 @@ import Button from "react-bootstrap/Button"
 import Modal from "react-bootstrap/Modal"
 import InputGroup from "react-bootstrap/InputGroup"
 import Form from "react-bootstrap/Form"
+import Card from "react-bootstrap/Card"
 import WarPlanerCompare from "./WarPlanerCompare"
-import { setWarPlaner } from "../appSlice"
+import { setWarPlaner } from "../../appSlice"
 
 
 export const foo = (arr, key, val, target) => {
@@ -62,7 +63,7 @@ export const MyModal = props => {
                 <Button variant="success" onClick={handleConfirm} disabled={!country}>
                     Ok
                 </Button>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button variant="secondary" onClick={() => handleClose(false)}>
                     Abort
                 </Button>
             </Modal.Footer>
@@ -104,7 +105,6 @@ export const WarPlaner = () => {
     }
 
     const handleCompare = event => {
-
         const [allAttackers, attackerAllies] = getNations(countries, attackers, defenders)
         const [allDefenders, defenderAllies] = getNations(countries, defenders, attackers)
         dispatch(setWarPlaner({
@@ -119,9 +119,6 @@ export const WarPlaner = () => {
                 allies: defenderAllies
             }
         }))
-
-        /* const weeklyDamgeAttackers = allAttackers.reduce((acc, cur) => acc + cur.rankings.weeklyCountryDamages.value, 0)
-        const weeklyDamageDefenders = allDefenders.reduce((acc, cur) => acc + cur.rankings.weeklyCountryDamages.value, 0) */
     }
 
 
@@ -146,34 +143,53 @@ export const WarPlaner = () => {
                 ? (
                     <>
                         <Row>
+                            <Col>Select attackers and defenders and click compare</Col>
+                        </Row>
+                        <Row>
                             <Col>
-                                <h5>Attackers</h5>
-                                {attackers && attackers.map((x, i) => {
-                                    return (
-                                        <InputGroup key={i}>
-                                            <InputGroup.Text>{foo(countries, '_id', x, 'name')}</InputGroup.Text>
-                                            <Button onClick={() => removeAttacker()}>remove</Button>
-                                        </InputGroup>
-                                    )
-                                })}
-                                <Button onClick={() => setShowAttackers(true)}>Add Attacker</Button>
+                                <Card>
+                                    <Card.Header>Header</Card.Header>
+                                    <Card.Body>
+                                        <Card.Title>Attackers</Card.Title>
+                                        {/* <Card.Text> */}
+                                            {attackers && attackers.map((x, i) => {
+                                                return (
+                                                    <InputGroup key={i} style={{padding: '0px 0px 5px 5px'}}>
+                                                        <InputGroup.Text>{foo(countries, '_id', x, 'name')}</InputGroup.Text>
+                                                        <Button onClick={() => removeAttacker()}>remove</Button>
+                                                    </InputGroup>
+                                                )
+                                            })}
+                                            <Button onClick={() => setShowAttackers(true)}>Add Attacker</Button>
+                                        {/* </Card.Text> */}
+                                    </Card.Body>
+                                </Card>
                             </Col>
                             <Col>
-                                <h5>Defenders</h5>
-                                {defenders && defenders.map((x, i) => {
-                                    return (
-                                        <InputGroup key={i}>
-                                            <InputGroup.Text>{foo(countries, '_id', x, 'name')}</InputGroup.Text>
-                                            <Button onClick={() => removeDefender()}>remove</Button>
-                                        </InputGroup>
-                                    )
-                                })}
-                                <Button onClick={() => setShowDefenders(true)}>Add Defender</Button>
+                                <Card>
+                                    <Card.Header>Header</Card.Header>
+                                    <Card.Body>
+                                        <Card.Title>Defenders</Card.Title>
+                                        {/* <Card.Text> */}
+                                            {defenders && defenders.map((x, i) => {
+                                                return (
+                                                    <InputGroup key={i} style={{padding: '0px 0px 5px 5px'}}>
+                                                        <InputGroup.Text>{foo(countries, '_id', x, 'name')}</InputGroup.Text>
+                                                        <Button onClick={() => removeDefender()}>remove</Button>
+                                                    </InputGroup>
+                                                )
+                                            })}
+                                            <Button onClick={() => setShowDefenders(true)}>Add Defender</Button>
+                                        {/* </Card.Text> */}
+                                    </Card.Body>
+                                </Card>
                             </Col>
                         </Row>
-                        <Row><Col>
-                            <Button disabled={!attackers.length || !defenders.length} onClick={handleCompare}>Compare</Button>
-                        </Col></Row>
+                        <Row>
+                            <Col style={{ textAlign: "center", marginTop: "50px" }}>
+                                <Button disabled={!attackers.length || !defenders.length} onClick={handleCompare}>Compare</Button>
+                            </Col>
+                        </Row>
                     </>
                 )
                 : (

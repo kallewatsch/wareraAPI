@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
-import { resetWarPlaner } from "../appSlice"
+import { resetWarPlaner } from "../../appSlice"
 import CountriesTable from "./CountriesTable"
 
 
@@ -13,10 +13,6 @@ export const WarPlanerCompare = props => {
     const [includeAllies, setIncludeAllies] = useState(true)
 
     const dispatch = useDispatch()
-    /* const handleCompare = event => {
-        const weeklyDamgeAttackers = allAttackers.reduce((acc, cur) => acc + cur.rankings.weeklyCountryDamages.value, 0)
-        const weeklyDamageDefenders = allDefenders.reduce((acc, cur) => acc + cur.rankings.weeklyCountryDamages.value, 0)
-    } */
 
     const handleReset = event => {
         dispatch(resetWarPlaner())
@@ -25,6 +21,9 @@ export const WarPlanerCompare = props => {
     const handleFuck = event => {
         setIncludeAllies(!includeAllies)
     }
+
+    const attackerCountries = includeAllies ? [...attackers.countries, ...attackers.allies] : attackers.countries
+    const defenderCountries = includeAllies ? [...defenders.countries, ...defenders.allies] : defenders.countries
 
     return (
         <>
@@ -36,12 +35,12 @@ export const WarPlanerCompare = props => {
             </Row>
             <Row>
                 <Col>
-                    attackers: {attackers.countries.reduce((acc, cur) => acc + cur.rankings.weeklyCountryDamages.value, 0)}
-                    <CountriesTable key={includeAllies ? 'fuck1' : 'fuck2'} countries={includeAllies ? [...attackers.countries, ...attackers.allies] : attackers.countries} />
+                    attackers dmg weekly: {attackerCountries.reduce((acc, cur) => acc + cur.rankings.weeklyCountryDamages.value, 0)}
+                    <CountriesTable key={includeAllies ? 'cta1' : 'cta2'} countries={attackerCountries} />
                 </Col>
                 <Col>
-                    defenders: {defenders.countries.reduce((acc, cur) => acc + cur.rankings.weeklyCountryDamages.value, 0)}
-                    <CountriesTable key={includeAllies ? 'shit1' : 'shit2'} countries={includeAllies ? [...defenders.countries, ...defenders.allies] : defenders.countries} />
+                    defenders dmg weekly: {defenderCountries.reduce((acc, cur) => acc + cur.rankings.weeklyCountryDamages.value, 0)}
+                    <CountriesTable key={includeAllies ? 'ctd1' : 'ctd2'} countries={defenderCountries} />
                 </Col>
             </Row>
         </>
