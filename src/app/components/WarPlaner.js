@@ -26,7 +26,8 @@ export const getNations = (countries, idsFriendly, idsHostile) => {
     const nations = countries.filter(country => idsFriendly.some(id => id == country._id))
     const alliesIds = getAllies(nations)
     const alliesIdsClean = alliesIds.filter(item => idsHostile.every(id => id != item))
-    return [...nations, ...countries.filter(country => alliesIdsClean.some(id => id == country._id))]
+    //return [...nations, ...countries.filter(country => alliesIdsClean.some(id => id == country._id))]
+    return [[...nations], [...countries.filter(country => alliesIdsClean.some(id => id == country._id))]]
 }
 
 export const MyModal = props => {
@@ -104,16 +105,18 @@ export const WarPlaner = () => {
 
     const handleCompare = event => {
 
-        const allAttackers = getNations(countries, attackers, defenders)
-        const allDefenders = getNations(countries, defenders, attackers)
+        const [allAttackers, attackerAllies] = getNations(countries, attackers, defenders)
+        const [allDefenders, defenderAllies] = getNations(countries, defenders, attackers)
         dispatch(setWarPlaner({
             attackers: {
                 ids: attackers,
-                countries: allAttackers
+                countries: allAttackers,
+                allies: attackerAllies
             },
             defenders: {
                 ids: defenders,
-                countries: allDefenders
+                countries: allDefenders,
+                allies: defenderAllies
             }
         }))
 

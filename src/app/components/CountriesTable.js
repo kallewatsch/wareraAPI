@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import Table from "react-bootstrap/Table"
 
 export const foo = (data) => {
@@ -15,7 +15,7 @@ export const foo = (data) => {
 export const CountriesRankingTable = props => {
 
     const { countries } = props
-    console.log(countries)
+    const [sortedCountries, setSortedCountries] = useState(countries)
 
     const theaders = ["countryRegionDiff", "countryDamages", "weeklyCountryDamages",
         "weeklyCountryDamagesPerCitizen", "countryDevelopment", "countryActivePopulation",
@@ -29,19 +29,43 @@ export const CountriesRankingTable = props => {
     } = props
     */
 
+    const handleSortTable = (event, key) => {
+        const sortedCunts = [...countries].sort((a,b) => {
+            if (!a.rankings[key]) {
+                return -1
+            }
+            if (!b.rankings[key]) {
+                return 1
+            }
+            return a.rankings[key].value > b.rankings[key].value ? 1 : a.rankings[key].value < b.rankings[key].value ? -1 : 0
+        })
+
+        if (sortedCountries.every((item, i) => sortedCunts[i] && item._id == sortedCunts[i]._id)) {
+            setSortedCountries(sortedCunts.reverse())
+        }
+        else {
+            setSortedCountries(sortedCunts)
+        }
+
+    }
+
+    const handleToggleCountry = (event, id) => {
+        console.log("maybe soon")
+    }
+
     return (
         <Table>
             <thead>
                 <tr>
                     <th>country</th>
-                    {theaders.map((txt, i) => <th key={i}>{txt.toLowerCase().replace("country", "")}</th>)}
+                    {theaders.map((txt, i) => <th onClick={event => handleSortTable(event, txt)} key={i}>{txt.toLowerCase().replace("country", "")}</th>)}
                 </tr>
             </thead>
             <tbody>
-                {countries && countries.map((country, i) => {
+                {sortedCountries && sortedCountries.map((country, i) => {
                     return (
                         <tr key={i}>
-                            <td><img
+                            <td onClick={event => handleToggleCountry(event, country._id)}><img
                                 alt={country.name}
                                 src={`https://app.warera.io/images/flags/${country.code}.svg?v=16`} />{country.name}</td>
                             {theaders.map((x, j) => {
