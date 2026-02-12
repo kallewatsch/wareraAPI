@@ -25,6 +25,7 @@ export const WarPlanerCompare = props => {
     const attackerCountries = includeAllies ? [...attackers.countries, ...attackers.allies] : attackers.countries
     const defenderCountries = includeAllies ? [...defenders.countries, ...defenders.allies] : defenders.countries
 
+
     return (
         <>
             <Row>
@@ -35,11 +36,9 @@ export const WarPlanerCompare = props => {
             </Row>
             <Row>
                 <Col>
-                    attackers dmg weekly: {attackerCountries.reduce((acc, cur) => acc + cur.rankings.weeklyCountryDamages.value, 0)}
                     <CountriesTable key={includeAllies ? 'cta1' : 'cta2'} countries={attackerCountries} />
                 </Col>
                 <Col>
-                    defenders dmg weekly: {defenderCountries.reduce((acc, cur) => acc + cur.rankings.weeklyCountryDamages.value, 0)}
                     <CountriesTable key={includeAllies ? 'ctd1' : 'ctd2'} countries={defenderCountries} />
                 </Col>
             </Row>

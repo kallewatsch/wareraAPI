@@ -12,6 +12,10 @@ export const foo = (data) => {
     return data.value
 }
 
+export const getRankingSum = (arr, key) => {
+    return arr.reduce((acc, cur) => acc + (cur.rankings[key] ? cur.rankings[key].value : 0), 0)
+}
+
 export const CountriesRankingTable = props => {
 
     const { countries } = props
@@ -21,16 +25,8 @@ export const CountriesRankingTable = props => {
         "weeklyCountryDamagesPerCitizen", "countryDevelopment", "countryActivePopulation",
         "countryWealth", "countryBounty", "countryProductionBonus"]
 
-
-    /* 
-    const { countryRegionDiff, countryDamages, weeklyCountryDamages,
-        weeklyCountryDamagesPerCitizen, countryDevelopment, countryActivePopulation,
-        countryWealth, countryBounty, countryProductionBonus
-    } = props
-    */
-
     const handleSortTable = (event, key) => {
-        const sortedCunts = [...countries].sort((a,b) => {
+        const sortedCunts = [...countries].sort((a, b) => {
             if (!a.rankings[key]) {
                 return -1
             }
@@ -53,15 +49,24 @@ export const CountriesRankingTable = props => {
         console.log("maybe soon")
     }
 
+    const rankingSumAndAverages = theaders.map((key, i) => ({
+        key, value: getRankingSum(countries, key)
+    }))
+
     return (
         <Table>
             <thead>
                 <tr>
-                    <th>country</th>
+                    <th>#</th>
                     {theaders.map((txt, i) => <th onClick={event => handleSortTable(event, txt)} key={i}>{txt.toLowerCase().replace("country", "")}</th>)}
                 </tr>
+                <tr></tr>
             </thead>
             <tbody>
+                <tr>
+                    <td><b>Totals</b></td>
+                    {rankingSumAndAverages.map((x, i) => <td key={i}>{foo(x)}</td>)}
+                </tr>
                 {sortedCountries && sortedCountries.map((country, i) => {
                     return (
                         <tr key={i}>
