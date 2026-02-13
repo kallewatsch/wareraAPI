@@ -21,7 +21,8 @@ export const initialState = {
             countries: [],
             allies: []
         }
-    }
+    },
+    search: {}
 }
 
 export const appSlice = createSlice({
@@ -98,6 +99,12 @@ export const appSlice = createSlice({
                     defenders: {ids: [], countries: [], allies: []}
                 }
             }
+        },
+        setSearchResult(state,action) {
+            return {
+                ...state,
+                search: action.payload
+            }
         }
     }
 })
@@ -114,7 +121,8 @@ export const {
     setRegions,
     setCompanies,
     setWarPlaner,
-    resetWarPlaner
+    resetWarPlaner,
+    setSearchResult
 } = appSlice.actions
 
 

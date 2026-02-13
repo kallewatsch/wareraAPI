@@ -5,10 +5,11 @@ import {
 } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import Container from "react-bootstrap/Container"
-import Accordion from "react-bootstrap/Accordion"
+import Spinner from "react-bootstrap/Spinner"
 import { useGetAllCountriesQuery } from "./api"
 import { setCountries } from "./appSlice"
-import Search from "./components/Search"
+import "./App.css"
+import Search from "./components/search/Search"
 import Companies from "./components/Companies"
 import Countries from "./components/Countries"
 import Events from "./components/Events"
@@ -33,7 +34,7 @@ import FreeMUs from "./components/FreeMUs"
 import Navigation from "./components/Navigation"
 import Home from "./components/Home"
 import WarPlaner from "./components/warplaner/WarPlaner"
-
+import LineChart from "./components/LineChart"
 
 const router = createHashRouter(
     [
@@ -137,17 +138,17 @@ const router = createHashRouter(
             path: "/warplaner",
             element: <WarPlaner />
         },
-        /* {
-            path: "/jobcenter",
-            element: <Jobcenter />
-        } */
+        {
+            path: "/miau",
+            element: <LineChart />
+        }
     ]
 )
 
 export const App = () => {
 
-    const { data: countries, error, isLoading } = useGetAllCountriesQuery()
-    const dataState = useSelector(state => state.app)
+    const { data: countries, error } = useGetAllCountriesQuery()
+    const { isLoading } = useSelector(state => state.app)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -156,18 +157,12 @@ export const App = () => {
     }, [countries])
 
     return (
-        <Container>
-            <Navigation />
-            <RouterProvider router={router} />
-            {/* <Accordion>
-                <Accordion.Item eventKey="0">
-                    <Accordion.Header>Show JSON Data</Accordion.Header>
-                    <Accordion.Body>
-                        <textarea value={JSON.stringify(dataState.data, null, 2)} cols="80" rows="20" style={{ "width": "100%" }} readOnly />
-                    </Accordion.Body>
-                </Accordion.Item>
-            </Accordion> */}
-        </Container>
+        <>{isLoading && <div id="loadingSpinner" ><Spinner /></div>}
+            <Container>
+                <Navigation />
+                <RouterProvider router={router} />
+            </Container>
+        </>
     )
 
 }

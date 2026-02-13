@@ -35,11 +35,11 @@ export const WarPlanerCompare = props => {
                 </Col>
             </Row>
             <Row>
-                <Col>
-                    <CountriesTable key={includeAllies ? 'cta1' : 'cta2'} countries={attackerCountries} />
+                <Col xs={6}>
+                    <CountriesTable key={includeAllies ? 'cta1' : 'cta2'} countries={attackerCountries} variant={"success"}/>
                 </Col>
-                <Col>
-                    <CountriesTable key={includeAllies ? 'ctd1' : 'ctd2'} countries={defenderCountries} />
+                <Col xs={6}>
+                    <CountriesTable key={includeAllies ? 'ctd1' : 'ctd2'} countries={defenderCountries} variant={"danger"} />
                 </Col>
             </Row>
         </>

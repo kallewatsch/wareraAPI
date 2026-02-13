@@ -1,13 +1,14 @@
 import React, { useState } from "react"
 import Table from "react-bootstrap/Table"
+import "./CountriesTable.css"
 
-export const foo = (data) => {
+export const humanReadable = (data) => {
     if (!data || !data.value) {
         return "-"
     }
     const intVal = parseInt(data.value)
     if (intVal != 'NaN') {
-        return Math.round(intVal)
+        return Math.round(intVal).toLocaleString()
     }
     return data.value
 }
@@ -18,12 +19,24 @@ export const getRankingSum = (arr, key) => {
 
 export const CountriesRankingTable = props => {
 
-    const { countries } = props
+    const { countries, variant } = props
     const [sortedCountries, setSortedCountries] = useState(countries)
 
     const theaders = ["countryRegionDiff", "countryDamages", "weeklyCountryDamages",
         "weeklyCountryDamagesPerCitizen", "countryDevelopment", "countryActivePopulation",
         "countryWealth", "countryBounty", "countryProductionBonus"]
+
+    const shortTheaders = {
+        countryRegionDiff: "RegionDiff",
+        countryDamages: "Dmg",
+        weeklyCountryDamages: "DmgWeekly",
+        weeklyCountryDamagesPerCitizen: "Dmg/Citizen",
+        countryDevelopment: "Dev",
+        countryActivePopulation: "Pop",
+        countryWealth: "Wealth",
+        countryBounty: "Bounty",
+        countryProductionBonus: "ProdBon"
+    }
 
     const handleSortTable = (event, key) => {
         const sortedCunts = [...countries].sort((a, b) => {
@@ -54,18 +67,18 @@ export const CountriesRankingTable = props => {
     }))
 
     return (
-        <Table>
+        <Table variant={variant} striped size="sm" className="countriesTable">
             <thead>
                 <tr>
-                    <th>#</th>
-                    {theaders.map((txt, i) => <th onClick={event => handleSortTable(event, txt)} key={i}>{txt.toLowerCase().replace("country", "")}</th>)}
+                    <th>Country</th>
+                    {theaders.map((txt, i) => <th onClick={event => handleSortTable(event, txt)} key={i}>{shortTheaders[txt]}</th>)}
                 </tr>
                 <tr></tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><b>Totals</b></td>
-                    {rankingSumAndAverages.map((x, i) => <td key={i}>{foo(x)}</td>)}
+                    <td><b>All Countries</b></td>
+                    {rankingSumAndAverages.map((x, i) => <td key={i}>{humanReadable(x)}</td>)}
                 </tr>
                 {sortedCountries && sortedCountries.map((country, i) => {
                     return (
@@ -75,7 +88,7 @@ export const CountriesRankingTable = props => {
                                 src={`https://app.warera.io/images/flags/${country.code}.svg?v=16`} />{country.name}</td>
                             {theaders.map((x, j) => {
                                 return (
-                                    <td key={j}>{foo(country.rankings[x])}</td>
+                                    <td key={j}>{humanReadable(country.rankings[x])}</td>
                                 )
                             })}
                         </tr>

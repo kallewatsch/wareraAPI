@@ -14,12 +14,19 @@ export const wareraApi = createApi({
                 return {
                     url: 'company.getById',
                     method: 'GET',
-                    params: { input: JSON.stringify({companyId}) }
+                    params: { input: JSON.stringify({ companyId }) }
                 }
             }
         }),
         getCompanies: builder.query({
-            // TODO: there is multiple paramters
+            /* 
+            {
+                "userId": "string",
+                "orgId": "string",
+                "perPage": 10,
+                "cursor": "string"
+            }
+            */
             query: (data) => {
                 return {
                     url: 'company.getCompanies',
@@ -33,7 +40,7 @@ export const wareraApi = createApi({
                 return {
                     url: 'country.getCountryById',
                     method: 'GET',
-                    params: { input: JSON.stringify({countryId}) }
+                    params: { input: JSON.stringify({ countryId }) }
                 }
             }
         }),
@@ -66,7 +73,7 @@ export const wareraApi = createApi({
         }),
         getRegionById: builder.query({
             query: ({ regionId }) => {
-                let trpcData = {regionId: regionId}
+                let trpcData = { regionId: regionId }
                 return {
                     url: 'region.getById',
                     method: 'GET',
@@ -84,7 +91,7 @@ export const wareraApi = createApi({
         }),
         getBattleById: builder.query({
             query: ({ battleId }) => {
-                let trpcData = {battleId: battleId}
+                let trpcData = { battleId: battleId }
                 return {
                     url: 'battle.getById',
                     method: 'GET',
@@ -95,7 +102,7 @@ export const wareraApi = createApi({
         getBattleLive: builder.query({
             query: ({ battleId }) => {
                 // TODO: there are multiple params
-                let trpcData = {battleId: battleId}
+                let trpcData = { battleId: battleId }
                 return {
                     url: 'battle.getLiveBattleData',
                     method: 'GET',
@@ -106,7 +113,7 @@ export const wareraApi = createApi({
         getBattles: builder.query({
             query: ({ battleId }) => {
                 // TODO: there are multiple params
-                let trpcData = {battleId: battleId}
+                let trpcData = { battleId: battleId }
                 return {
                     url: 'battle.getBattles',
                     method: 'GET',
@@ -116,7 +123,7 @@ export const wareraApi = createApi({
         }),
         getRoundById: builder.query({
             query: ({ roundId }) => {
-                let trpcData = {roundId: roundId}
+                let trpcData = { roundId: roundId }
                 return {
                     url: 'round.getById',
                     method: 'GET',
@@ -126,7 +133,7 @@ export const wareraApi = createApi({
         }),
         getRoundLastHits: builder.query({
             query: ({ roundId }) => {
-                let trpcData = {roundId: roundId}
+                let trpcData = { roundId: roundId }
                 return {
                     url: 'round.getLastHits',
                     method: 'GET',
@@ -137,7 +144,7 @@ export const wareraApi = createApi({
         getBattleRanking: builder.query({
             query: ({ roundId }) => {
                 // TODO: there are multiple params
-                let trpcData = {roundId: roundId}
+                let trpcData = { roundId: roundId }
                 return {
                     url: 'battleRanking.getRanking',
                     method: 'GET',
@@ -166,7 +173,7 @@ export const wareraApi = createApi({
         }),
         getItemOffer: builder.query({
             query: ({ itemOfferId }) => {
-                let trpcData = {itemOfferId: itemOfferId}
+                let trpcData = { itemOfferId: itemOfferId }
                 return {
                     url: 'itemOffer.getById',
                     method: 'GET',
@@ -175,8 +182,8 @@ export const wareraApi = createApi({
             }
         }),
         getWorkOffer: builder.query({
-            query: ({ workOfferId}) => {
-                let trpcData = {workOfferId: workOfferId}
+            query: ({ workOfferId }) => {
+                let trpcData = { workOfferId: workOfferId }
                 return {
                     url: 'workOffer.getById',
                     method: 'GET',
@@ -185,8 +192,8 @@ export const wareraApi = createApi({
             }
         }),
         getWorkOfferByCompany: builder.query({
-            query: ({ companyId}) => {
-                let trpcData = {companyId: companyId}
+            query: ({ companyId }) => {
+                let trpcData = { companyId: companyId }
                 return {
                     url: 'workOffer.getWorkOfferByCompanyId',
                     method: 'GET',
@@ -195,9 +202,9 @@ export const wareraApi = createApi({
             }
         }),
         getWorkOffersPaginated: builder.query({
-            query: ({ workOfferId}) => {
+            query: ({ workOfferId }) => {
                 // TODO: there are multiple params
-                let trpcData = {workOfferId: workOfferId}
+                let trpcData = { workOfferId: workOfferId }
                 return {
                     url: 'workOffer.getWorkOffersPaginated',
                     method: 'GET',
@@ -206,8 +213,8 @@ export const wareraApi = createApi({
             }
         }),
         getRanking: builder.query({
-            query: ({ rankingType}) => {
-                let trpcData = {rankingType: rankingType}
+            query: ({ rankingType }) => {
+                let trpcData = { rankingType: rankingType }
                 return {
                     url: 'ranking.getRanking',
                     method: 'GET',
@@ -216,8 +223,9 @@ export const wareraApi = createApi({
             }
         }),
         searchAnything: builder.query({
-            query: ({ searchText}) => {
-                let trpcData = {searchText: searchText}
+            query: ({ searchText }) => {
+                let trpcData = { searchText: searchText }
+                console.log({searchText})
                 return {
                     url: 'search.searchAnything',
                     method: 'GET',
@@ -242,8 +250,8 @@ export const wareraApi = createApi({
             }
         }),
         getUser: builder.query({
-            query: ({ userId}) => {
-                let trpcData = {userId: userId}
+            query: ({ userId }) => {
+                let trpcData = { userId: userId }
                 return {
                     url: 'user.getUserLite',
                     method: 'GET',
@@ -262,8 +270,8 @@ export const wareraApi = createApi({
             }
         }),
         getArticle: builder.query({
-            query: ({ articleId}) => {
-                let trpcData = {articleId: articleId}
+            query: ({ articleId }) => {
+                let trpcData = { articleId: articleId }
                 return {
                     url: 'article.getArticleById',
                     method: 'GET',
@@ -284,7 +292,7 @@ export const wareraApi = createApi({
         }),
         getMuById: builder.query({
             query: ({ muId }) => {
-                let trpcData = {muId: muId}
+                let trpcData = { muId: muId }
                 return {
                     url: 'mu.getById',
                     method: 'GET',
@@ -306,7 +314,7 @@ export const wareraApi = createApi({
         getTransactions: builder.query({
             query: ({ muId }) => {
                 // TODO: there are multiple params
-                let trpcData = {muId: muId}
+                let trpcData = { muId: muId }
                 return {
                     url: 'transaction.getPaginatedTransactions',
                     method: 'GET',
@@ -317,7 +325,7 @@ export const wareraApi = createApi({
         getUpgrade: builder.query({
             query: ({ muId }) => {
                 // TODO: there are multiple params
-                let trpcData = {muId: muId}
+                let trpcData = { muId: muId }
                 return {
                     url: 'upgrade.getUpgradeByTypeAndEntity',
                     method: 'GET',
@@ -336,12 +344,43 @@ export const wareraApi = createApi({
         }),
         getWorkersTotal: builder.query({
             query: ({ userId }) => {
-                let trpcData = {userId: userId}
+                let trpcData = { userId: userId }
                 return {
                     url: 'worker.getTotalWorkers',
                     method: 'GET',
                     params: { input: JSON.stringify(trpcData) }
                 }
+            }
+        }),
+        getJobOffersByNation: builder.query({
+            async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
+                let allUsers = []
+                let { data, error } = await fetchWithBQ(`user.getUsersByCountry?input=${JSON.stringify(_arg)}`)
+                if (error) return { error }
+                allUsers = [...allUsers, ...data.result.data.items]
+                let cursor = data.result.data.nextCursor
+                while (cursor) {
+                    const _argC = Object.assign({}, _arg, { cursor: cursor })
+                    let { data, error } = await fetchWithBQ(`user.getUsersByCountry?input=${JSON.stringify(_argC)}`)
+                    if (error) return { error }
+                    allUsers = [...allUsers, ...data.result.data.items]
+                    cursor = data.result.data.nextCursor
+                }
+                console.log(data, error, data.result.data.nextCursor)
+                const allCompanies = []
+                await Promise.all(allUsers.map(async (user) => {
+                    const { data, error } = await fetchWithBQ(`company.getCompanies?input=${JSON.stringify({ userId: user._id })}`)
+                    data && allCompanies.push(data.result.data.items)
+                }));
+                const companiesIds = allCompanies.flat()
+                console.log(companiesIds)
+                const allWorkOffers = []
+                await Promise.all(companiesIds.map(async (companyId) => {
+                    const { data, error } = await fetchWithBQ(`workOffer.getWorkOfferByCompanyId?input=${JSON.stringify({companyId})}`)
+                    data && allWorkOffers.push(data.result.data.items)
+                }))
+                console.log("all workoffers", allWorkOffers)
+                return { data: allUsers }
             }
         }),
     })
@@ -373,6 +412,7 @@ export const {
     useLazySearchAnythingQuery,
     useLazyGetGameDatesQuery,
     useLazyGetGameConfigQuery,
+    useGetUserQuery,
     useLazyGetUserQuery,
     useLazyGetUsersByCountryQuery,
     useGetUsersByCountryQuery,
@@ -384,5 +424,6 @@ export const {
     useLazyGetUpgradeQuery,
     useGetWorkersQuery,
     useLazyGetWorkersQuery,
-    useLazyGetWorkersTotalQuery
+    useLazyGetWorkersTotalQuery,
+    useLazyGetJobOffersByNationQuery
 } = wareraApi

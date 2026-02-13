@@ -1,0 +1,11 @@
+.countriesTable th:hover {
+    cursor: pointer;    
+}
+
+.countriesTable {
+    font-size: smaller;
+}
+
+.countriesTable td {
+    font-size: x-small;
+}
