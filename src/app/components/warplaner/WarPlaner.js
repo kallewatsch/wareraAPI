@@ -9,6 +9,8 @@ import Form from "react-bootstrap/Form"
 import Card from "react-bootstrap/Card"
 import WarPlanerCompare from "./WarPlanerCompare"
 import { setWarPlaner } from "../../appSlice"
+import "./WarPlaner.css"
+import godzilla from "./godzilla.jpg"
 
 
 export const foo = (arr, key, val, target) => {
@@ -147,40 +149,36 @@ export const WarPlaner = () => {
                         </Row>
                         <Row>
                             <Col>
-                                <Card>
-                                    <Card.Header>Header</Card.Header>
+                                <Card bg="success">
+                                    <Card.Header><h5>Attackers</h5></Card.Header>
+                                    <Card.Img src={godzilla} className="imgGreen" />
                                     <Card.Body>
-                                        <Card.Title>Attackers</Card.Title>
-                                        {/* <Card.Text> */}
-                                            {attackers && attackers.map((x, i) => {
-                                                return (
-                                                    <InputGroup key={i} style={{padding: '0px 0px 5px 5px'}}>
-                                                        <InputGroup.Text>{foo(countries, '_id', x, 'name')}</InputGroup.Text>
-                                                        <Button onClick={() => removeAttacker()}>remove</Button>
-                                                    </InputGroup>
-                                                )
-                                            })}
-                                            <Button onClick={() => setShowAttackers(true)}>Add Attacker</Button>
-                                        {/* </Card.Text> */}
+                                        {attackers && attackers.map((x, i) => {
+                                            return (
+                                                <InputGroup key={i} style={{ padding: '0px 0px 5px 5px' }}>
+                                                    <InputGroup.Text>{foo(countries, '_id', x, 'name')}</InputGroup.Text>
+                                                    <Button onClick={() => removeAttacker(i)}>remove</Button>
+                                                </InputGroup>
+                                            )
+                                        })}
+                                        <Button onClick={() => setShowAttackers(true)}>Add Attacker</Button>
                                     </Card.Body>
                                 </Card>
                             </Col>
                             <Col>
-                                <Card>
-                                    <Card.Header>Header</Card.Header>
+                                <Card bg="danger">
+                                    <Card.Header><h5>Defenders</h5></Card.Header>
+                                    <Card.Img src={godzilla} className="imgRed" />
                                     <Card.Body>
-                                        <Card.Title>Defenders</Card.Title>
-                                        {/* <Card.Text> */}
-                                            {defenders && defenders.map((x, i) => {
-                                                return (
-                                                    <InputGroup key={i} style={{padding: '0px 0px 5px 5px'}}>
-                                                        <InputGroup.Text>{foo(countries, '_id', x, 'name')}</InputGroup.Text>
-                                                        <Button onClick={() => removeDefender()}>remove</Button>
-                                                    </InputGroup>
-                                                )
-                                            })}
-                                            <Button onClick={() => setShowDefenders(true)}>Add Defender</Button>
-                                        {/* </Card.Text> */}
+                                        {defenders && defenders.map((x, i) => {
+                                            return (
+                                                <InputGroup key={i} style={{ padding: '0px 0px 5px 5px' }}>
+                                                    <InputGroup.Text>{foo(countries, '_id', x, 'name')}</InputGroup.Text>
+                                                    <Button onClick={() => removeDefender(i)}>remove</Button>
+                                                </InputGroup>
+                                            )
+                                        })}
+                                        <Button onClick={() => setShowDefenders(true)}>Add Defender</Button>
                                     </Card.Body>
                                 </Card>
                             </Col>

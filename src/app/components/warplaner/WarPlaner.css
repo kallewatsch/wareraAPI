@@ -1,0 +1,8 @@
+.imgGreen, .imgRed {
+    opacity: 0.5;
+}
+
+.imgRed {
+    opacity: 0.5;
+    rotate: y -180deg;
+}
