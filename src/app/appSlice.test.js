@@ -23,15 +23,18 @@ describe("appSlice", () => {
             isLoading: false,
             users: [],
             regions: [],
+            search: {},
             companies: [],
             warplaner: {
                 attackers: {
                     ids: [],
-                    countries: []
+                    countries: [],
+                    allies: []
                 },
                 defenders: {
                     ids: [],
-                    countries: []
+                    countries: [],
+                    allies: []
                 }
             }
         })

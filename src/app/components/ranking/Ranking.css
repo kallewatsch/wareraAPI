@@ -1,0 +1,19 @@
+.ranking-platinum {
+    color: #E5E4E2;
+}
+
+.ranking-gold {
+    color: 'gold';
+}
+
+.ranking-silver {
+    color: 'silver';
+}
+
+.ranking-bronze {
+    color: #CD7F32;
+}
+
+.rankingDefault {
+    color: 'gray';
+}
