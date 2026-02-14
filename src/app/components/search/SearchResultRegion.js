@@ -1,31 +1,32 @@
 import React, { useState } from "react"
-import { useGetUserQuery } from "../../api"
+import { useGetRegionByIdQuery } from "../../api"
 import Modal from "react-bootstrap/Modal"
 import Button from "react-bootstrap/Button"
 import { BsBoxArrowInRight } from "react-icons/bs";
-import User from "../user/User"
+import Region from "../region/region"
 
-export const SearchResultUser = props => {
+
+export const SearchResultRegion = props => {
 
     const { resultId } = props
-    const { data, error, isLoading } = useGetUserQuery({ userId: resultId })
+    const { data, error, isLoading } = useGetRegionByIdQuery({ regionId: resultId })
     const [show, setShow] = useState(false)
 
     const handleClose = event => {
         setShow(false)
     }
 
-    const user = data && data.result.data
+    const region = data && data.result.data
 
     return (
         <>
-            <Button onClick={event => setShow(true)}>{!user ? resultId : user.username}</Button>
+            <Button onClick={event => setShow(true)}>{!region ? resultId : region.name}</Button>
             <Modal show={show} onHide={handleClose} /* fullscreen */>
                 <Modal.Header closeButton>
-                    <Button target="_blank" href={`https://app.warera.io/user/${resultId}`}>{!user ? resultId : user.username}<BsBoxArrowInRight /></Button>
+                    <Button target="_blank" href={`https://app.warera.io/region/${resultId}`}>{!region ? resultId : region.name}<BsBoxArrowInRight /></Button>
                 </Modal.Header>
                 <Modal.Body>
-                    {user && <User {...user} />}
+                    {region && <Region {...region} />}
                 </Modal.Body>
                 <Modal.Footer>
                 </Modal.Footer>
@@ -34,4 +35,4 @@ export const SearchResultUser = props => {
     )
 }
 
-export default SearchResultUser
+export default SearchResultRegion

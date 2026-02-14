@@ -14,13 +14,13 @@ export const User = (props) => {
         skills
     } = props
 
-    const [key, setKey] = useState('profile');
+    const [key, setKey] = useState('rankings');
 
     return (
         <Card>
             <Card.Header>
             </Card.Header>
-            {/* <Card.Img src={avatarUrl} /> */}
+            <Card.Img src={avatarUrl} />
             <Card.Body>
                 <Tabs
                     activeKey={key}

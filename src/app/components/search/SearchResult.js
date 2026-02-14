@@ -1,12 +1,24 @@
 import React from "react"
+import Badge from "react-bootstrap/Badge"
+import SearchResultCountry from "./SearchResultCountry"
+import SearchResultMu from "./SearchResultMu"
 import SearchResultUser from "./SearchResultUser"
+import SearchResultRegion from "./SearchResultRegion"
+import "./SearchResult.css"
 
 export const SearchResultDefault = props => {
     return <h1>default</h1>
 }
 
 const getComponent = (s) => {
-    switch(s) {
+    switch (s) {
+        case "countryIds":
+            return SearchResultCountry
+        case "muIds":
+            return SearchResultMu
+        /* case "partyIds": */
+        case "regionIds":
+            return SearchResultRegion
         case "userIds":
             return SearchResultUser
         default:
@@ -20,11 +32,11 @@ export const SearchResult = props => {
     const Compo = getComponent(resultType)
 
     return (
-        <>
-            <h5>{resultType}</h5>
-            
+        <div className="searchResultContainer">
+            <h5>{resultType.replace("Id", "")}</h5>
+            {!resultIds.length && <Badge bg="warning">There are no matching {resultType}</Badge>}
             {resultIds && resultIds.map((id, i) => <Compo key={i} resultId={id} />)}
-        </>
+        </div>
     )
 
 }
