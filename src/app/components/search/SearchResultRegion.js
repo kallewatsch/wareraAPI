@@ -3,7 +3,7 @@ import { useGetRegionByIdQuery } from "../../api"
 import Modal from "react-bootstrap/Modal"
 import Button from "react-bootstrap/Button"
 import { BsBoxArrowInRight } from "react-icons/bs";
-import Region from "../region/region"
+import Region from "../region/Region"
 
 
 export const SearchResultRegion = props => {
