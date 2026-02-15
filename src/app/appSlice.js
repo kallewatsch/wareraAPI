@@ -1,5 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { initialStateWarplaner } from '../mocks/initialStateWarplaner'
+import { initialStateWarplaner as stateMock } from '../mocks/initialStateWarplaner'
+
+const initialStateWarplaner = {
+    attackers: {
+        ids: [],
+        countries: [],
+        allies: [],
+        excluded: []
+    },
+    defenders: {
+        ids: [],
+        countries: [],
+        allies: [],
+        excluded: []
+    }
+}
 
 export const initialState = {
     data: 'miau',
@@ -10,18 +25,8 @@ export const initialState = {
     users: [],
     regions: [],
     companies: [],
-    warplaner: /* initialStateWarplaner */{
-        attackers: {
-            ids: [],
-            countries: [],
-            allies: []
-        },
-        defenders: {
-            ids: [],
-            countries: [],
-            allies: []
-        }
-    },
+    //warplaner: stateMock,
+    warplaner: initialStateWarplaner,
     search: {}
 }
 
@@ -95,12 +100,12 @@ export const appSlice = createSlice({
             return {
                 ...state,
                 warplaner: {
-                    attackers: {ids: [], countries: [], allies: []},
-                    defenders: {ids: [], countries: [], allies: []}
+                    attackers: { ids: [], countries: [], allies: [] },
+                    defenders: { ids: [], countries: [], allies: [] }
                 }
             }
         },
-        setSearchResult(state,action) {
+        setSearchResult(state, action) {
             return {
                 ...state,
                 search: action.payload

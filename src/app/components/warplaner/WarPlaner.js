@@ -112,12 +112,14 @@ export const WarPlaner = () => {
             attackers: {
                 ids: attackers,
                 countries: allAttackers,
-                allies: attackerAllies
+                allies: attackerAllies,
+                excluded: []
             },
             defenders: {
                 ids: defenders,
                 countries: allDefenders,
-                allies: defenderAllies
+                allies: defenderAllies,
+                excluded: []
             }
         }))
     }
