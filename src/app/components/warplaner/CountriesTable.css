@@ -9,3 +9,11 @@
 .countriesTable td {
     font-size: x-small;
 }
+
+.countryflag-toggle {
+    cursor: pointer;
+}
+
+.tr-excluded td {
+    background-color: #666;
+}

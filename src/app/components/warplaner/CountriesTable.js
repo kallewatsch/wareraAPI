@@ -21,6 +21,7 @@ export const CountriesRankingTable = props => {
 
     const { countries, variant } = props
     const [sortedCountries, setSortedCountries] = useState(countries)
+    const [excludedCountryIds, setExcludedCountryIds] = useState([])
 
     const theaders = ["countryRegionDiff", "countryDamages", "weeklyCountryDamages",
         "weeklyCountryDamagesPerCitizen", "countryDevelopment", "countryActivePopulation",
@@ -59,15 +60,18 @@ export const CountriesRankingTable = props => {
     }
 
     const handleToggleCountry = (event, id) => {
-        console.log("maybe soon")
+        const newExcludedIds = excludedCountryIds.includes(id)
+            ? excludedCountryIds.filter(x => x != id)
+            : [...excludedCountryIds, id]
+        setExcludedCountryIds(newExcludedIds)
     }
 
     const rankingSumAndAverages = theaders.map((key, i) => ({
-        key, value: getRankingSum(countries, key)
+        key, value: getRankingSum(countries.filter(country => excludedCountryIds.every(id => id != country._id)), key)
     }))
 
     return (
-        <Table variant={variant} striped size="sm" className="countriesTable">
+        <Table variant={variant} size="sm" className="countriesTable">
             <thead>
                 <tr>
                     <th>Country</th>
@@ -81,9 +85,11 @@ export const CountriesRankingTable = props => {
                     {rankingSumAndAverages.map((x, i) => <td key={i}>{humanReadable(x)}</td>)}
                 </tr>
                 {sortedCountries && sortedCountries.map((country, i) => {
+                    const className = excludedCountryIds.includes(country._id) ? 'tr-excluded' : ''
                     return (
-                        <tr key={i}>
-                            <td onClick={event => handleToggleCountry(event, country._id)}><img
+                        <tr key={i} className={className}>
+                            <td onClick={event => handleToggleCountry(event, country._id)}
+                                className="countryflag-toggle"><img
                                 alt={country.name}
                                 src={`https://app.warera.io/images/flags/${country.code}.svg?v=16`} />{country.name}</td>
                             {theaders.map((x, j) => {
