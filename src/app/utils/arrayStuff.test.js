@@ -7,7 +7,8 @@ import {
     sortByNameAsc,
     rankingValueToHumanReadable,
     getRankingSum,
-    sortCountryByRankingKey
+    sortCountryByRankingKey,
+    getNonExcludedCountries
 } from "./arrayStuff"
 
 describe("arrayStuff", () => {
@@ -106,5 +107,17 @@ describe("arrayStuff", () => {
         }
     ])('sortCountryByRankingKey($countries) returns $expected', ({ countries, key, expected }) => {
         expect(sortCountryByRankingKey(countries, key)).toEqual(expected)
+    })
+    it.each([
+        { countries: [], exludedIds: [], expected: [] },
+        {
+            countries: [{ _id: 'foo' }, { _id: 'bar' }],
+            exludedIds: ['foo'],
+            expected: [{ _id: 'bar' }]
+        }
+    ])('getNonExcludedCountries($countries, $exludedIds) returns $expected', ({
+        countries, exludedIds, expected
+    }) => {
+        expect(getNonExcludedCountries(countries, exludedIds)).toEqual(expected)
     })
 })

@@ -50,3 +50,7 @@ export const sortCountryByRankingKey = (countries, key) => {
         return a.rankings[key].value > b.rankings[key].value ? 1 : a.rankings[key].value < b.rankings[key].value ? -1 : 0
     })
 }
+
+export const getNonExcludedCountries = (countries, excludedIds) => {
+    return countries.filter(country => excludedIds.every(id => id != country._id))
+}
