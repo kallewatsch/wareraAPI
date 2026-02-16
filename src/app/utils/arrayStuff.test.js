@@ -4,7 +4,10 @@ import {
     getRemainigNations,
     getUniqueValuesByKey,
     getValueFromArrayItem,
-    sortByNameAsc
+    sortByNameAsc,
+    rankingValueToHumanReadable,
+    getRankingSum,
+    sortCountryByRankingKey
 } from "./arrayStuff"
 
 describe("arrayStuff", () => {
@@ -57,6 +60,51 @@ describe("arrayStuff", () => {
         [{ name: 'b' }, { name: 'a' }, 1],
         [{ name: 'a' }, { name: 'a' }, 0]
     ])('sortByNameAsc(%i, %i)', (a, b, expected) => {
-            expect(sortByNameAsc(a, b)).toEqual(expected)
+        expect(sortByNameAsc(a, b)).toEqual(expected)
+    })
+    it.each([
+        [undefined, '-'],
+        [null, '-'],
+        [1, Math.round(1).toLocaleString()],
+        [13337, Math.round(13337).toLocaleString()],
+        [0, Math.round(0).toLocaleString()]
+    ])('rankingValueToHumanReadable %s returns %s', (val, exp) => {
+        expect(rankingValueToHumanReadable(val)).toEqual(exp)
+    })
+    it.each([
+        { countries: [], key: 'foo', expected: 0 },
+        {
+            countries: [
+                { rankings: { foo: { value: 40 } } },
+                { rankings: { foo: undefined } },
+                { rankings: { foo: { value: 2 } } }
+            ],
+            key: 'foo',
+            expected: 42
+        }
+    ])('getRankingSum($countries) returns $expected', ({ countries, key, expected }) => {
+        expect(getRankingSum(countries, key)).toEqual(expected)
+    })
+    it.each([
+        { countries: [], key: 'foo', expected: [] },
+        {
+            countries: [
+                { rankings: { foo: { value: 40 } } },
+                { rankings: { foo: undefined } },
+                { rankings: { foo: { value: 1 } } },
+                { rankings: { foo: { value: 1 } } },
+                { rankings: { foo: { value: 2 } } }
+            ],
+            key: 'foo',
+            expected: [
+                { rankings: { foo: undefined } },
+                { rankings: { foo: { value: 1 } } },
+                { rankings: { foo: { value: 1 } } },
+                { rankings: { foo: { value: 2 } } },
+                { rankings: { foo: { value: 40 } } }
+            ]
+        }
+    ])('sortCountryByRankingKey($countries) returns $expected', ({ countries, key, expected }) => {
+        expect(sortCountryByRankingKey(countries, key)).toEqual(expected)
     })
 })

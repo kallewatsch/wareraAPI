@@ -2,22 +2,9 @@ import React, { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import Table from "react-bootstrap/Table"
 import { setWarPlaner } from "../../appSlice"
+import { rankingValueToHumanReadable, getRankingSum, sortCountryByRankingKey } from "../../utils/arrayStuff"
 import "./CountriesTable.css"
 
-export const humanReadable = (data) => {
-    if (!data || !data.value) {
-        return "-"
-    }
-    const intVal = parseInt(data.value)
-    if (intVal != 'NaN') {
-        return Math.round(intVal).toLocaleString()
-    }
-    return data.value
-}
-
-export const getRankingSum = (arr, key) => {
-    return arr.reduce((acc, cur) => acc + (cur.rankings[key] ? cur.rankings[key].value : 0), 0)
-}
 
 export const CountriesRankingTable = props => {
 
@@ -47,7 +34,7 @@ export const CountriesRankingTable = props => {
     }
 
     const handleSortTable = (event, key) => {
-        const sortedCunts = [...countries].sort((a, b) => {
+        /* const sortedCunts = [...countries].sort((a, b) => {
             if (!a.rankings[key]) {
                 return -1
             }
@@ -55,7 +42,8 @@ export const CountriesRankingTable = props => {
                 return 1
             }
             return a.rankings[key].value > b.rankings[key].value ? 1 : a.rankings[key].value < b.rankings[key].value ? -1 : 0
-        })
+        }) */
+        const sortedCunts = sortCountryByRankingKey(countries, key)
 
         if (sortedCountries.every((item, i) => sortedCunts[i] && item._id == sortedCunts[i]._id)) {
             setSortedCountries(sortedCunts.reverse())
@@ -70,7 +58,7 @@ export const CountriesRankingTable = props => {
         const newExcludedIds = excluded.includes(id)
             ? excluded.filter(x => x != id)
             : [...excluded, id]
-        const payload = Object.assign({}, {...warplaner}, {[team]: {ids: side.ids, countries: side.countries, allies: side.allies, excluded: newExcludedIds}})
+        const payload = Object.assign({}, { ...warplaner }, { [team]: { ids: side.ids, countries: side.countries, allies: side.allies, excluded: newExcludedIds } })
         dispatch(setWarPlaner(payload))
     }
 
@@ -90,7 +78,7 @@ export const CountriesRankingTable = props => {
             <tbody>
                 <tr>
                     <td><b>All Countries</b></td>
-                    {rankingSumAndAverages.map((x, i) => <td key={i}>{humanReadable(x)}</td>)}
+                    {rankingSumAndAverages.map((x, i) => <td key={i}>{rankingValueToHumanReadable(x?.value)}</td>)}
                 </tr>
                 {sortedCountries && sortedCountries.map((country, i) => {
                     const className = excluded.includes(country._id) ? 'tr-excluded' : ''
@@ -102,7 +90,7 @@ export const CountriesRankingTable = props => {
                                     src={`https://app.warera.io/images/flags/${country.code}.svg?v=16`} />{country.name}</td>
                             {theaders.map((x, j) => {
                                 return (
-                                    <td key={j}>{humanReadable(country.rankings[x])}</td>
+                                    <td key={j}>{rankingValueToHumanReadable(country.rankings[x]?.value)}</td>
                                 )
                             })}
                         </tr>

@@ -12,7 +12,7 @@ export const getNations = (countries, idsFriendly, idsHostile) => {
 }
 
 export const getRemainigNations = (countries, attackers, defenders) => countries.filter(country =>
-        attackers.every(id => id != country._id) && defenders.every(id => id != country._id)
+    attackers.every(id => id != country._id) && defenders.every(id => id != country._id)
 )
 
 export const getUniqueValuesByKey = (countries, key) => {
@@ -28,4 +28,25 @@ export const getValueFromArrayItem = (arr, itemKey, val, target) => {
 
 export const sortByNameAsc = (a, b) => {
     return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
+}
+
+export const rankingValueToHumanReadable = (value) => {
+    const intVal = parseInt(value)
+    return isNaN(intVal) ? '-' : Math.round(intVal).toLocaleString()
+}
+
+export const getRankingSum = (arr, key) => {
+    return arr.reduce((acc, cur) => acc + (cur.rankings[key] ? cur.rankings[key].value : 0), 0)
+}
+
+export const sortCountryByRankingKey = (countries, key) => {
+    return [...countries].sort((a, b) => {
+        if (!a.rankings[key]) {
+            return -1
+        }
+        if (!b.rankings[key]) {
+            return 1
+        }
+        return a.rankings[key].value > b.rankings[key].value ? 1 : a.rankings[key].value < b.rankings[key].value ? -1 : 0
+    })
 }
