@@ -7,71 +7,13 @@ import Modal from "react-bootstrap/Modal"
 import InputGroup from "react-bootstrap/InputGroup"
 import Form from "react-bootstrap/Form"
 import Card from "react-bootstrap/Card"
+import CountrySelectModal from "./CountrySelectModal"
 import WarPlanerCompare from "./WarPlanerCompare"
 import { setWarPlaner } from "../../appSlice"
+import { getNations, getValueFromArrayItem, getRemainigNations } from "../../utils/arrayStuff"
 import "./WarPlaner.css"
 import godzilla from "./godzilla.jpg"
 
-
-export const foo = (arr, key, val, target) => {
-    // future me slappin me in the face
-    const res = arr.find(item => item[key] == val)
-    return res[target] || val
-}
-
-export const getAllies = countries => {
-    return countries.map(country => country.allies)
-        .flat()
-        .reduce((unique, item) => unique.includes(item) ? unique : [...unique, item], [])
-}
-
-export const getNations = (countries, idsFriendly, idsHostile) => {
-    const nations = countries.filter(country => idsFriendly.some(id => id == country._id))
-    const alliesIds = getAllies(nations)
-    const alliesIdsClean = alliesIds.filter(item => idsHostile.every(id => id != item))
-    return [[...nations], [...countries.filter(country => alliesIdsClean.some(id => id == country._id))]]
-}
-
-export const MyModal = props => {
-
-    const { show, handleClose, confirm, countries, title } = props
-    const [country, setCountry] = useState()
-
-    const handleChange = event => {
-        setCountry(event.target.value)
-    }
-
-    const handleConfirm = event => {
-        confirm(country)
-    }
-
-    return (
-        <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton>
-                <Modal.Title>{title}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form.Select onChange={handleChange}>
-                    <option value="">Select Country</option>
-                    {countries
-                        .sort((a, b) => a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
-                        .map((country, i) =>
-                            <option key={i} value={country._id}>{country.name}</option>
-                        )}
-                </Form.Select>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="success" onClick={handleConfirm} disabled={!country}>
-                    Ok
-                </Button>
-                <Button variant="secondary" onClick={() => handleClose(false)}>
-                    Abort
-                </Button>
-            </Modal.Footer>
-        </Modal>
-    )
-
-}
 
 export const WarPlaner = () => {
 
@@ -124,10 +66,7 @@ export const WarPlaner = () => {
         }))
     }
 
-
-    const remainigCountries = countries && countries.filter(country =>
-        attackers.every(id => id != country._id) && defenders.every(id => id != country._id)
-    )
+    const remainigCountries = getRemainigNations(countries, attackers, defenders)
 
     const attackersModalProps = {
         show: showAttackers, handleClose: setShowAttackers, confirm: addAttacker, countries: remainigCountries,
@@ -157,7 +96,7 @@ export const WarPlaner = () => {
                                         {attackers && attackers.map((x, i) => {
                                             return (
                                                 <InputGroup key={i} style={{ padding: '0px 0px 5px 5px' }}>
-                                                    <InputGroup.Text>{foo(countries, '_id', x, 'name')}</InputGroup.Text>
+                                                    <InputGroup.Text>{getValueFromArrayItem(countries, '_id', x, 'name')}</InputGroup.Text>
                                                     <Button onClick={() => removeAttacker(i)}>remove</Button>
                                                 </InputGroup>
                                             )
@@ -174,7 +113,7 @@ export const WarPlaner = () => {
                                         {defenders && defenders.map((x, i) => {
                                             return (
                                                 <InputGroup key={i} style={{ padding: '0px 0px 5px 5px' }}>
-                                                    <InputGroup.Text>{foo(countries, '_id', x, 'name')}</InputGroup.Text>
+                                                    <InputGroup.Text>{getValueFromArrayItem(countries, '_id', x, 'name')}</InputGroup.Text>
                                                     <Button onClick={() => removeDefender(i)}>remove</Button>
                                                 </InputGroup>
                                             )
@@ -197,11 +136,10 @@ export const WarPlaner = () => {
                 )
             }
 
-            {/* <Button disabled={!attackers.length || !defenders.length} onClick={handleCompareNations}>Compare</Button> */}
             <p><b>TODO: what about allies which are defenders and attackers at the same time?</b></p>
 
-            <MyModal {...attackersModalProps} />
-            <MyModal {...defendersModalProps} />
+            <CountrySelectModal {...attackersModalProps} />
+            <CountrySelectModal {...defendersModalProps} />
         </>
     )
 
