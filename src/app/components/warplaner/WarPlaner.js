@@ -3,9 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 import Col from "react-bootstrap/Col"
 import Row from "react-bootstrap/Row"
 import Button from "react-bootstrap/Button"
-import Modal from "react-bootstrap/Modal"
 import InputGroup from "react-bootstrap/InputGroup"
-import Form from "react-bootstrap/Form"
 import Card from "react-bootstrap/Card"
 import CountrySelectModal from "./CountrySelectModal"
 import WarPlanerCompare from "./WarPlanerCompare"
@@ -131,8 +129,8 @@ export const WarPlaner = () => {
                     </>
                 )
                 : (
-                    <WarPlanerCompare attackers={warplaner.attackers}
-                        defenders={warplaner.defenders} />
+                    <WarPlanerCompare /* attackers={warplaner.attackers}
+                        defenders={warplaner.defenders} */ />
                 )
             }
 
