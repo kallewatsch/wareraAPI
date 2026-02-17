@@ -100,8 +100,8 @@ export const appSlice = createSlice({
             return {
                 ...state,
                 warplaner: {
-                    attackers: { ids: [], countries: [], allies: [] },
-                    defenders: { ids: [], countries: [], allies: [] }
+                    attackers: { ids: [], countries: [], allies: [], excluded: [] },
+                    defenders: { ids: [], countries: [], allies: [], excluded: [] }
                 }
             }
         },

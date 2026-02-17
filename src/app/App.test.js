@@ -1,7 +1,7 @@
 import React from "react"
 import App from "./App"
 import { server } from "../mocks/server"
-import { handlers } from "../mocks/handlers"
+import { getAllCountriesHandlers } from "../mocks/handlers"
 import { renderWithProviders } from "../test-utils"
 
 describe("App", () => {
@@ -19,6 +19,7 @@ describe("App", () => {
         const { container } = renderWithProviders(
             <App />, { container: document.body.appendChild(div) }
         )
+        server.use(getAllCountriesHandlers.allCountriesHandler)
         expect(container).toBeInTheDocument()
     })
 })

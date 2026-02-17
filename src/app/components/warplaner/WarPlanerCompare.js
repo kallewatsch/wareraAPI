@@ -8,6 +8,7 @@ import Button from "react-bootstrap/Button"
 import { resetWarPlaner, setWarPlaner } from "../../appSlice"
 import CountriesTable from "./CountriesTable"
 import CountriesPie from "./CountriesPie"
+import WarPlanerBars from "./WarPlanerBars"
 
 
 export const WarPlanerCompare = props => {
@@ -62,6 +63,7 @@ export const WarPlanerCompare = props => {
                             </Col>
                             <Col xs={6}>
                                 <h5>component to show diff between team1.stat and team2.stat</h5>
+                                <WarPlanerBars />
                             </Col>
                         </Row>
                     </Tab>

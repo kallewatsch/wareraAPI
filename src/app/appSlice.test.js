@@ -29,12 +29,14 @@ describe("appSlice", () => {
                 attackers: {
                     ids: [],
                     countries: [],
-                    allies: []
+                    allies: [],
+                    excluded: []
                 },
                 defenders: {
                     ids: [],
                     countries: [],
-                    allies: []
+                    allies: [],
+                    excluded: []
                 }
             }
         })

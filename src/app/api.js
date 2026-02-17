@@ -225,7 +225,6 @@ export const wareraApi = createApi({
         searchAnything: builder.query({
             query: ({ searchText }) => {
                 let trpcData = { searchText: searchText }
-                console.log({searchText})
                 return {
                     url: 'search.searchAnything',
                     method: 'GET',
@@ -383,6 +382,29 @@ export const wareraApi = createApi({
                 return { data: allUsers }
             }
         }),
+        getCitizens: builder.query({
+            async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
+                let allUsers = []
+                let { data, error } = await fetchWithBQ(`user.getUsersByCountry?input=${JSON.stringify(_arg)}`)
+                if (error) return { error }
+                allUsers = [...allUsers, ...data.result.data.items]
+                let cursor = data.result.data.nextCursor
+                while (cursor) {
+                    const _argC = Object.assign({}, _arg, { cursor: cursor })
+                    let { data, error } = await fetchWithBQ(`user.getUsersByCountry?input=${JSON.stringify(_argC)}`)
+                    if (error) return { error }
+                    allUsers = [...allUsers, ...data.result.data.items]
+                    cursor = data.result.data.nextCursor
+                }
+                const allCitizens = []
+                await Promise.all(allUsers.map(async (user) => {
+                    const { data, error } = await fetchWithBQ(`user.getUserLite?input=${JSON.stringify({ userId: user._id })}`)
+                    console.log(data,error)
+                    data && allCitizens.push(data.result.data)
+                }))
+                return {data: allCitizens}
+            }
+        }),
     })
 })
 
@@ -428,5 +450,6 @@ export const {
     useGetWorkersQuery,
     useLazyGetWorkersQuery,
     useLazyGetWorkersTotalQuery,
-    useLazyGetJobOffersByNationQuery
+    useLazyGetJobOffersByNationQuery,
+    useLazyGetCitizensQuery
 } = wareraApi

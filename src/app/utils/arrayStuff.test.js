@@ -6,6 +6,7 @@ import {
     getValueFromArrayItem,
     sortByNameAsc,
     rankingValueToHumanReadable,
+    rankingRankToHumanReadable,
     getRankingSum,
     sortCountryByRankingKey,
     getNonExcludedCountries
@@ -71,6 +72,18 @@ describe("arrayStuff", () => {
         [0, Math.round(0).toLocaleString()]
     ])('rankingValueToHumanReadable %s returns %s', (val, exp) => {
         expect(rankingValueToHumanReadable(val)).toEqual(exp)
+    })
+    it.each([
+        [undefined, '-'],
+        [null, '-'],
+        [0, '-'],
+        [1, '1st'],
+        [2, '2nd'],
+        [3, '3rd'],
+        [4, '4th'],
+        [1337, '1337th']
+    ])('rankingRankToHumanReadable %s returns %s', (rank, exp) => {
+        expect(rankingRankToHumanReadable(rank)).toEqual(exp)
     })
     it.each([
         { countries: [], key: 'foo', expected: 0 },

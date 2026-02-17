@@ -37,7 +37,7 @@ export const Search = () => {
             const { result: { data, error } } = await searchAnything({ searchText }).unwrap()
             data && dispatch(setSearchResult(data))
         } catch (err) {
-            console.log(err)
+            /* console.log(err) */
         } finally {
             dispatch(setIsLoading(false))
         }

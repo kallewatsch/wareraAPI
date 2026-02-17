@@ -34,15 +34,7 @@ export const CountriesRankingTable = props => {
     }
 
     const handleSortTable = (event, key) => {
-        /* const sortedCunts = [...countries].sort((a, b) => {
-            if (!a.rankings[key]) {
-                return -1
-            }
-            if (!b.rankings[key]) {
-                return 1
-            }
-            return a.rankings[key].value > b.rankings[key].value ? 1 : a.rankings[key].value < b.rankings[key].value ? -1 : 0
-        }) */
+
         const sortedCunts = sortCountryByRankingKey(countries, key)
 
         if (sortedCountries.every((item, i) => sortedCunts[i] && item._id == sortedCunts[i]._id)) {

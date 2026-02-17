@@ -35,6 +35,11 @@ export const rankingValueToHumanReadable = (value) => {
     return isNaN(intVal) ? '-' : Math.round(intVal).toLocaleString()
 }
 
+export const rankingRankToHumanReadable = rank => {
+    // hell awaits me for sure
+    return !rank ? '-' : rank == 3 ? `${rank}rd` : rank == 2 ? `${rank}nd` : rank == 1 ? `${rank}st` : `${rank}th`
+}
+
 export const getRankingSum = (arr, key) => {
     return arr.reduce((acc, cur) => acc + (cur.rankings[key] ? cur.rankings[key].value : 0), 0)
 }
