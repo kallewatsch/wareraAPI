@@ -4,34 +4,41 @@ import Tabs from "react-bootstrap/Tabs"
 import Tab from "react-bootstrap/Tab"
 import UserRankings from "./UserRankings"
 import UserSkills from "./UserSkills"
+import SimpleStats from "../SimpleStats"
 
 export const User = (props) => {
-    console.log("User", props)
     const {
         username,
         avatarUrl,
         rankings,
-        skills
+        skills,
+        dates,
+        leveling,
+        ...otherProps
     } = props
 
-    const [key, setKey] = useState('rankings');
+    const [key, setKey] = useState('skills');
 
     return (
-        <Card>
+        <Card bg={otherProps.infos?.isBanned ? 'danger' : undefined}>
             <Card.Header>
+                {username} {otherProps.infos?.isBanned && '(banned user)'}
             </Card.Header>
-            <Card.Img src={avatarUrl} />
+            {/* <Card.Img src={avatarUrl} /> */}
             <Card.Body>
                 <Tabs
                     activeKey={key}
                     onSelect={(k) => setKey(k)}
                     className="mb-3"
                 >
-                    <Tab eventKey="home" title="Home">
-                        Tab content for Home
+                    <Tab eventKey="other" title="Other">
+                        <SimpleStats {...otherProps} />
                     </Tab>
-                    <Tab eventKey="profile" title="Profile">
-                        Tab content for Profile
+                    <Tab eventKey="dates" title="Dates">
+                        <SimpleStats {...dates} />
+                    </Tab>
+                    <Tab eventKey="leveling" title="Leveling">
+                        <SimpleStats {...leveling} />
                     </Tab>
                     <Tab eventKey="skills" title="Skills">
                         <UserSkills {...skills} />
@@ -39,11 +46,10 @@ export const User = (props) => {
                     <Tab eventKey="rankings" title="Rankings">
                         <UserRankings {...rankings} />
                     </Tab>
-                    
+
                 </Tabs>
             </Card.Body>
             <Card.Footer></Card.Footer>
-            yo
         </Card>
     )
 

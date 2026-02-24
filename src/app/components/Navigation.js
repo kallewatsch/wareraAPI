@@ -12,7 +12,6 @@ const routes = [
     "events",
     "governments",
     "regions",
-    "users",
     /* "battles",
     "rounds",
     "battlerankings", */
@@ -21,6 +20,8 @@ const routes = [
     "itemoffers",
     "mus",
     "warplaner",
+    /* "market", */
+    "intel"
     /* "miau" */
 ]
 

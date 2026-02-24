@@ -24,7 +24,6 @@ import ItemOffers from "./components/ItemOffers"
 import WorkOffers from "./components/WorkOffers"
 import Rankings from "./components/Rankings"
 import GameConfig from "./components/GameConfig"
-import Users from "./components/Users"
 import Articles from "./components/Articles"
 import MUs from "./components/MUs"
 import Transactions from "./components/Transactions"
@@ -35,6 +34,8 @@ import Navigation from "./components/Navigation"
 import Home from "./components/Home"
 import WarPlaner from "./components/warplaner/WarPlaner"
 import LineChart from "./components/LineChart"
+import Market from "./components/market/Market"
+import Intel from "./components/intel/Intel"
 
 const router = createHashRouter(
     [
@@ -111,10 +112,6 @@ const router = createHashRouter(
             element: <GameConfig />
         },
         {
-            path: "/users",
-            element: <Users />
-        },
-        {
             path: "/articles",
             element: <Articles />
         },
@@ -141,6 +138,14 @@ const router = createHashRouter(
         {
             path: "/miau",
             element: <LineChart />
+        },
+        {
+            path: "/market",
+            element: <Market />
+        },
+        {
+            path: "/intel",
+            element: <Intel />
         }
     ]
 )

@@ -375,36 +375,21 @@ export const wareraApi = createApi({
                 console.log(companiesIds)
                 const allWorkOffers = []
                 await Promise.all(companiesIds.map(async (companyId) => {
-                    const { data, error } = await fetchWithBQ(`workOffer.getWorkOfferByCompanyId?input=${JSON.stringify({companyId})}`)
+                    const { data, error } = await fetchWithBQ(`workOffer.getWorkOfferByCompanyId?input=${JSON.stringify({ companyId })}`)
                     data && allWorkOffers.push(data.result.data.items)
                 }))
                 console.log("all workoffers", allWorkOffers)
                 return { data: allUsers }
             }
         }),
-        getCitizens: builder.query({
+        getAnythingBatched: builder.query({
             async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
-                let allUsers = []
-                let { data, error } = await fetchWithBQ(`user.getUsersByCountry?input=${JSON.stringify(_arg)}`)
-                if (error) return { error }
-                allUsers = [...allUsers, ...data.result.data.items]
-                let cursor = data.result.data.nextCursor
-                while (cursor) {
-                    const _argC = Object.assign({}, _arg, { cursor: cursor })
-                    let { data, error } = await fetchWithBQ(`user.getUsersByCountry?input=${JSON.stringify(_argC)}`)
-                    if (error) return { error }
-                    allUsers = [...allUsers, ...data.result.data.items]
-                    cursor = data.result.data.nextCursor
-                }
-                const allCitizens = []
-                await Promise.all(allUsers.map(async (user) => {
-                    const { data, error } = await fetchWithBQ(`user.getUserLite?input=${JSON.stringify({ userId: user._id })}`)
-                    console.log(data,error)
-                    data && allCitizens.push(data.result.data)
-                }))
-                return {data: allCitizens}
+                //let fuck = await fetchWithBQ()
+                const {endpoints, obj} = _arg
+                const fuck = await fetchWithBQ(`${endpoints.join()}?batch=1&input=${encodeURI(JSON.stringify(obj))}`)
+                return {data: fuck.data.map(x => x.result.data)}
             }
-        }),
+        })
     })
 })
 
@@ -427,6 +412,7 @@ export const {
     useLazyGetRoundLastHitsQuery,
     useLazyGetBattleRankingQuery,
     useLazyGetPricesQuery,
+    useGetPricesQuery,
     useLazyGetTopOrdersQuery,
     useLazyGetItemOfferQuery,
     useLazyGetWorkOfferQuery,
@@ -451,5 +437,5 @@ export const {
     useLazyGetWorkersQuery,
     useLazyGetWorkersTotalQuery,
     useLazyGetJobOffersByNationQuery,
-    useLazyGetCitizensQuery
+    useLazyGetAnythingBatchedQuery
 } = wareraApi
