@@ -3,21 +3,24 @@ import { useDispatch, useSelector } from "react-redux"
 import InputGroup from "react-bootstrap/InputGroup"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
+import CountrySelectModal from "./util/CountrySelectModal"
 import { useLazyGetMusPaginatedQuery, useLazyGetUserQuery, useLazyGetUsersByCountryQuery } from "../api"
-import { addMus, setData, setFreeMUs, setIsLoading, setUsers, addUsers } from "../appSlice"
+import { addMus, setMus, setFreeMUs, setIsLoading, setUsers, addUsers } from "../appSlice"
 
 
 export const FreeMUs = () => {
 
     const [getMUsPaginated] = useLazyGetMusPaginatedQuery()
-    const [getUsersPaginated] = useLazyGetUsersByCountryQuery()
+    const [getUsers] = useLazyGetUsersByCountryQuery()
     const { data: dataState, countries, isLoading, mus, freeMUs, users } = useSelector(state => state.app)
     const [countryId, setCountryId] = useState('')
-    const [countryName, setCountryName] = useState('')
+    const [country, setCountry] = useState()
+    const [showModal, setShowModal] = useState(true)
+
     const dispatch = useDispatch()
 
 
-    useEffect(() => {
+    /* useEffect(() => {
         const getNextCursorMU = async (cursor) => {
             const data = await getMUsPaginated(cursor).unwrap()
             dispatch(addMus(data.result.data.items))
@@ -44,12 +47,45 @@ export const FreeMUs = () => {
         if (!countryId) return;
         dispatch(setIsLoading(true))
         getNextCursorUsers({countryId}).catch(err => console.log(err))
-    }, [countryId])
+    }, [countryId]) */
 
-    const handleChangeCountry = event => {
+    const handleSetCountry = async country => {
+        setShowModal(false)
+        setCountry(countries.find(cunt => cunt._id == country))
         dispatch(setUsers([]))
-        setCountryId(event.target.value)
-        setCountryName(event.target.options[event.target.selectedIndex].text)
+        dispatch(setIsLoading(true))
+        try {
+
+            let { result: { data: { items: users, nextCursor: nextCursorU }, errorU } } = await getUsers({ countryId: country, limit: 100 }).unwrap()
+            let allItemsU = [...users]
+            while (nextCursorU) {
+                let { result: { data: moreData }, errorU } = await getUsers({ countryId: country, cursor: nextCursorU, limit: 100 }).unwrap()
+                allItems = [...allItemsU, ...moreData.items]
+                nextCursorU = moreData.nextCursor
+            }
+            let { result: { data: { items, nextCursor }, error } } = await getMUsPaginated({ limit: 100 }).unwrap()
+            let allItems = [...items]
+            while (nextCursor) {
+                let { result: { data: moreData }, error } = await getMUsPaginated({ cursor: nextCursor, limit: 100 }).unwrap()
+                allItems = [...allItems, ...moreData.items]
+                nextCursor = moreData.nextCursor
+            }
+            dispatch(setMus(allItems))
+            const freeMUs = allItems.filter(item => {
+                let cond1 = item.members.length < item.activeUpgradeLevels.dormitories * 5
+                let cond2 = users.some((user) => item.user == user._id)
+                return cond1 && cond2
+            }).map(item => {
+                let slots = `${item.members.length}/${item.activeUpgradeLevels.dormitories * 5}`
+                return { url: `https://app.warera.io/mu/${item._id}`, name: item.name, slots }
+            })
+            console.log("zadszu", freeMUs)
+            dispatch(setFreeMUs(freeMUs))
+        } catch (err) {
+            console.log(err)
+        } finally {
+            dispatch(setIsLoading(false))
+        }
     }
 
     const handleGetFreeMus = event => {
@@ -58,29 +94,27 @@ export const FreeMUs = () => {
             let cond2 = users.some((user) => item.user == user._id)
             return cond1 && cond2
         }).map(item => {
-            let slots = `${item.members.length}/${item.activeUpgradeLevels.dormitories*5}`
+            let slots = `${item.members.length}/${item.activeUpgradeLevels.dormitories * 5}`
             return { url: `https://app.warera.io/mu/${item._id}`, name: item.name, slots }
         })
         dispatch(setFreeMUs(freeMUs))
     }
 
-    const countryOptions = countries && countries.map((country, i) => <option key={`country-${i}`} value={country._id}>{country.name}</option>)
+    const modalProps = {
+        show: showModal, handleClose: setShowModal, confirm: handleSetCountry, countries: [...countries],
+        title: 'bla'
+    }
 
-    return <>
-        <InputGroup>
-            <Button onClick={handleGetFreeMus} variant={isLoading ? 'warning' : 'success'}
-                disabled={isLoading || !countryId}>{isLoading ? 'loading' : countryId ? 'show' : 'select country'}</Button>
-            <Form.Select value={countryId} onChange={handleChangeCountry}>
-                <option>Select Country</option>
-                {countryOptions}
-            </Form.Select>
-        </InputGroup>
-        {freeMUs && countryId && <h3>There are {freeMUs.length} MUs with free slots for country {countryName}</h3>}
-        <ul>
-            {freeMUs.map((mu, i) => (<li key={i}><a href={mu.url} target="_blank">{mu.name} | {mu.slots}</a></li>))}
-        </ul>
-    </>
-
+    return (
+        <>
+            <Button onClick={() => setShowModal(true)}>change Country</Button>
+            {freeMUs && country && <h3>There are {freeMUs.length} MUs with free slots for country {country.name}</h3>}
+            <ul>
+                {freeMUs.map((mu, i) => (<li key={i}><a href={mu.url} target="_blank">{mu.name} | {mu.slots}</a></li>))}
+            </ul>
+            <CountrySelectModal {...modalProps} />
+        </>
+    )
 }
 
 export default FreeMUs

@@ -60,6 +60,12 @@ export const appSlice = createSlice({
                 mus: newMus
             }
         },
+        setMus(state, action) {
+            return {
+                ...state,
+                mus: action.payload
+            }
+        },
         setIsLoading(state, action) {
             return {
                 ...state,
@@ -127,6 +133,7 @@ export const {
     setFreeMUs,
     setCountries,
     addMus,
+    setMus,
     setIsLoading,
     setUsers,
     addUsers,
