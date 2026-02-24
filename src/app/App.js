@@ -34,7 +34,7 @@ import Navigation from "./components/Navigation"
 import Home from "./components/Home"
 import WarPlaner from "./components/warplaner/WarPlaner"
 import LineChart from "./components/LineChart"
-import Market from "./components/market/Market"
+//import Market from "./components/market/Market"
 import Intel from "./components/intel/Intel"
 
 const router = createHashRouter(
@@ -139,10 +139,10 @@ const router = createHashRouter(
             path: "/miau",
             element: <LineChart />
         },
-        {
+        /* {
             path: "/market",
             element: <Market />
-        },
+        }, */
         {
             path: "/intel",
             element: <Intel />
