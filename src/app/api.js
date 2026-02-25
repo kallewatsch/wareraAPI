@@ -311,13 +311,13 @@ export const wareraApi = createApi({
             }
         }),
         getTransactions: builder.query({
-            query: ({ muId }) => {
-                // TODO: there are multiple params
-                let trpcData = { muId: muId }
+            query: (args) => {
+                const { data, headers } = args
                 return {
+                    headers,
                     url: 'transaction.getPaginatedTransactions',
                     method: 'GET',
-                    params: { input: JSON.stringify(trpcData) }
+                    params: { input: JSON.stringify(data) }
                 }
             }
         }),
@@ -385,9 +385,9 @@ export const wareraApi = createApi({
         getAnythingBatched: builder.query({
             async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
                 //let fuck = await fetchWithBQ()
-                const {endpoints, obj} = _arg
+                const { endpoints, obj } = _arg
                 const fuck = await fetchWithBQ(`${endpoints.join()}?batch=1&input=${encodeURI(JSON.stringify(obj))}`)
-                return {data: fuck.data.map(x => x.result.data)}
+                return { data: fuck.data.map(x => x.result.data) }
             }
         })
     })
