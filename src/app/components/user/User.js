@@ -5,6 +5,7 @@ import Tab from "react-bootstrap/Tab"
 import UserRankings from "./UserRankings"
 import UserSkills from "./UserSkills"
 import SimpleStats from "../SimpleStats"
+import UserInventory from "./UserInventory"
 
 export const User = (props) => {
     const {
@@ -46,7 +47,9 @@ export const User = (props) => {
                     <Tab eventKey="rankings" title="Rankings">
                         <UserRankings {...rankings} />
                     </Tab>
-
+                    <Tab eventKey="inventory" title="Inventory">
+                        <UserInventory userId={props._id} />
+                    </Tab>
                 </Tabs>
             </Card.Body>
             <Card.Footer></Card.Footer>
