@@ -17,7 +17,6 @@ const initialStateWarplaner = {
 }
 
 export const initialState = {
-    data: 'miau',
     freeMUs: [],
     countries: [],
     mus: [],
@@ -35,12 +34,6 @@ export const appSlice = createSlice({
     name: 'app',
     initialState: initialState,
     reducers: {
-        setData(state, action) {
-            return {
-                ...state,
-                data: action.payload
-            }
-        },
         setFreeMUs(state, action) {
             return {
                 ...state,
@@ -129,7 +122,6 @@ export const appSlice = createSlice({
 
 
 export const {
-    setData,
     setFreeMUs,
     setCountries,
     addMus,

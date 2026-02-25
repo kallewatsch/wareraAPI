@@ -59,3 +59,11 @@ export const sortCountryByRankingKey = (countries, key) => {
 export const getNonExcludedCountries = (countries, excludedIds) => {
     return countries.filter(country => excludedIds.every(id => id != country._id))
 }
+
+export const getFreeMUsByCountry = (mus, users) => {
+    return mus.filter(mu => {
+        const cond1 = mu.members.length < mu.activeUpgradeLevels.dormitories * 5
+        const cond2 = users.some((user) => mu.user == user._id)
+        return cond1 && cond2
+    })
+}

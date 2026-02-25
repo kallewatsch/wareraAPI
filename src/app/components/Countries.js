@@ -4,7 +4,6 @@ import InputGroup from "react-bootstrap/InputGroup"
 import Form from "react-bootstrap/Form"
 import Accordion from "react-bootstrap/Accordion"
 import { useLazyGetCountryByIdQuery, useGetAllCountriesQuery } from "../api"
-import { setData } from "../appSlice"
 import SimpleStats from "./SimpleStats"
 import Country from "./Country"
 

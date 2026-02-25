@@ -7,35 +7,15 @@ import { BsFillMoonStarsFill, BsFillSunFill } from "react-icons/bs";
 const routes = [
     "freemus",
     "search",
-    "companies",
     "countries",
-    "events",
-    "governments",
     "regions",
-    /* "battles",
-    "rounds",
-    "battlerankings", */
-    "prices",
-    "tradingorders",
-    "itemoffers",
-    "mus",
     "warplaner",
     /* "market", */
-    "intel"
-    /* "miau" */
+    "intel",
+    "miau"
 ]
 
 const disabledRoutes = [
-    "battles",
-    "rounds",
-    "battlerankings",
-    "workoffers",
-    "rankings",
-    "gameconfig",
-    "articles",
-    "transactions",
-    "upgrade",
-    "workers"
 ]
 
 export const Navigation = () => {

@@ -117,7 +117,7 @@ export const Country = props => {
                 src={`https://app.warera.io/images/flags/${props.code}.svg?v=16`} />
             <span>{props.name}</span>
             <a href={discordUrl} target="_blank">{discordUrl}</a>
-            <CountriesRankingTable countries={[{...props}]} variant="success" />
+            {/* <CountriesRankingTable countries={[{...props}]} variant="success" /> */}
             <CountryDiplomacy {...diplomacyProps} />
             <CountryEconomy {...economyProps} />
             {/* <SimpleStats {...simpleStatsProps} /> */}

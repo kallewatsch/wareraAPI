@@ -7,6 +7,7 @@ import { setWarPlaner, resetWarPlaner } from "../../appSlice"
 
 jest.mock('./CountriesTable', () => () => <mock-countriestable />)
 jest.mock('./CountriesPie', () => () => <mock-countriespie />)
+jest.mock('./WarPlanerBars', () => () => <mock-warplanerbars />)
 jest.mock('../../appSlice', () => ({
     __esModule: true,
     ...jest.requireActual('../../appSlice'),
@@ -14,7 +15,7 @@ jest.mock('../../appSlice', () => ({
     resetWarPlaner: jest.fn(() => ({ type: 'app/resetWarPlaner' }))
 }))
 
-describe("WarPlaner", () => {
+describe("WarPlanerCompare", () => {
     afterEach(() => {
         cleanup()
     })

@@ -1,6 +1,5 @@
 import reducer, {
     initialState,
-    setData,
     setFreeMUs,
     setCountries,
     addMus,
@@ -16,7 +15,6 @@ import reducer, {
 describe("appSlice", () => {
     it("initialState has expected structure and values", () => {
         expect(initialState).toEqual({
-            data: 'miau',
             freeMUs: [],
             countries: [],
             mus: [],
@@ -25,6 +23,7 @@ describe("appSlice", () => {
             regions: [],
             search: {},
             companies: [],
+            market: {},
             warplaner: {
                 attackers: {
                     ids: [],
@@ -43,13 +42,6 @@ describe("appSlice", () => {
     })
     it("should return initialState", () => {
         expect(reducer(undefined, {})).toEqual(initialState)
-    })
-    it("should handle setData", () => {
-        let foo = { bar: 'baz' }
-        expect(reducer(initialState, setData(foo))).toEqual({
-            ...initialState,
-            data: foo
-        })
     })
     it("should handle setFreeMUs", () => {
         const mus = []

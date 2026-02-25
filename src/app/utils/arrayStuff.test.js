@@ -9,7 +9,8 @@ import {
     rankingRankToHumanReadable,
     getRankingSum,
     sortCountryByRankingKey,
-    getNonExcludedCountries
+    getNonExcludedCountries,
+    getFreeMUsByCountry
 } from "./arrayStuff"
 
 describe("arrayStuff", () => {
@@ -132,5 +133,27 @@ describe("arrayStuff", () => {
         countries, exludedIds, expected
     }) => {
         expect(getNonExcludedCountries(countries, exludedIds)).toEqual(expected)
+    })
+    it.each([
+        { mus: [], users: [], expected: [] },
+        {
+            mus: [
+                {
+                    members: [],
+                    activeUpgradeLevels: { dormitories: 1 },
+                    user: 'foo'
+                }
+            ],
+            users: [{ _id: 'foo' }],
+            expected: [
+                {
+                    members: [],
+                    activeUpgradeLevels: { dormitories: 1 },
+                    user: 'foo'
+                }
+            ]
+        }
+    ])('getFreeMUsByCountry($mus, $users) returns $expected', ({ mus, users, expected }) => {
+        expect(getFreeMUsByCountry(mus, users)).toEqual(expected)
     })
 })
