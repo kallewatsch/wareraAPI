@@ -27,10 +27,10 @@ export const UserInventory = (props) => {
         const transactionType = "trading"
         try {
             dispatch(setIsLoading(true))
-            let { result: { data: { items, nextCursor } } } = await getTransactions({ data: { userId, transactionType }, headers }).unwrap()
+            let { result: { data: { items, nextCursor } } } = await getTransactions({ data: { userId, transactionType, limit: 100 }, headers }).unwrap()
             let allTransactions = [...items]
             while (nextCursor) {
-                const bla = await getTransactions({ data: { userId, transactionType, cursor: nextCursor }, headers }).unwrap()
+                const bla = await getTransactions({ data: { userId, transactionType, cursor: nextCursor, limit: 100 }, headers }).unwrap()
                 allTransactions = [...allTransactions, ...bla.result.data.items]
                 nextCursor = bla.result.data.nextCursor
             }
