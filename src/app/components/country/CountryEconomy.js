@@ -1,7 +1,7 @@
 import React from "react"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import SimpleStats from "./SimpleStats"
+import SimpleStats from "../SimpleStats"
 
 
 export const CountryEconomy = props => {

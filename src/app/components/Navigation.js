@@ -12,6 +12,7 @@ const routes = [
     "warplaner",
     /* "market", */
     "intel",
+    "events",
     "miau"
 ]
 

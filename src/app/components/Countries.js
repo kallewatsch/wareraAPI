@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form"
 import Accordion from "react-bootstrap/Accordion"
 import { useLazyGetCountryByIdQuery, useGetAllCountriesQuery } from "../api"
 import SimpleStats from "./SimpleStats"
-import Country from "./Country"
+import Country from "./country/Country"
 
 export const Countries = () => {
 

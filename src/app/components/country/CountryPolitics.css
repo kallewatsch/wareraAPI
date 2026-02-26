@@ -1,0 +1,8 @@
+.countryPolitics {
+    display: grid;
+    place-items: center;
+}
+
+.countryPolitics > .progress {
+    width: 80%;
+}
