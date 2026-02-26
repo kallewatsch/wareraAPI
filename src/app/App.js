@@ -6,8 +6,8 @@ import {
 import { useSelector, useDispatch } from "react-redux"
 import Container from "react-bootstrap/Container"
 import Spinner from "react-bootstrap/Spinner"
-import { useGetAllCountriesQuery } from "./api"
-import { setCountries } from "./appSlice"
+import { useGetAllCountriesQuery, useGetRegionsQuery } from "./api"
+import { setCountries, setRegions } from "./appSlice"
 import "./App.css"
 import Search from "./components/search/Search"
 import Countries from "./components/Countries"
@@ -19,6 +19,7 @@ import WarPlaner from "./components/warplaner/WarPlaner"
 import LineChart from "./components/LineChart"
 //import Market from "./components/market/Market"
 import Intel from "./components/intel/Intel"
+import WareraEvents from "./components/events/WareraEvents"
 
 const router = createHashRouter(
     [
@@ -61,13 +62,18 @@ const router = createHashRouter(
         {
             path: "/intel",
             element: <Intel />
-        }
+        },
+        {
+            path: "/events",
+            element: <WareraEvents />
+        },
     ]
 )
 
 export const App = () => {
 
-    const { data: countries, error } = useGetAllCountriesQuery()
+    const { data: countries, countriesError } = useGetAllCountriesQuery()
+    const { data: regions, error: regionsError } = useGetRegionsQuery()
     const { isLoading } = useSelector(state => state.app)
     const dispatch = useDispatch()
 
@@ -75,6 +81,11 @@ export const App = () => {
         if (!countries) return;
         dispatch(setCountries(countries.result.data))
     }, [countries])
+
+    useEffect(() => {
+        if (!regions) return;
+        dispatch(setRegions(regions.result.data))
+    }, [regions])
 
     return (
         <>{isLoading && <div id="loadingSpinner" ><Spinner /></div>}
