@@ -6,8 +6,6 @@ import Ranking from "../ranking/Ranking"
 import Card from "react-bootstrap/Card"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import Button from "react-bootstrap/Button"
-
 import "./Mu.css"
 
 export const Mu = props => {
@@ -47,7 +45,11 @@ export const Mu = props => {
             }
             setUsers(allUsers)
         }
-        asyncFoo([...members, owner, ...roles.managers.filter(id => !members.includes(id))], setUsers)
+        asyncFoo([
+            owner,
+            ...members.filter(id => id != owner),
+            ...roles.managers.filter(id => !members.includes(id) && id != owner)
+        ], setUsers)
 
     }, [_id])
 
@@ -61,7 +63,6 @@ export const Mu = props => {
                 <Row>
                     {Object.keys(rankings).map((key, i) => <Col key={i}><Ranking  {...rankings[key]} title={key} /></Col>)}
                 </Row>
-                {/* {Object.keys(rankings).map((key, i) => <Ranking key={i} {...rankings[key]} title={key} />)} */}
                 <Row>
                     <Col>
                         <h6>Members</h6>
@@ -71,12 +72,19 @@ export const Mu = props => {
                                 .sort((a, b) => a._id == owner ? -1 : 0)
                                 .sort((a, b) => roles.managers.includes(a._id) ? -1 : 0)
                                 .map((member, i) => {
-                                    const foo = roles.commanders.includes(member._id)
+                                    /* const foo = roles.commanders.includes(member._id)
                                         ? 'commander'
                                         : owner == member._id
                                             ? 'owner'
-                                            : roles.managers.includes(member._id) ? 'founder' : 'casual'
-                                    return <li key={i} className={foo}>{member.username}</li>
+                                            : roles.managers.includes(member._id) ? 'founder' : 'casual' */
+                                    const memberClassName = roles.managers.includes(member._id)
+                                        ? 'founder'
+                                        : owner == member._id
+                                            ? 'owner'
+                                            : roles.commanders.includes(member._id)
+                                                ? 'commander'
+                                                : 'casual'
+                                    return <li key={i} className={memberClassName}>{member.username}</li>
                                 })}
 
                         </ol>
@@ -98,30 +106,6 @@ export const Mu = props => {
                     </Col>
                 </Row>
                 <SimpleStats {...otherProps} />
-                {/* <Tabs
-                    activeKey={key}
-                    onSelect={(k) => setKey(k)}
-                    className="mb-3"
-                >
-                    <Tab eventKey="other" title="Other">
-                        <SimpleStats {...otherProps} />
-                    </Tab>
-                    <Tab eventKey="dates" title="Dates">
-                        <SimpleStats {...dates} />
-                    </Tab>
-                    <Tab eventKey="leveling" title="Leveling">
-                        <SimpleStats {...leveling} />
-                    </Tab>
-                    <Tab eventKey="skills" title="Skills">
-                        <UserSkills {...skills} />
-                    </Tab>
-                    <Tab eventKey="rankings" title="Rankings">
-                        <UserRankings {...rankings} />
-                    </Tab>
-                    <Tab eventKey="inventory" title="Inventory">
-                        <UserInventory userId={props._id} />
-                    </Tab>
-                </Tabs> */}
             </Card.Body>
             <Card.Footer></Card.Footer>
         </Card>
