@@ -7,7 +7,8 @@ export const getAllies = countries => {
 export const getNations = (countries, idsFriendly, idsHostile) => {
     const nations = countries.filter(country => idsFriendly.some(id => id == country._id))
     const alliesIds = getAllies(nations)
-    const alliesIdsClean = alliesIds.filter(item => idsHostile.every(id => id != item))
+    const alliesIdsClean = alliesIds.filter(item => idsHostile.every(id => id != item)).filter(item => idsFriendly.every(id => id != item))
+
     return [[...nations], [...countries.filter(country => alliesIdsClean.some(id => id == country._id))]]
 }
 
