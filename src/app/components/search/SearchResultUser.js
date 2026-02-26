@@ -20,7 +20,7 @@ export const SearchResultUser = props => {
     return (
         <>
             <Button onClick={event => setShow(true)}>{!user ? resultId : user.username}</Button>
-            <Modal show={show} onHide={handleClose} /* fullscreen */>
+            <Modal show={show} onHide={handleClose} fullscreen>
                 <Modal.Header closeButton>
                     <Button target="_blank" href={`https://app.warera.io/user/${resultId}`}>{!user ? resultId : user.username}<BsBoxArrowInRight /></Button>
                 </Modal.Header>

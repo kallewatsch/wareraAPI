@@ -21,7 +21,7 @@ export const SearchResultMu = props => {
     return (
         <>
             <Button onClick={event => setShow(true)}>{!mu ? resultId : mu.name}</Button>
-            <Modal show={show} onHide={handleClose} /* fullscreen */>
+            <Modal show={show} onHide={handleClose} fullscreen>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         <Button target="_blank" href={`https://app.warera.io/mu/${resultId}`}>{!mu ? resultId : mu.name}<BsBoxArrowInRight /></Button>

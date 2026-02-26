@@ -21,7 +21,7 @@ export const SearchResultRegion = props => {
     return (
         <>
             <Button onClick={event => setShow(true)}>{!region ? resultId : region.name}</Button>
-            <Modal show={show} onHide={handleClose} /* fullscreen */>
+            <Modal show={show} onHide={handleClose} fullscreen>
                 <Modal.Header closeButton>
                     <Button target="_blank" href={`https://app.warera.io/region/${resultId}`}>{!region ? resultId : region.name}<BsBoxArrowInRight /></Button>
                 </Modal.Header>
