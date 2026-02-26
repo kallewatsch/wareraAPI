@@ -23,7 +23,7 @@ export const User = (props) => {
     return (
         <Card bg={otherProps.infos?.isBanned ? 'danger' : undefined}>
             <Card.Header>
-                {username} {otherProps.infos?.isBanned && '(banned user)'}
+                <h1><img src={avatarUrl} />{username} {otherProps.infos?.isBanned && '(banned user)'}</h1>
             </Card.Header>
             {/* <Card.Img src={avatarUrl} /> */}
             <Card.Body>
