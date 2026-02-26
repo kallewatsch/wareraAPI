@@ -1,0 +1,38 @@
+.commander {
+    color: red;
+}
+
+.owner {
+    color: green;
+}
+
+.founder {
+    color: gold;
+}
+
+.casual {
+    color: #666
+}
+
+@keyframes disco {
+    from {
+        transform: rotateY(0deg);
+        background-color: chartreuse;
+        border: solid thick aqua;
+        color: blueviolet;
+    }
+    to {
+        transform: rotateY(360deg);
+        background-color: blueviolet;
+        border: dotted thick orangered;
+        color: chartreuse;
+    }
+}
+
+.freeSlotsMadness {
+    margin: 0 auto;
+    animation: 1s;
+    animation-name: disco;
+    animation-iteration-count: infinite;
+    font-weight: bold;
+}
