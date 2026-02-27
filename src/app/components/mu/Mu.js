@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { useLazyGetAnythingBatchedQuery } from "../../api"
+import { useLazyGetAnythingBatchedPostQuery, useLazyGetAnythingBatchedQuery } from "../../api"
 import SimpleStats from "../SimpleStats"
 import Ranking from "../ranking/Ranking"
 import Card from "react-bootstrap/Card"
@@ -25,7 +25,7 @@ export const Mu = props => {
 
     const { regions } = useSelector(state => state.app)
     const [users, setUsers] = useState([])
-    const [getAnythingBatched, { data, error }] = useLazyGetAnythingBatchedQuery()
+    const [getAnythingBatched, { data, error }] = useLazyGetAnythingBatchedPostQuery()
 
     useEffect(() => {
         if (!_id) return;
@@ -61,7 +61,7 @@ export const Mu = props => {
             </Card.Header>
             <Card.Body>
                 <Row>
-                    {Object.keys(rankings).map((key, i) => <Col key={i}><Ranking  {...rankings[key]} title={key} /></Col>)}
+                    {rankings && Object.keys(rankings).map((key, i) => <Col key={i}><Ranking  {...rankings[key]} title={key} /></Col>)}
                 </Row>
                 <Row>
                     <Col>
