@@ -8,7 +8,7 @@ export const Ranking = props => {
     const { value, tier, rank, title } = props
 
     return (
-        <div className={`ranking-${tier}`}>
+        <div className={`ranking-${tier||`default`}`}>
             <span className="rankingTitle">{title}</span>
             <hr />
             <span className="rankingValue"><BsRocketTakeoffFill /> {rankingValueToHumanReadable(value)}</span>
