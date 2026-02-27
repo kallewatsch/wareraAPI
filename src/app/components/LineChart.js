@@ -112,25 +112,26 @@ export const LineChart = () => {
     //const {pData, name} = props
     const pData = []
     const name = 'Company vs AE'
-
-    const companyPrices = [20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]
-    const aePrices = [4, 8, 16, 32, 64, 128]
+    const companyPrices = [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65]
+    const aePrices = [2, 4, 8, 16, 32, 64]
 
     const n = 12
     const allData = []
 
-    for (var i = 0; i < n - 1; i++) {
+    for (var i = 0; i < n ; i++) {
         const companyCount = i + 1
         const companyCostArr = companyPrices.slice(0, i)
-        const maxUpgrades = Math.min(n - companyCount, companyCount * 6)
+        const maxUpgrades = companyCount*6//Math.min(n - companyCount, companyCount * 6)
         const aeCostRepeatArr = [...Array(companyCount).keys()]
             .map(_ => aePrices)
             .flat()
             .sort((a, b) => a > b ? 1 : a < b ? -1 : 0)
             .slice(0, maxUpgrades)
-        console.log(companyCostArr, aeCostRepeatArr)
+        //console.log(companyCostArr, aeCostRepeatArr)
         const costArr = [...companyCostArr, ...aeCostRepeatArr]
         const data = costArr.sort().map((sum => value => sum += value)(0))
+        console.log(data)
+        data.splice(n)
         allData.push(data)
     }
 
