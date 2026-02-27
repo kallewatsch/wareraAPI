@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { initialStateWarplaner as stateMock } from '../mocks/initialStateWarplaner'
+import { initialStateWarplaner as stateMock } from '../mocks/states/initialStateWarplaner'
 
 const initialStateWarplaner = {
     attackers: {

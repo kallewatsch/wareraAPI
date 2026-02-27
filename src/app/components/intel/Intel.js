@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button"
 import User from "../user/User"
 import CountrySelectModal from "../util/CountrySelectModal"
 import getUserLiteResponse from "../../../mocks/responses/user.getUserLite.json"
-import { useLazyGetUsersByCountryQuery, useLazyGetUserQuery, useLazyGetAnythingBatchedQuery } from "../../api"
+import { useLazyGetUsersByCountryQuery, useLazyGetUserQuery, useLazyGetAnythingBatchedQuery, useLazyGetAnythingBatchedPostQuery } from "../../api"
 import { setIsLoading, setUsers } from "../../appSlice"
 
 export const Intel = (props) => {
@@ -15,11 +15,12 @@ export const Intel = (props) => {
 
     const [getUserIds] = useLazyGetUsersByCountryQuery()
     const [getUser] = useLazyGetUserQuery()
-    const [getAnythingBatched] = useLazyGetAnythingBatchedQuery()
+    const [getAnythingBatched] = useLazyGetAnythingBatchedPostQuery()
 
     const dispatch = useDispatch()
 
     const handleSetCountry = async country => {
+        const startedAt = Date.now()
         setShowModal(false)
         setCountry(countries.find(cunt => cunt._id == country))
         dispatch(setUsers([])) // remove this when better loadings indicator available
@@ -36,22 +37,25 @@ export const Intel = (props) => {
             let allUsers = []
             const ep = 'user.getUserLite'
             while (allItems.length) {
-                const chunk = allItems.splice(0, 200)
-                const payload = {
+                const chunk = allItems.splice(0, 800)
+
+                const payloadPost = {
                     endpoints: chunk.map(item => ep),
                     obj: Object.fromEntries(chunk.map((val, i) => [i, { userId: val._id }]))
                 }
-                const someUsers = await getAnythingBatched(payload).unwrap()
+                const someUsers = await getAnythingBatched(payloadPost).unwrap()
                 allUsers = [...allUsers, ...someUsers]
             }
-            
+
             dispatch(setUsers(allUsers))
-            
+
         } catch (err) {
             console.log(err)
             dispatch(setIsLoading(false))
         } finally {
             dispatch(setIsLoading(false))
+            const finishedAt = Date.now()
+            console.log(`finished after ${(finishedAt - startedAt) / 1000} seconds`)
         }
 
     }
@@ -65,7 +69,7 @@ export const Intel = (props) => {
         <>
             <Button onClick={() => setShowModal(true)}>change Country</Button>
             <h5>{country ? `${country.name} ${users.filter(user => user.isActive == true).length} Users, newest first` : 'No Country selected'}</h5>
-            {users && [...users].sort((a,b) => a.createdAt > b.createdAt ? -1 : a.createdAt < b.createdAt ? 1 : 0).map((user, i) => {
+            {users && [...users].sort((a, b) => a.createdAt > b.createdAt ? -1 : a.createdAt < b.createdAt ? 1 : 0).map((user, i) => {
                 return <User key={i} {...user} />
             })}
             <CountrySelectModal {...modalProps} />

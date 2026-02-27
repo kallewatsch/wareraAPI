@@ -398,7 +398,20 @@ export const wareraApi = createApi({
                 const fuck = await fetchWithBQ(`${endpoints.join()}?batch=1&input=${encodeURI(JSON.stringify(obj))}`)
                 return { data: fuck.data.map(x => x.result.data) }
             }
-        })
+        }),
+        getAnythingBatchedPost: builder.query({
+            query: (arg) => {
+                const { endpoints, obj } = arg
+                return {
+                    url: `${endpoints}?batch=1`,
+                    method: 'POST',
+                    body: obj
+                }
+            },
+            transformResponse: (response) => {
+                return response.map(x => x.result.data)
+            }
+        }),
     })
 })
 
@@ -450,5 +463,6 @@ export const {
     useGetPartyByIdQuery,
     useLazyGetPartyByIdQuery,
     useLazyGetJobOffersByNationQuery,
-    useLazyGetAnythingBatchedQuery
+    useLazyGetAnythingBatchedQuery,
+    useLazyGetAnythingBatchedPostQuery
 } = wareraApi
