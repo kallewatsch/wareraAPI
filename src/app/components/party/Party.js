@@ -3,6 +3,8 @@ import SimpleStats from "../SimpleStats"
 
 export const Party = props => {
 
+    console.log(props)
+
     return (
         <>
             <h1>Hello Party</h1>

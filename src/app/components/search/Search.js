@@ -14,7 +14,7 @@ import SearchResult from "./SearchResult"
 export const resultArrayNames = [
     "countryIds",
     "muIds",
-    //"partyIds", // no public endpoint available yet
+    "partyIds", // no public endpoint available yet
     "regionIds",
     "userIds"
 ]
