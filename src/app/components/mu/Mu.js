@@ -72,11 +72,6 @@ export const Mu = props => {
                                 .sort((a, b) => a._id == owner ? -1 : 0)
                                 .sort((a, b) => roles.managers.includes(a._id) ? -1 : 0)
                                 .map((member, i) => {
-                                    /* const foo = roles.commanders.includes(member._id)
-                                        ? 'commander'
-                                        : owner == member._id
-                                            ? 'owner'
-                                            : roles.managers.includes(member._id) ? 'founder' : 'casual' */
                                     const memberClassName = roles.managers.includes(member._id)
                                         ? 'founder'
                                         : owner == member._id
