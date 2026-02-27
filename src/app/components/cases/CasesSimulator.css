@@ -1,0 +1,44 @@
+.casesContainer {
+    padding: 5px;
+    border: solid thick #333;
+}
+
+.casesContainer > img {
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
+    margin: 8px;
+}
+
+.casesContainer > img.dunno:hover {
+    transform: scale(1.2);
+}
+
+.total, .mythic, .legendary, .epic, .rare, .uncommon, .common {
+    color: #ccc;
+    font-weight: bold;
+}
+
+.mythic {
+    background-color: brown !important;
+}
+
+.legendary {
+    background-color: goldenrod !important;
+}
+
+.epic {
+    background-color: blueviolet !important;
+}
+
+.rare {
+    background-color: dodgerblue !important;
+}
+
+.uncommon {
+    background-color: green !important;
+}
+
+.common {
+    background-color: gray !important;
+}

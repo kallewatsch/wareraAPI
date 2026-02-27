@@ -3,9 +3,18 @@ import InputGroup from "react-bootstrap/InputGroup"
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 import "./CasesSimulator.css"
-
-
-
+import boots from "./imgs/boots.png"
+import case1 from "./imgs/case1.png"
+import chest from "./imgs/chest.png"
+import gloves from "./imgs/gloves.png"
+import gun from "./imgs/gun.png"
+import helmet from "./imgs/helmet.png"
+import jet from "./imgs/jet.png"
+import knife from "./imgs/knife.png"
+import pants from "./imgs/pants.png"
+import rifle from "./imgs/rifle.png"
+import sniper from "./imgs/sniper.png"
+import tank from "./imgs/tank.png"
 /* 
 
 Tier 1 / Common / Grey	62%
@@ -16,6 +25,10 @@ Tier 5 / Legendary / Yellow	0,04%
 Tier 6 / Mythic / Red	0,01% => 99.99
 
 */
+const imagesObj = {
+    boots, case1, chest, gloves, gun, helmet, jet, knife, pants, rifle, sniper, tank
+}
+
 
 export const openCase = () => {
 
@@ -123,18 +136,21 @@ export const CasesSimulator = (props) => {
     }
 
     const foo = Array.from({ length: caseCount }).map((_, i) => {
+        const src = imagesObj[images[i].name]
         return <img key={i} alt={images[i].name} onClick={() => handleClick(i)}
-            src={`https://app.warera.io/images/items/${images[i].name}.png`} className={images[i].rareness} />
+            src={src} className={images[i].rareness} />
     })
+
+    const total = Object.keys(counter).map(key => counter[key]).reduce((acc, sum) => acc + sum, 0)
 
     return (
         <div>
             <InputGroup>
                 <Button onClick={handleReset} >reset</Button>
                 <Button onClick={handleOpenAll} >open all</Button>
-                {Object.keys(counter).map((key, i) => <Form.Control key={i} disabled value={`${key}: ${counter[key]}`} />)}
+                <Form.Control className="total" disabled value={`total: ${total}`} />
+                {Object.keys(counter).map((key, i) => <Form.Control className={key} key={i} disabled value={`${key}: ${counter[key]}`} />)}
             </InputGroup>
-
 
             <div className="casesContainer">
                 {foo}
