@@ -1,0 +1,33 @@
+.casesContainer > img {
+    width: 128px;
+    height: 128px;
+    cursor: pointer;
+}
+
+.casesContainer > img.dunno:hover {
+    transform: scale(1.2);
+}
+
+.mythic {
+    background-color: brown;
+}
+
+.legendary {
+    background-color: goldenrod;
+}
+
+.epic {
+    background-color: blueviolet;
+}
+
+.rare {
+    background-color: blue;
+}
+
+.uncommon {
+    background-color: green;
+}
+
+.common {
+    background-color: gray;
+}

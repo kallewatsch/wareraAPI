@@ -13,6 +13,7 @@ const routes = [
     /* "market", */
     "intel",
     "events",
+    "cases",
     "miau"
 ]
 

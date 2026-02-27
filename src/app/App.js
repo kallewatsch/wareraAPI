@@ -20,6 +20,7 @@ import LineChart from "./components/LineChart"
 //import Market from "./components/market/Market"
 import Intel from "./components/intel/Intel"
 import WareraEvents from "./components/events/WareraEvents"
+import CasesSimulator from "./components/CasesSimulator"
 
 const router = createHashRouter(
     [
@@ -66,6 +67,10 @@ const router = createHashRouter(
         {
             path: "/events",
             element: <WareraEvents />
+        },
+        {
+            path: "/cases",
+            element: <CasesSimulator caseCount={50} />
         },
     ]
 )
