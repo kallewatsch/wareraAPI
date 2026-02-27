@@ -37,10 +37,15 @@ export const Search = () => {
             const { result: { data, error } } = await searchAnything({ searchText }).unwrap()
             data && dispatch(setSearchResult(data))
         } catch (err) {
-            /* console.log(err) */
+            console.log(err)
         } finally {
             dispatch(setIsLoading(false))
         }
+    }
+
+    const handleEnterPress = async event => {
+        if (event.key != "Enter" && event.keyCode != 13) return;
+        handleSearch()
     }
 
     return <>
@@ -48,7 +53,7 @@ export const Search = () => {
             <Col md={6}>
                 <InputGroup>
                     <InputGroup.Text><BsSearch /></InputGroup.Text>
-                    <Form.Control onChange={handleChange} />
+                    <Form.Control onChange={handleChange} onKeyDown={handleEnterPress} />
                     <Button onClick={handleSearch}>search</Button>
                 </InputGroup>
             </Col>
