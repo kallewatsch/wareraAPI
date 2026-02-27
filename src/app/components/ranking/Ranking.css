@@ -1,19 +1,51 @@
+.ranking-platinum,
+.ranking-gold,
+.ranking-silver,
+.ranking-bronze,
+.rankingDefault {
+    border: solid thick;
+    border-radius: 5px;
+    padding: 10px;
+    display: grid;
+    margin: 5px 0px;
+}
+
 .ranking-platinum {
-    color: #E5E4E2;
+    background-color: rgba(229, 228, 226, 0.2);
+    color: rgb(229, 228, 226);
 }
 
 .ranking-gold {
-    color: 'gold';
+    background-color: rgba(255, 215, 0, 0.2);
+    color: gold;
 }
 
 .ranking-silver {
-    color: 'silver';
+    background-color: rgba(192, 192, 192, 0.2);
+    color: silver;
+
 }
 
 .ranking-bronze {
-    color: #CD7F32;
+    background-color: rgba(205, 127, 50, 0.2);
+    color: rgb(205, 127, 50);
 }
 
 .rankingDefault {
-    color: 'gray';
+    background-color: rgba(128, 128, 128, 0.2);
+    color: gray;
+
+}
+
+.rankingTitle {
+    font-weight: bold;
+}
+
+.rankingValue {
+    font-size: x-large;
+}
+
+.rankingRank {
+    font-size: smaller;
+    place-self: end;
 }

@@ -1,21 +1,19 @@
 import React from "react"
-import ListGroup from "react-bootstrap/ListGroup"
 import { BsFillStarFill, BsRocketTakeoffFill, BsBarChartFill } from "react-icons/bs"
-import "./Ranking.css"
 import { rankingValueToHumanReadable, rankingRankToHumanReadable } from "../../utils/arrayStuff"
+import "./Ranking.css"
 
 
 export const Ranking = props => {
     const { value, tier, rank, title } = props
+
     return (
-        <>
-            <h5>{title}</h5>
-            <ListGroup horizontal>
-                <ListGroup.Item><BsBarChartFill />{rankingValueToHumanReadable(value)}</ListGroup.Item>
-                <ListGroup.Item><BsRocketTakeoffFill />{rankingRankToHumanReadable(rank)}</ListGroup.Item>
-                <ListGroup.Item><BsFillStarFill className={`ranking-${tier}`}/>{tier || '-'}</ListGroup.Item>
-            </ListGroup>
-        </>
+        <div className={`ranking-${tier}`}>
+            <span className="rankingTitle">{title}</span>
+            <hr />
+            <span className="rankingValue"><BsRocketTakeoffFill /> {rankingValueToHumanReadable(value)}</span>
+            <span className="rankingRank">{rankingRankToHumanReadable(rank)}</span>
+        </div>
     )
 }
 
