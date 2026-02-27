@@ -67,9 +67,10 @@ export const FreeMUs = () => {
             <Accordion>
                 {freeMUs.map((mu, i) => {
                     const eventKey = mu._id
+                    const slots = `${mu.members.length}/${mu.activeUpgradeLevels.dormitories * 5}`
                     return (
                         <Accordion.Item eventKey={eventKey} id={eventKey} key={i}>
-                            <Accordion.Header>{mu.name} <span className="freeSlotsMadness">!!!FREE SLOTS!!!</span></Accordion.Header>
+                            <Accordion.Header>{mu.name} {slots} <span className="freeSlotsMadness">!!!FREE SLOTS!!!</span></Accordion.Header>
                             <Accordion.Body>
                                 <Button target="_blank" href={`https://app.warera.io/mu/${mu._id}`}>Visit Military Unit<BsBoxArrowInRight /></Button>
                                 <Mu {...mu} />
