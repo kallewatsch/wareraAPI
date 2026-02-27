@@ -351,6 +351,15 @@ export const wareraApi = createApi({
                 }
             }
         }),
+        getPartyById: builder.query({
+            query: (data) => {
+                return {
+                    url: 'party.getById',
+                    method: 'GET',
+                    params: { input: JSON.stringify(data) }
+                }
+            }
+        }),
         getJobOffersByNation: builder.query({
             async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
                 let allUsers = []
@@ -438,6 +447,8 @@ export const {
     useGetWorkersQuery,
     useLazyGetWorkersQuery,
     useLazyGetWorkersTotalQuery,
+    useGetPartyByIdQuery,
+    useLazyGetPartyByIdQuery,
     useLazyGetJobOffersByNationQuery,
     useLazyGetAnythingBatchedQuery
 } = wareraApi
