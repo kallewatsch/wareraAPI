@@ -115,7 +115,8 @@ export const CasesSimulator = (props) => {
         const newImages = [...images]
         newImages.splice(index, 1, { name, rareness })
         const meh = Object.assign({}, { ...counter })
-        const fuck = [meh, { [rareness]: 1 }]
+        const bla = Object.assign({}, { mythic: 0, legendary: 0, epic: 0, rare: 0, uncommon: 0, common: 0 }, { [rareness]: 1 })
+        const fuck = [meh, bla]
         const foo = calcTotalForDataProps(fuck, Object.keys(weaponTypes))
         setCounter(foo)
         setImages(newImages)
