@@ -79,7 +79,11 @@ export const Mu = props => {
                                             : roles.commanders.includes(member._id)
                                                 ? 'commander'
                                                 : 'casual'
-                                    return <li key={i} className={memberClassName}>{member.username}</li>
+                                    const d = new Date(member?.dates?.lastConnectionAt)
+                                    const lastDate = d.toLocaleDateString()
+                                    const lastTime = d.toLocaleTimeString()
+                                    const lastSeen = `${lastDate} ${lastTime}`
+                                    return <li key={i} className={memberClassName}>{member.username} {lastSeen}</li>
                                 })}
 
                         </ol>
