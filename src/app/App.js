@@ -6,8 +6,8 @@ import {
 import { useSelector, useDispatch } from "react-redux"
 import Container from "react-bootstrap/Container"
 import Spinner from "react-bootstrap/Spinner"
-import { useGetAllCountriesQuery, useGetRegionsQuery } from "./api"
-import { setCountries, setRegions } from "./appSlice"
+import { useGetAllCountriesQuery, useGetGameConfigQuery, useGetRegionsQuery } from "./api"
+import { setConfig, setCountries, setRegions } from "./appSlice"
 import "./App.css"
 import Search from "./components/search/Search"
 import Countries from "./components/Countries"
@@ -79,8 +79,14 @@ export const App = () => {
 
     const { data: countries, countriesError } = useGetAllCountriesQuery()
     const { data: regions, error: regionsError } = useGetRegionsQuery()
+    const { data: config, error: configError } = useGetGameConfigQuery()
     const { isLoading } = useSelector(state => state.app)
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        if(!config) return;
+        dispatch(setConfig(config.result.data))
+    }, [config])
 
     useEffect(() => {
         if (!countries) return;

@@ -27,7 +27,8 @@ export const initialState = {
     //warplaner: stateMock,
     warplaner: initialStateWarplaner,
     search: {},
-    market: {}
+    market: {},
+    config: {}
 }
 
 export const appSlice = createSlice({
@@ -116,6 +117,12 @@ export const appSlice = createSlice({
                 ...state,
                 market: action.payload
             }
+        },
+        setConfig(state, action) {
+            return {
+                ...state,
+                config: action.payload
+            }
         }
     }
 })
@@ -134,7 +141,8 @@ export const {
     setWarPlaner,
     resetWarPlaner,
     setSearchResult,
-    setMarket
+    setMarket,
+    setConfig
 } = appSlice.actions
 
 

@@ -445,6 +445,7 @@ export const {
     useLazyGetRankingQuery,
     useLazySearchAnythingQuery,
     useLazyGetGameDatesQuery,
+    useGetGameConfigQuery,
     useLazyGetGameConfigQuery,
     useGetUserQuery,
     useLazyGetUserQuery,
