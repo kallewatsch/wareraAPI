@@ -6,8 +6,10 @@ import Ranking from "../ranking/Ranking"
 import Card from "react-bootstrap/Card"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import Badge from "react-bootstrap/Badge"
+import ListGroup from "react-bootstrap/ListGroup"
 import "./Mu.css"
+import MuMember from "./MuMember"
+import MuDonor from "./MuDonor"
 
 
 export const foo = (datestring) => {
@@ -30,14 +32,17 @@ export const Mu = props => {
         ...otherProps
     } = props
 
+    const { managers, commanders } = roles || {}
+
     const { regions, config } = useSelector(state => state.app)
     const [users, setUsers] = useState([])
+    const [muUsers, setMuUsers] = useState({ members: [], commanders: [], donors: [], owner: {}, founder: {} })
     const [getAnythingBatched, { data, error }] = useLazyGetAnythingBatchedPostQuery()
 
     useEffect(() => {
         if (!_id) return;
 
-        const asyncFoo = async (allItems, cb) => {
+        const asyncFoo = async (allItems) => {
             let allUsers = []
             const ep = 'user.getUserLite'
 
@@ -56,10 +61,21 @@ export const Mu = props => {
             owner,
             ...members.filter(id => id != owner),
             ...roles.managers.filter(id => !members.includes(id) && id != owner)
-        ], setUsers)
+        ])
 
     }, [_id])
 
+    const memberUsers = users.filter(user => members.includes(user._id))
+        .sort((a,b) => commanders.includes(a._id) ? -1 : commanders.includes(b._id) ? - 1: 0)
+    //const commanderUsers = users.filter(user => commanders.includes(user._id))
+    const founderUsers = users.filter(user => managers.includes(user._id))
+    const ownerUsers = users.filter(user => owner == user._id)
+    const donorUsers = users.filter(user => investedMoneyByUsers?.hasOwnProperty(user._id))
+        .sort((a,b) => {
+            const aVal = investedMoneyByUsers?.[a._id]
+            const bVal = investedMoneyByUsers?.[b._id]
+            return aVal > bVal ? -1 : aVal < bVal ? 1 : 0
+        })
 
     return (
         <Card>
@@ -72,41 +88,28 @@ export const Mu = props => {
                 </Row>
                 <Row>
                     <Col>
+                        <h6>Founder</h6>
+                        <ListGroup>
+                            {founderUsers.map((user, i) => <MuMember key={i} {...user} />)}
+                        </ListGroup>
+                        <h6>Owner</h6>
+                        <ListGroup>
+                            {ownerUsers.map((user, i) => <MuMember key={i} {...user} />)}
+                        </ListGroup>
+                        {/* <h6>Commanders</h6>
+                        <ListGroup>
+                            {commanderUsers.map((user, i) => <MuMember key={i} {...user} />)}
+                        </ListGroup> */}
                         <h6>Members</h6>
-                        <ol>
-                            {users && users
-                                .sort((a, b) => roles.commanders.includes(a._id) ? -1 : 1)
-                                .sort((a, b) => a._id == owner ? -1 : 0)
-                                .sort((a, b) => roles.managers.includes(a._id) ? -1 : 0)
-                                .map((member, i) => {
-                                    const memberClassName = roles.managers.includes(member._id)
-                                        ? 'founder'
-                                        : owner == member._id
-                                            ? 'owner'
-                                            : roles.commanders.includes(member._id)
-                                                ? 'commander'
-                                                : 'casual'
-                                    const d = new Date(member.dates?.lastConnectionAt)
-                                    
-                                    return <li key={i} className={memberClassName}>{member.username} <Badge>{foo(d)}</Badge></li>
-                                })}
-
-                        </ol>
-
+                        <ListGroup>
+                            {memberUsers.map((user, i) => <MuMember key={i} {...user} isCommander={commanders.includes(user._id)}/>)}
+                        </ListGroup>
                     </Col>
                     <Col>
                         <h6>Donors</h6>
-                        <ol>
-                            {investedMoneyByUsers && Object.keys(investedMoneyByUsers)
-                                .map(key => ([key, investedMoneyByUsers[key]]))
-                                .sort((a, b) => b[1] - a[1])
-                                .map((userIdMoneyTpl, i) => {
-                                    return (
-                                        <li key={i}>{userIdMoneyTpl[0]}: {userIdMoneyTpl[1]}</li>
-                                    )
-                                })
-                            }
-                        </ol>
+                        <ListGroup>
+                            {donorUsers.map((user,i) => <MuDonor key={i} username={user.username} amount={investedMoneyByUsers?.[user._id]} />)}
+                        </ListGroup>
                     </Col>
                 </Row>
                 <SimpleStats {...otherProps} />

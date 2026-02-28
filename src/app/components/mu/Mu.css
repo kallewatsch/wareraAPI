@@ -1,17 +1,9 @@
-.commander {
-    color: red;
-}
-
-.owner {
-    color: green;
-}
-
-.founder {
+.text-gold {
     color: gold;
 }
 
-.casual {
-    color: #666
+.mu-member, .mu-donor {
+    font-size: 16pt;
 }
 
 @keyframes disco {
