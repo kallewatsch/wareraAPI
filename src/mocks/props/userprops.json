@@ -1,0 +1,244 @@
+{
+    "dates": {
+        "lastConnectionAt": "2026-02-24T03:34:00.440Z",
+        "lastNotificationsCheckAt": "2025-05-15T23:07:32.574Z",
+        "lastCountryMessageCheckAt": "2025-05-15T23:07:32.574Z",
+        "lastGlobalMessageCheckAt": "2025-05-15T23:07:32.574Z",
+        "lastEventsCheckAt": "2025-05-15T23:07:32.574Z",
+        "lastWorkOfferApplications": [
+            "2026-01-31T23:26:02.841Z",
+            "2026-02-07T23:23:43.847Z",
+            "2026-02-17T17:18:08.837Z"
+        ],
+        "lastWorkAt": "2026-02-24T03:35:17.735Z",
+        "lastDailyRewardClaimedAt": "2026-02-24T02:29:20.158Z",
+        "lastHelpAskedAt": "2026-02-23T20:11:07.887Z",
+        "lastCitizenshipChangeAt": "2026-02-05T01:39:18.680Z",
+        "lastTakingControlAt": "2025-09-16T21:45:58.230Z",
+        "lastHiresAt": [
+            "2026-01-10T17:40:25.002Z",
+            "2026-01-11T03:05:49.351Z",
+            "2026-01-31T23:54:44.378Z",
+            "2026-02-22T01:02:35.423Z",
+            "2026-02-22T01:03:54.229Z",
+            "2026-02-22T12:47:34.779Z",
+            "2026-02-23T11:53:05.995Z",
+            "2026-02-23T12:17:06.403Z"
+        ],
+        "lastCompanyJoinedAt": "2026-02-17T17:18:08.835Z"
+    },
+    "infos": {
+        "isPremium": true,
+        "premiumMonthsCount": 7,
+        "colorScheme": "lightBlue",
+        "font": "Texturina",
+        "description": "Bounty o plomo",
+        "vicePresidentOf": "6813b6d446e731854c7ac7fb"
+    },
+    "leveling": {
+        "level": 37,
+        "totalXp": 50380,
+        "dailyXpLeft": 0,
+        "availableSkillPoints": 1,
+        "spentSkillPoints": 147,
+        "totalSkillPoints": 148,
+        "freeReset": 1
+    },
+    "_id": "682673b42df7380c5363a0c0",
+    "username": "Miauricio",
+    "country": "6813b6d446e731854c7ac7fb",
+    "isActive": true,
+    "skills": {
+        "energy": {
+            "level": 0,
+            "currentBarValue": 13,
+            "value": 30,
+            "weapon": null,
+            "equipment": null,
+            "limited": null,
+            "total": 30,
+            "hourlyBarRegen": 3
+        },
+        "health": {
+            "level": 2,
+            "currentBarValue": 24.800000000000026,
+            "value": 70,
+            "weapon": null,
+            "equipment": null,
+            "limited": null,
+            "total": 70,
+            "hourlyBarRegen": 7
+        },
+        "hunger": {
+            "level": 4,
+            "currentBarValue": 3.000000000000001,
+            "value": 8,
+            "weapon": null,
+            "equipment": null,
+            "limited": null,
+            "total": 8,
+            "hourlyBarRegen": 0.8
+        },
+        "attack": {
+            "level": 6,
+            "ammoPercent": 10,
+            "buffsPercent": 0,
+            "debuffsPercent": 60,
+            "militaryRankPercent": 24.5,
+            "value": 220,
+            "weapon": 115,
+            "equipment": null,
+            "limited": null,
+            "total": 184
+        },
+        "companies": {
+            "level": 6,
+            "value": 8,
+            "weapon": null,
+            "equipment": null,
+            "limited": null,
+            "total": 8
+        },
+        "entrepreneurship": {
+            "level": 0,
+            "currentBarValue": 13,
+            "value": 30,
+            "weapon": null,
+            "equipment": null,
+            "limited": null,
+            "total": 30,
+            "hourlyBarRegen": 3
+        },
+        "production": {
+            "level": 0,
+            "currentBarValue": 10,
+            "value": 10,
+            "weapon": null,
+            "equipment": null,
+            "limited": null,
+            "total": 10,
+            "hourlyBarRegen": 1
+        },
+        "criticalChance": {
+            "level": 5,
+            "value": 35,
+            "weapon": 16,
+            "equipment": null,
+            "limited": null,
+            "total": 51
+        },
+        "criticalDamages": {
+            "level": 6,
+            "value": 220,
+            "weapon": null,
+            "equipment": 29,
+            "limited": null,
+            "total": 249
+        },
+        "armor": {
+            "level": 4,
+            "value": 16,
+            "weapon": null,
+            "equipment": 29,
+            "limited": null,
+            "total": 45
+        },
+        "precision": {
+            "level": 4,
+            "value": 70,
+            "weapon": null,
+            "equipment": 15,
+            "limited": null,
+            "total": 85
+        },
+        "dodge": {
+            "level": 8,
+            "value": 32,
+            "weapon": null,
+            "equipment": 18,
+            "limited": null,
+            "total": 50
+        },
+        "lootChance": {
+            "level": 0,
+            "value": 5,
+            "weapon": null,
+            "equipment": null,
+            "limited": null,
+            "total": 5
+        },
+        "management": {
+            "level": 0,
+            "value": 4,
+            "weapon": null,
+            "equipment": null,
+            "limited": null,
+            "total": 4
+        }
+    },
+    "createdAt": "2025-05-15T23:07:32.576Z",
+    "stats": {
+        "damagesCount": 23260561
+    },
+    "rankings": {
+        "userDamages": {
+            "value": 23258612,
+            "rank": 58,
+            "tier": "master"
+        },
+        "weeklyUserDamages": {
+            "value": 674142,
+            "rank": 18,
+            "tier": "master"
+        },
+        "userWealth": {
+            "value": 17272.392,
+            "rank": 503,
+            "tier": "platinum"
+        },
+        "userLevel": {
+            "value": 50380,
+            "rank": 199,
+            "tier": "diamond"
+        },
+        "userReferrals": {
+            "value": 2,
+            "rank": 193,
+            "tier": "diamond"
+        },
+        "userSubscribers": {
+            "value": 12,
+            "rank": 166,
+            "tier": "platinum"
+        },
+        "userTerrain": {
+            "value": 13568,
+            "rank": 44,
+            "tier": "platinum"
+        },
+        "userPremiumMonths": {
+            "value": 7,
+            "rank": 32,
+            "tier": "diamond"
+        },
+        "userCasesOpened": {
+            "value": 1828,
+            "rank": 256,
+            "tier": "diamond"
+        },
+        "userBounty": {
+            "value": 3294.9076133228996,
+            "rank": 80,
+            "tier": "diamond"
+        }
+    },
+    "avatarUrl": "https://media.warera.io/avatars/682673b42df7380c5363a0c0-1770260899579-54h3pdat.jpg",
+    "militaryRank": 80,
+    "mu": "6873ebf206cf11a5f9dbf7eb",
+    "buffs": {
+        "debuffCodes": [
+            "cocain"
+        ],
+        "debuffEndAt": "2026-02-24T20:05:03.773Z"
+    }
+}

@@ -1,0 +1,14 @@
+{
+  "result": {
+    "data": {
+      "nextDayAt": "2026-03-01T00:00:00.000Z",
+      "nextRegenAt": "2026-02-28T15:00:00.000Z",
+      "previousDayAt": "2026-02-28T00:00:00.000Z",
+      "nextCongressElectionsAt": "2026-03-05T00:00:00.000Z",
+      "nextPresidentialElectionsAt": "2026-03-01T00:00:00.000Z",
+      "nextMonthAt": "2026-03-01T00:00:00.000Z",
+      "dailyMissionRegenAt": "2026-03-01T00:00:00.000Z",
+      "weeklyMissionRegenAt": "2026-03-02T00:00:00.000Z"
+    }
+  }
+}

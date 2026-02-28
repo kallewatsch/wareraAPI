@@ -1,12 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-//import { BASEURL_DEV, BASEURL_PROD } from './settings'
 
-const baseUrl = 'https://api2.warera.io/trpc'//BASEURL_DEV
+const baseUrl = 'https://api2.warera.io/trpc'
 
 export const wareraApi = createApi({
     reducerPath: 'wareraApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: baseUrl
+        baseUrl: new URL(baseUrl, location.origin).href
     }),
     endpoints: (builder) => ({
         getCompanyById: builder.query({

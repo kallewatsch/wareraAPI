@@ -1,5 +1,8 @@
 import { http, HttpResponse } from "msw"
 import allCountriesResponse from "./responses/country.getAllCountries.json"
+import regionGetRegionsObjectResponse from "./responses/region.getRegionsObject.json"
+import gameConfigGetDatesResponse from "./responses/gameConfig.getDates.json"
+import gameConfigGetGameConfigResponse from "./responses/gameConfig.getGameConfig.json"
 
 export const BASE_URL = "https://api2.warera.io/trpc"
 
@@ -121,13 +124,90 @@ export const getUserByIdHandlers = {
     })
 }
 
+// new schema
+
+export const companyHandlers = {
+    getById: {},
+    getCompanies: {}
+}
+
+export const countryHandlers = {
+    getCountryById: {},
+    getAllCountries: {
+        success: http.get(`${BASE_URL}/country.getAllCountries`, () => {
+            return HttpResponse.json(allCountriesResponse)
+        }),
+    }
+}
+export const eventHandlers = {}
+
+export const governmentHandlers = {}
+
+export const regionHandlers = {
+    getRegionsOject: {
+        success: http.get(`${BASE_URL}/region.getRegionsObject`, () => {
+            return HttpResponse.json(regionGetRegionsObjectResponse)
+        }),
+    }
+}
+
+export const battleHandlers = {}
+
+export const roundHandlers = {}
+
+export const battleRankingHandlers = {}
+
+export const itemTradingHandlers = {}
+
+export const tradinOrderHandlers = {}
+
+export const itemOfferHandlers = {}
+
+export const workOfferHandlers = {}
+
+export const rankingHandlers = {}
+
+export const searchHandlers = {}
+
+
+export const gameConfigHandlers = {
+    getDates: {
+        success: http.get(`${BASE_URL}/gameConfig.getDates`, () => {
+            return HttpResponse.json(gameConfigGetDatesResponse)
+        }),
+    },
+    getGameConfig: {
+        success: http.get(`${BASE_URL}/gameConfig.getGameConfig`, () => {
+            return HttpResponse.json(gameConfigGetGameConfigResponse)
+        }),
+    }
+}
+
+export const userHandlers = {}
+
+export const articleHandlers = {}
+
+export const muHandlers = {}
+
+export const transactionHandlers = {}
+
+export const upgradeHandlers = {}
+
+export const workerHandlers = {}
+
+
+
 export const handlers = {
     searchAnythingHandlers,
     getAllCountriesHandlers,
     getCountryByIdHandlers,
     getMuByIdHandlers,
     getRegionByIdHandlers,
-    getUserByIdHandlers
+    getUserByIdHandlers,
+    // new schema
+    countryHandlers,
+    regionHandlers,
+    gameConfigHandlers
 }
 
 export default handlers
