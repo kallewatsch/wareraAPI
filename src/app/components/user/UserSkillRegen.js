@@ -22,10 +22,10 @@ export const UserSkillRegen = (props) => {
     } = props
 
     const key = skillName.toLowerCase()
-    const fuck = config.skills[key]
+    const fuck = config?.skills?.[key]
 
     const maxVal = skill.total
-    const fuckVal = fuck[10]?.value
+    const fuckVal = fuck?.[10]?.value
     const label = `${skill.currentBarValue.toFixed(1)}/${maxVal}`
 
     return <>

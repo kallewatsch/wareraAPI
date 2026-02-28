@@ -6,6 +6,9 @@ import UserRankings from "./UserRankings"
 import UserSkills from "./UserSkills"
 import SimpleStats from "../SimpleStats"
 import UserInventory from "./UserInventory"
+import UserCardHeader from "./UserCardHeader"
+import UserDates from "./UserDates"
+
 
 export const User = (props) => {
     const {
@@ -15,15 +18,21 @@ export const User = (props) => {
         skills,
         dates,
         leveling,
+        infos,
         ...otherProps
     } = props
 
     const [key, setKey] = useState('skills');
 
+    const userCardHederProps = {
+        avatarUrl, username, leveling, infos, otherProps
+    }
+
     return (
-        <Card bg={otherProps.infos?.isBanned ? 'danger' : undefined}>
+        <Card bg={infos?.isBanned ? 'danger' : undefined}>
             <Card.Header>
-                <h1><img src={avatarUrl} />{username} {otherProps.infos?.isBanned && '(banned user)'}</h1>
+                <UserCardHeader {...userCardHederProps} />
+                
             </Card.Header>
             {/* <Card.Img src={avatarUrl} /> */}
             <Card.Body>
@@ -36,7 +45,7 @@ export const User = (props) => {
                         <SimpleStats {...otherProps} />
                     </Tab>
                     <Tab eventKey="dates" title="Dates">
-                        <SimpleStats {...dates} />
+                        <UserDates dates={dates} />
                     </Tab>
                     <Tab eventKey="leveling" title="Leveling">
                         <SimpleStats {...leveling} />

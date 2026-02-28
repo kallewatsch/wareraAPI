@@ -7,11 +7,11 @@ export const UserSkillDefault = (props) => {
     const { skillName, config, skill, ...otherProps } = props
 
     const key = skillName.toLowerCase()
-    const fuck = config.skills[skillName]
+    const fuck = config?.skills?.[skillName]
 
     const maxVal = skill.total
-    const indexKey = Object.keys(fuck).at(-1)
-    const fuckVal = fuck[indexKey]?.value
+    const indexKey = Object.keys(fuck || {}).at(-1)
+    const fuckVal = fuck?.[indexKey]?.value
     const label = `${skill.value}/${maxVal}`
 
     return <>

@@ -6,7 +6,14 @@ import Ranking from "../ranking/Ranking"
 import Card from "react-bootstrap/Card"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
+import Badge from "react-bootstrap/Badge"
 import "./Mu.css"
+
+
+export const foo = (datestring) => {
+    const d = new Date(datestring)
+    return `${d.toLocaleDateString()} | ${d.toLocaleTimeString()}`
+}
 
 export const Mu = props => {
 
@@ -23,7 +30,7 @@ export const Mu = props => {
         ...otherProps
     } = props
 
-    const { regions } = useSelector(state => state.app)
+    const { regions, config } = useSelector(state => state.app)
     const [users, setUsers] = useState([])
     const [getAnythingBatched, { data, error }] = useLazyGetAnythingBatchedPostQuery()
 
@@ -79,11 +86,9 @@ export const Mu = props => {
                                             : roles.commanders.includes(member._id)
                                                 ? 'commander'
                                                 : 'casual'
-                                    const d = new Date(member?.dates?.lastConnectionAt)
-                                    const lastDate = d.toLocaleDateString()
-                                    const lastTime = d.toLocaleTimeString()
-                                    const lastSeen = `${lastDate} ${lastTime}`
-                                    return <li key={i} className={memberClassName}>{member.username} {lastSeen}</li>
+                                    const d = new Date(member.dates?.lastConnectionAt)
+                                    
+                                    return <li key={i} className={memberClassName}>{member.username} <Badge>{foo(d)}</Badge></li>
                                 })}
 
                         </ol>

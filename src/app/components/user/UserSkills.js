@@ -1,14 +1,13 @@
 import React from "react"
 import { useSelector } from "react-redux"
 import ListGroup from "react-bootstrap/ListGroup"
-import SimpleStats from "../SimpleStats"
 import UserSkillAttack from "./UserSkillAttack"
 import UserSkillRegen from "./UserSkillRegen"
 import UserSkillDefault from "./UserSkillDefault"
 
 
-
 export const UserSkills = props => {
+
     const {
         attack,
         energy,
