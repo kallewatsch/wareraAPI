@@ -1,5 +1,5 @@
 import React from "react"
-import Progressbar from "react-bootstrap/Progressbar"
+import ProgressBar from "react-bootstrap/ProgressBar"
 
 
 export const UserSkillDefault = (props) => {
@@ -10,17 +10,16 @@ export const UserSkillDefault = (props) => {
     const fuck = config.skills[skillName]
 
     const maxVal = skill.total
-    console.log(key, skillName, fuck)
     const indexKey = Object.keys(fuck).at(-1)
     const fuckVal = fuck[indexKey]?.value
     const label = `${skill.value}/${maxVal}`
 
     return <>
         {skillName}:
-        <Progressbar>
-            <Progressbar max={fuckVal} now={skill.value} label={label} key={1} />
-            <Progressbar max={fuckVal} now={fuckVal} key={2} variant="danger" striped />
-        </Progressbar>
+        <ProgressBar>
+            <ProgressBar max={fuckVal} now={skill.value} label={label} key={1} />
+            <ProgressBar max={fuckVal} now={fuckVal} key={2} variant="danger" striped />
+        </ProgressBar>
     </>
 
 }

@@ -1,5 +1,5 @@
 import React from "react"
-import Progressbar from "react-bootstrap/Progressbar"
+import ProgressBar from "react-bootstrap/ProgressBar"
 
 
 export const UserSkillRegen = (props) => {
@@ -30,11 +30,11 @@ export const UserSkillRegen = (props) => {
 
     return <>
         {skillName}:
-        <Progressbar>
-            <Progressbar max={fuckVal} now={skill.currentBarValue} label={label} key={1} />
-            <Progressbar max={fuckVal} now={skill.total} label={label} key={2} variant="secondary" />
-            <Progressbar max={fuckVal} now={fuckVal} key={3} variant="danger" striped />
-        </Progressbar>
+        <ProgressBar>
+            <ProgressBar max={fuckVal} now={skill.currentBarValue} label={label} key={1} />
+            <ProgressBar max={fuckVal} now={skill.total} label={label} key={2} variant="secondary" />
+            <ProgressBar max={fuckVal} now={fuckVal} key={3} variant="danger" striped />
+        </ProgressBar>
     </>
 
 }
