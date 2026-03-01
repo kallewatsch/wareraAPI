@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import Row from "react-bootstrap/Row"
 import Button from "react-bootstrap/Button"
-import User from "../user/User"
 import CountrySelectModal from "../util/CountrySelectModal"
-import getUserLiteResponse from "../../../mocks/responses/user.getUserLite.json"
-import { useLazyGetUsersByCountryQuery, useLazyGetUserQuery, useLazyGetAnythingBatchedQuery, useLazyGetAnythingBatchedPostQuery } from "../../api"
+import { useLazyGetUsersByCountryQuery, useLazyGetAnythingBatchedPostQuery } from "../../api"
 import { setIsLoading, setUsers } from "../../appSlice"
-import TableHeader from "../util/TableHeader"
-import { Table } from "react-bootstrap"
 import SortableTable from "../util/SortableTable"
 
 export const Intel = (props) => {
@@ -18,7 +14,6 @@ export const Intel = (props) => {
     const [country, setCountry] = useState('')
 
     const [getUserIds] = useLazyGetUsersByCountryQuery()
-    const [getUser] = useLazyGetUserQuery()
     const [getAnythingBatched] = useLazyGetAnythingBatchedPostQuery()
 
     const dispatch = useDispatch()
@@ -26,7 +21,6 @@ export const Intel = (props) => {
     const handleSetCountry = async country => {
         const startedAt = Date.now()
         setShowModal(false)
-        setCountry(countries.find(cunt => cunt._id == country))
         dispatch(setIsLoading(true))
         try {
             let { result: { data: { items, nextCursor }, error } } = await getUserIds({ countryId: country, limit: 100 }).unwrap()
@@ -56,6 +50,7 @@ export const Intel = (props) => {
             console.log(err)
             dispatch(setIsLoading(false))
         } finally {
+            setCountry(countries.find(cunt => cunt._id == country))
             dispatch(setIsLoading(false))
             const finishedAt = Date.now()
             console.log(`finished after ${(finishedAt - startedAt) / 1000} seconds`)
@@ -99,7 +94,7 @@ export const Intel = (props) => {
         <Row>
             <Button onClick={() => setShowModal(true)}>change Country</Button>
             <h5>{country?.name}</h5>
-            <SortableTable items={[...users]} ths={ths} component="user" />
+            <SortableTable items={[...users]} ths={ths} component="user" key={`${country?._id}`} />
             <CountrySelectModal {...modalProps} />
         </Row>
     )

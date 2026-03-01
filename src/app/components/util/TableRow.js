@@ -25,7 +25,12 @@ export const TableRow = (props) => {
     }
 
     const foobar = (x) => {
-        return !isNaN(parseFloat(x)) ? x.toFixed(1) : x
+        try {
+            return x.toFixed(2)
+        }
+        catch {
+            return x
+        }
     }
 
     return (
