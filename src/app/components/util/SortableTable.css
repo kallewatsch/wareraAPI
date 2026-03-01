@@ -1,0 +1,15 @@
+.sortableTable-container h6 {
+    text-align: center;    
+}
+
+.sortableTable th:hover {
+    cursor: pointer;    
+}
+/* 
+.sortableTable {
+    font-size: small;
+}
+
+.sortableTable td {
+    font-size: smaller;
+} */

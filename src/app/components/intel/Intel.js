@@ -6,6 +6,9 @@ import CountrySelectModal from "../util/CountrySelectModal"
 import getUserLiteResponse from "../../../mocks/responses/user.getUserLite.json"
 import { useLazyGetUsersByCountryQuery, useLazyGetUserQuery, useLazyGetAnythingBatchedQuery, useLazyGetAnythingBatchedPostQuery } from "../../api"
 import { setIsLoading, setUsers } from "../../appSlice"
+import TableHeader from "../util/TableHeader"
+import { Table } from "react-bootstrap"
+import SortableTable from "../util/SortableTable"
 
 export const Intel = (props) => {
 
@@ -64,13 +67,33 @@ export const Intel = (props) => {
         title: 'bla'
     }
 
+    const thsSkills = [
+        'attack',
+        'energy',
+        'health',
+        'hunger',
+        'entrepreneurship',
+        'production',
+        'companies',
+        'criticalChance',
+        'criticalDamages',
+        'armor',
+        'precision',
+        'dodge',
+        'lootChance',
+        'management'].map(key => ({
+            txt: key, attrPath: ["skills", key], target: "total"
+        }))
+
+    const ths = [
+        { txt: 'username', attrPath: "", target: "username" },
+        ...thsSkills
+    ]
+
     return (
         <>
             <Button onClick={() => setShowModal(true)}>change Country</Button>
-            <h5>{country ? `${country.name} ${users.filter(user => user.isActive == true).length} Users, newest first` : 'No Country selected'}</h5>
-            {users && [...users].sort((a, b) => a.createdAt > b.createdAt ? -1 : a.createdAt < b.createdAt ? 1 : 0).map((user, i) => {
-                return <User key={i} {...user} />
-            })}
+            <SortableTable items={[...users]} ths={ths} component="user" />
             <CountrySelectModal {...modalProps} />
         </>
     )
