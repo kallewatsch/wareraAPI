@@ -31,12 +31,12 @@ export const sortByFoo = (items, attrPath, key) => {
         const foo = getObjKeyViaAttrPath(a, attrPath, key)
         const bar = getObjKeyViaAttrPath(b, attrPath, key)
         if (!foo) {
-            return -1
+            return 1
         }
         if (!bar) {
             return 1
         }
-        return foo > bar ? 1 : foo < bar ? -1 : 0
+        return foo > bar ? -1 : foo < bar ? 1 : 0
     })
 }
 
