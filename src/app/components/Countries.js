@@ -21,14 +21,14 @@ export const Countries = () => {
             setActiveKey("")
         } else {
             setActiveKey(key)
-            /* setTimeout(() => {
+            setTimeout(() => {
                 const el = document.getElementById(key)
                 el.scrollIntoView({
                     behavior: "smooth",
-                    block: "end",
+                    block: "start",
                     inline: "nearest",
                 })
-            }, 500) */
+            }, 500)
         }
     }
 

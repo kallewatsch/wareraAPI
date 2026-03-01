@@ -23,7 +23,6 @@ export const Intel = (props) => {
         const startedAt = Date.now()
         setShowModal(false)
         setCountry(countries.find(cunt => cunt._id == country))
-        dispatch(setUsers([])) // remove this when better loadings indicator available
         dispatch(setIsLoading(true))
         try {
             let { result: { data: { items, nextCursor }, error } } = await getUserIds({ countryId: country, limit: 100 }).unwrap()

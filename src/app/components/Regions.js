@@ -15,10 +15,7 @@ export const Regions = () => {
 
     const dispatch = useDispatch()
 
-    /* const handleSelect = eventKey => {
-        console.log(event)
-    } */
-
+    // TODO: proper scrollIntoView, current one scrolls in the middle of the open accordion
     const handleSetActiveKeyAndScroll = key => {
         if (key == activeKey || !key) {
             setActiveKey("")

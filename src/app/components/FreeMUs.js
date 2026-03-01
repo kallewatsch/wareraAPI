@@ -17,6 +17,7 @@ export const FreeMUs = () => {
     const { countries, mus, /* freeMUs, */ users } = useSelector(state => state.app)
     const [countryId, setCountryId] = useState('')
     const [country, setCountry] = useState()
+    const [activeKey, setActiveKey] = useState()
     const [showModal, setShowModal] = useState(true)
 
     const dispatch = useDispatch()
@@ -50,6 +51,22 @@ export const FreeMUs = () => {
         }
     }
 
+    const handleSetActiveKeyAndScroll = key => {
+        if (key == activeKey || !key) {
+            setActiveKey("")
+        } else {
+            setActiveKey(key)
+            setTimeout(() => {
+                const el = document.getElementById(key)
+                el.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                    inline: "nearest",
+                })
+            }, 500)
+        }
+    }
+
     const modalProps = {
         show: showModal, handleClose: setShowModal, confirm: handleSetCountry, countries: [...countries],
         title: 'bla'
@@ -64,7 +81,7 @@ export const FreeMUs = () => {
             <Button onClick={() => setShowModal(true)}>change Country</Button>
             {freeMUs && country && <h3>There are {freeMUs.length} MUs with free slots for country {country.name}</h3>}
 
-            <Accordion>
+            <Accordion activeKey={activeKey} onSelect={handleSetActiveKeyAndScroll}>
                 {freeMUs.map((mu, i) => {
                     const eventKey = mu._id
                     const slots = `${mu.members.length}/${mu.activeUpgradeLevels.dormitories * 5}`
