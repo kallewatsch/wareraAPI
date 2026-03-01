@@ -1,0 +1,21 @@
+{
+    "_id": "6883dbaca5762d055f99c29b",
+    "user": "685dc017671305cd2cbafea3",
+    "region": "6813b70b9403bc4170a5dac5",
+    "itemCode": "limestone",
+    "name": "Harpagany",
+    "concreteInvested": 100,
+    "production": 85.44249999999968,
+    "activeUpgradeLevels": {
+        "automatedEngine": 7,
+        "storage": 2
+    },
+    "workers": [],
+    "createdAt": "2025-07-25T19:31:56.764Z",
+    "updatedAt": "2026-03-01T07:00:41.786Z",
+    "__v": 0,
+    "estimatedValue": 2218.123143171324,
+    "isFull": false,
+    "movedUpAt": "2025-09-20T22:25:00.184Z",
+    "workerCount": 0
+}
