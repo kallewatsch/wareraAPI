@@ -11,6 +11,7 @@ import { setConfig, setCountries, setRegions } from "./appSlice"
 import "./App.css"
 import Search from "./components/search/Search"
 import Countries from "./components/Countries"
+import Companies from "./components/companies/Companies"
 import Regions from "./components/Regions"
 import FreeMUs from "./components/FreeMUs"
 import Navigation from "./components/Navigation"
@@ -43,6 +44,10 @@ const router = createHashRouter(
         {
             path: "/countries",
             element: <Countries />
+        },
+        {
+            path: "/companies",
+            element: <Companies />
         },
         {
             path: "/regions",

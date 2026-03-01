@@ -8,6 +8,7 @@ const routes = [
     "freemus",
     "search",
     "countries",
+    "companies",
     "regions",
     "warplaner",
     /* "market", */
