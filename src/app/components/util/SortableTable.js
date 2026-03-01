@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import Row from "react-bootstrap/Row"
 import Table from "react-bootstrap/Table"
 import Modal from "react-bootstrap/Modal"
 import TableHeader from "./TableHeader"
@@ -93,9 +94,11 @@ export const SortableTable = (props) => {
     const Comp = getComponent(component)
 
     return (
-        <div className="sortableTable-container">
+        <Row className="sortableTable-container">
 
             <h6>{items.length} Items</h6>
+
+            <b>TODO: add interface for all the filtering stuff.</b>
 
             <Table className="sortableTable">
                 <TableHeader items={items} ths={ths} sortItems={handleSortTable} />
@@ -112,7 +115,7 @@ export const SortableTable = (props) => {
                 <Modal.Footer>
                 </Modal.Footer>
             </Modal>
-        </div>
+        </Row>
     )
 
 }

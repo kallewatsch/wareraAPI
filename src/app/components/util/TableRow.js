@@ -24,12 +24,16 @@ export const TableRow = (props) => {
         bla(item)
     }
 
+    const foobar = (x) => {
+        return !isNaN(parseFloat(x)) ? x.toFixed(1) : x
+    }
+
     return (
         <tr>
             <td><Button onClick={handleBla}>details</Button></td>
             {tds && tds.map((td, i) => {
                 const displayVal = getObjKeyViaAttrPath(item, td.attrPath, td.target)
-                return <td key={i}>{displayVal}</td>
+                return <td key={i}>{foobar(displayVal)}</td>
             })}
         </tr>
     )

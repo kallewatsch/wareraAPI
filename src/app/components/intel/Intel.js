@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
+import Row from "react-bootstrap/Row"
 import Button from "react-bootstrap/Button"
 import User from "../user/User"
 import CountrySelectModal from "../util/CountrySelectModal"
@@ -68,21 +69,25 @@ export const Intel = (props) => {
     }
 
     const thsSkills = [
-        'attack',
-        'energy',
-        'health',
-        'hunger',
-        'entrepreneurship',
-        'production',
-        'companies',
-        'criticalChance',
-        'criticalDamages',
-        'armor',
-        'precision',
-        'dodge',
-        'lootChance',
-        'management'].map(key => ({
-            txt: key, attrPath: ["skills", key], target: "total"
+        { txt: 'attack total', key: 'attack', target: 'total' },
+        { txt: 'energy', key: 'energy', target: 'total' },
+        { txt: 'now', key: 'energy', target: 'currentBarValue' },
+        { txt: 'health', key: 'health', target: 'total' },
+        { txt: 'now', key: 'health', target: 'currentBarValue' },
+        { txt: 'hunger', key: 'hunger', target: 'total' },
+        { txt: 'now', key: 'hunger', target: 'currentBarValue' },
+        { txt: 'entrepreneurship', key: 'entrepreneurship', target: 'total' },
+        { txt: 'now', key: 'entrepreneurship', target: 'currentBarValue' },
+        { txt: 'production', key: 'production', target: 'total' },
+        { txt: 'companies', key: 'companies', target: 'total' },
+        { txt: 'crit chance', key: 'criticalChance', target: 'total' },
+        { txt: 'crit dmg', key: 'criticalDamages', target: 'total' },
+        { txt: 'armor', key: 'armor', target: 'total' },
+        { txt: 'precision', key: 'precision', target: 'total' },
+        { txt: 'dodge', key: 'dodge', target: 'total' },
+        { txt: 'lootChance', key: 'lootChance', target: 'total' },
+        { txt: 'management', key: 'management', target: 'total' }].map(x => ({
+            txt: x.txt, attrPath: ["skills", x.key], target: x.target
         }))
 
     const ths = [
@@ -91,11 +96,12 @@ export const Intel = (props) => {
     ]
 
     return (
-        <>
+        <Row>
             <Button onClick={() => setShowModal(true)}>change Country</Button>
+            <h5>{country?.name}</h5>
             <SortableTable items={[...users]} ths={ths} component="user" />
             <CountrySelectModal {...modalProps} />
-        </>
+        </Row>
     )
 
 }
