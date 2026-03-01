@@ -10,6 +10,29 @@ import UserCardHeader from "./UserCardHeader"
 import UserDates from "./UserDates"
 
 
+export const getExpectedDamage = (skills) => {
+    const {
+        attack, precision, criticalChance, criticalDamages, useEquipment
+    } = skills
+
+    const key = useEquipment ? "total" : "value"
+
+    const { _attack, _precision, _criticalDamages, _criticalChance } = {
+        _attack: attack[key] || 0,
+        _precision: precision[key] || 0,
+        _criticalDamages: criticalDamages[key] || 0,
+        _criticalChance: criticalChance[key] || 0
+    }
+
+    const avgDmgMiss = (_attack / 2) * (_precision / 100)
+    const avgHit = _attack * (_precision / 100)
+    const avgCrit = (_attack + (_criticalDamages / 100) * _attack) * (_criticalChance / 100)
+
+    return avgDmgMiss + avgHit + avgCrit
+
+}
+
+
 export const User = (props) => {
     const {
         username,
@@ -28,11 +51,13 @@ export const User = (props) => {
         avatarUrl, username, leveling, infos, otherProps
     }
 
+    const expectedDmg = getExpectedDamage({ useEquipment: true, ...skills })
+
     return (
         <Card bg={infos?.isBanned ? 'danger' : undefined}>
             <Card.Header>
                 <UserCardHeader {...userCardHederProps} />
-                
+                expectedDmg per attack: {expectedDmg}
             </Card.Header>
             {/* <Card.Img src={avatarUrl} /> */}
             <Card.Body>

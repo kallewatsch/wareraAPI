@@ -7,6 +7,28 @@ import { useLazyGetUsersByCountryQuery, useLazyGetAnythingBatchedPostQuery } fro
 import { setIsLoading, setUsers } from "../../appSlice"
 import SortableTable from "../util/SortableTable"
 
+export const getExpectedDamage = (skills) => {
+    const {
+        attack, precision, criticalChance, criticalDamages, useEquipment
+    } = skills
+
+    const key = useEquipment ? "total" : "value"
+
+    const { _attack, _precision, _criticalDamages, _criticalChance } = {
+        _attack: attack[key] || 0,
+        _precision: precision[key] || 0,
+        _criticalDamages: criticalDamages[key] || 0,
+        _criticalChance: criticalChance[key] || 0
+    }
+
+    const avgDmgMiss = (_attack / 2) * (_precision / 100)
+    const avgHit = _attack * (_precision / 100)
+    const avgCrit = (_attack + (_criticalDamages / 100) * _attack) * (_criticalChance / 100)
+
+    return avgDmgMiss + avgHit + avgCrit
+
+}
+
 export const Intel = (props) => {
 
     const { countries, users } = useSelector(state => state.app)
@@ -87,14 +109,17 @@ export const Intel = (props) => {
 
     const ths = [
         { txt: 'username', attrPath: "", target: "username" },
+        { txt: 'expected dmg', attrPath: ["extended"], target: "expDmg" },
         ...thsSkills
     ]
+
+    const extendedUsers = [...users].map((user => Object.assign({}, { ...user }, { extended: {expDmg: getExpectedDamage({...user?.skills, useEquipment: true})} })))
 
     return (
         <Row>
             <Button onClick={() => setShowModal(true)}>change Country</Button>
             <h5>{country?.name}</h5>
-            <SortableTable items={[...users]} ths={ths} component="user" key={`${country?._id}`} />
+            <SortableTable items={[...extendedUsers]} ths={ths} component="user" key={`${country?._id}`} />
             <CountrySelectModal {...modalProps} />
         </Row>
     )
