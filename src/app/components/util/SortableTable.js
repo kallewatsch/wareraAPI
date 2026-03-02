@@ -30,10 +30,10 @@ export const sortByFoo = (items, attrPath, key) => {
     return [...items].sort((a, b) => {
         const foo = getObjKeyViaAttrPath(a, attrPath, key)
         const bar = getObjKeyViaAttrPath(b, attrPath, key)
-        if (!foo) {
+        if (foo == undefined) {
             return 1
         }
-        if (!bar) {
+        if (bar == undefined) {
             return 1
         }
         return foo > bar ? -1 : foo < bar ? 1 : 0
@@ -101,7 +101,7 @@ export const SortableTable = (props) => {
             <b>TODO: add interface for all the filtering stuff.</b>
 
             <Table className="sortableTable">
-                <TableHeader items={items} ths={ths} sortItems={handleSortTable} />
+                <TableHeader ths={ths} sortItems={handleSortTable} />
                 <tbody>
                     {meh.map((item, i) => <TableRow key={i} item={item} tds={ths} bla={handleShowItemModal} />)}
                 </tbody>

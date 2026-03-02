@@ -2,43 +2,34 @@ import React, { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import Row from "react-bootstrap/Row"
 import Button from "react-bootstrap/Button"
+import Badge from "react-bootstrap/Badge"
 import CountrySelectModal from "../util/CountrySelectModal"
 import { useLazyGetUsersByCountryQuery, useLazyGetAnythingBatchedPostQuery } from "../../api"
 import { setIsLoading, setUsers } from "../../appSlice"
 import SortableTable from "../util/SortableTable"
+import { getExpectedDamage } from "../../utils/fooStuff"
+import "./Intel.css"
 
-export const getExpectedDamage = (skills) => {
-    const {
-        attack, precision, criticalChance, criticalDamages, useEquipment
-    } = skills
-
-    const key = useEquipment ? "total" : "value"
-
-    const { _attack, _precision, _criticalDamages, _criticalChance } = {
-        _attack: attack[key] || 0,
-        _precision: precision[key] || 0,
-        _criticalDamages: criticalDamages[key] || 0,
-        _criticalChance: criticalChance[key] || 0
-    }
-
-    const avgDmgMiss = (_attack / 2) * (_precision / 100)
-    const avgHit = _attack * (_precision / 100)
-    const avgCrit = (_attack + (_criticalDamages / 100) * _attack) * (_criticalChance / 100)
-
-    return avgDmgMiss + avgHit + avgCrit
-
-}
 
 export const Intel = (props) => {
 
     const { countries, users } = useSelector(state => state.app)
     const [showModal, setShowModal] = useState(true)
     const [country, setCountry] = useState('')
+    const [thMode, setThMode] = useState('realtime')
 
     const [getUserIds] = useLazyGetUsersByCountryQuery()
     const [getAnythingBatched] = useLazyGetAnythingBatchedPostQuery()
 
     const dispatch = useDispatch()
+
+    const handleSetThMode = event => {
+        const modes = ["war", "eco", "realtime"]
+        const index = modes.indexOf(thMode)
+        const foo = (index + 1) % modes.length
+        const _thMode = index == -1 ? modes[0] : modes[foo]
+        setThMode(_thMode)
+    }
 
     const handleSetCountry = async country => {
         const startedAt = Date.now()
@@ -85,41 +76,60 @@ export const Intel = (props) => {
         title: 'bla'
     }
 
-    const thsSkills = [
-        { txt: 'attack total', key: 'attack', target: 'total' },
-        { txt: 'energy', key: 'energy', target: 'total' },
-        { txt: 'now', key: 'energy', target: 'currentBarValue' },
-        { txt: 'health', key: 'health', target: 'total' },
-        { txt: 'now', key: 'health', target: 'currentBarValue' },
-        { txt: 'hunger', key: 'hunger', target: 'total' },
-        { txt: 'now', key: 'hunger', target: 'currentBarValue' },
-        { txt: 'entrepreneurship', key: 'entrepreneurship', target: 'total' },
-        { txt: 'now', key: 'entrepreneurship', target: 'currentBarValue' },
-        { txt: 'production', key: 'production', target: 'total' },
-        { txt: 'companies', key: 'companies', target: 'total' },
-        { txt: 'crit chance', key: 'criticalChance', target: 'total' },
-        { txt: 'crit dmg', key: 'criticalDamages', target: 'total' },
-        { txt: 'armor', key: 'armor', target: 'total' },
-        { txt: 'precision', key: 'precision', target: 'total' },
-        { txt: 'dodge', key: 'dodge', target: 'total' },
-        { txt: 'lootChance', key: 'lootChance', target: 'total' },
-        { txt: 'management', key: 'management', target: 'total' }].map(x => ({
-            txt: x.txt, attrPath: ["skills", x.key], target: x.target
-        }))
+    const thsSkillsWar = [
+        { txt: 'expected dmg', attrPath: ["extended"], target: "expDmg" },
+        { txt: 'attack total', attrPath: ['skills', 'attack'], target: 'total' },
+        { txt: 'health', attrPath: ['skills', 'health'], target: 'total' },
+        { txt: 'h now', attrPath: ['skills', 'health'], target: 'currentBarValue' },
+        { txt: 'hunger', attrPath: ['skills', 'hunger'], target: 'total' },
+        { txt: 'hu now', attrPath: ['skills', 'hunger'], target: 'currentBarValue' },
+        { txt: 'crit chance', attrPath: ['skills', 'criticalChance'], target: 'total' },
+        { txt: 'crit dmg', attrPath: ['skills', 'criticalDamages'], target: 'total' },
+        { txt: 'armor', attrPath: ['skills', 'armor'], target: 'total' },
+        { txt: 'precision', attrPath: ['skills', 'precision'], target: 'total' },
+        { txt: 'dodge', attrPath: ['skills', 'dodge'], target: 'total' },
+        { txt: 'lootChance', attrPath: ['skills', 'lootChance'], target: 'total' },
+    ]
+
+    const thsRealTime = [
+        { txt: 'energy', attrPath: ['skills', 'energy'], target: 'currentBarValue' },
+        { txt: 'health', attrPath: ['skills', 'health'], target: 'currentBarValue' },
+        { txt: 'hunger', attrPath: ['skills', 'hunger'], target: 'currentBarValue' },
+        { txt: 'en now', attrPath: ['skills', 'entrepreneurship'], target: 'currentBarValue' },
+    ]
+
+    const thSkillsEco = [
+        { txt: 'energy', attrPath: ['skills', 'energy'], target: 'total' },
+        { txt: 'e now', attrPath: ['skills', 'energy'], target: 'currentBarValue' },
+        { txt: 'entrepreneurship', attrPath: ['skills', 'entrepreneurship'], target: 'total' },
+        { txt: 'en now', attrPath: ['skills', 'entrepreneurship'], target: 'currentBarValue' },
+        { txt: 'production', attrPath: ['skills', 'production'], target: 'total' },
+        { txt: 'companies', attrPath: ['skills', 'companies'], target: 'total' },
+        { txt: 'management', attrPath: ['skills', 'management'], target: 'total' }
+    ]
+
+    const availableThs = {
+        eco: thSkillsEco,
+        war: thsSkillsWar,
+        realtime: thsRealTime 
+    }
+
+    const thsSkills = availableThs[thMode] || []
 
     const ths = [
         { txt: 'username', attrPath: "", target: "username" },
-        { txt: 'expected dmg', attrPath: ["extended"], target: "expDmg" },
         ...thsSkills
     ]
 
-    const extendedUsers = [...users].map((user => Object.assign({}, { ...user }, { extended: {expDmg: getExpectedDamage({...user?.skills, useEquipment: true})} })))
+    // TODO: add function to calculate expected values for amount of attacks a user can do (based on hp, armor & dodge). lootChance aswell
+    const extendedUsers = [...users].map((user => Object.assign({}, { ...user }, { extended: { expDmg: getExpectedDamage({ ...user?.skills, useEquipment: true }) } })))
 
     return (
         <Row>
             <Button onClick={() => setShowModal(true)}>change Country</Button>
-            <h5>{country?.name}</h5>
-            <SortableTable items={[...extendedUsers]} ths={ths} component="user" key={`${country?._id}`} />
+            <Button onClick={handleSetThMode}>toggle mode</Button>
+            <h5>{country?.name} | current mode: <Badge bg={thMode} txt={thMode}>{thMode}</Badge></h5>
+            <SortableTable items={[...extendedUsers]} ths={[...ths]} component="user" key={`${country?._id}`} />
             <CountrySelectModal {...modalProps} />
         </Row>
     )
