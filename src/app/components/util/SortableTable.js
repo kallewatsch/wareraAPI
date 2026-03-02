@@ -101,6 +101,9 @@ export const SortableTable = (props) => {
     return (
         <Row className="sortableTable-container">
             <TableFilters items={[...items]} ths={ths} applyFilters={handleApplyFilters} />
+
+            <h6>{meh.length} items</h6>
+
             <Table className="sortableTable">
                 <TableHeader ths={ths} sortItems={handleSortTable} />
                 <tbody>
