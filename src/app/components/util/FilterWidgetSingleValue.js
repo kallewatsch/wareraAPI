@@ -3,9 +3,9 @@ import InputGroup from "react-bootstrap/InputGroup"
 import FormControl from "react-bootstrap/FormControl"
 import Button from "react-bootstrap/Button"
 
-export const FilterWidgetSmaller = props => {
+export const FilterWidgetSingleValue = props => {
 
-    const { text, index, remove, changeWidgetValue } = props
+    const { text, index, remove, changeWidgetValue, hasFocus } = props
 
     const [value, setValue] = useState('')
 
@@ -20,9 +20,9 @@ export const FilterWidgetSmaller = props => {
 
     return (
         <>
-            <InputGroup>
+            <InputGroup className={value !== 0 && !value ? 'highlightEmpty' : ''}>
                 <InputGroup.Text>{text}</InputGroup.Text>
-                <FormControl onChange={handleChange} value={value} />
+                <FormControl onChange={handleChange} value={value} name={`filterWidget${index}`} placeholder="Enter Value" autoFocus={hasFocus} />
                 <Button variant="danger" onClick={handleRemove}>remove</Button>
             </InputGroup>
 
@@ -32,4 +32,4 @@ export const FilterWidgetSmaller = props => {
 }
 
 
-export default FilterWidgetSmaller
+export default FilterWidgetSingleValue

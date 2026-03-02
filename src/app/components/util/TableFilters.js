@@ -5,9 +5,7 @@ import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
 import Modal from "react-bootstrap/Modal"
 import TableFilterItem from "./TableFilterItem"
-import FilterWidgetBigger from "./FilterWidgetBigger"
-import FilterWidgetSmaller from "./FilterWidgetSmaller"
-import FilterWidgetEqual from "./FilterWidgetEqual"
+import FilterWidgetSingleValue from "./FilterWidgetSingleValue"
 import FilterWidgetIncludes from "./FilterWidgetIncludes"
 import FilterWidgetBetween from "./FilterWidgetBetween"
 
@@ -17,14 +15,12 @@ export const SearchResultDefault = props => {
 
 const getComponent = (s) => {
     switch (s) {
-        case "bigger":
-            return FilterWidgetBigger
         case "smaller":
-            return FilterWidgetSmaller
+        case "equal":
+        case "bigger":
+            return FilterWidgetSingleValue
         case "between":
             return FilterWidgetBetween
-        case "equal":
-            return FilterWidgetEqual
         case "includes":
             return FilterWidgetIncludes
         default:
@@ -82,7 +78,6 @@ export const TableFilters = (props) => {
 
     return (
         <>
-
             <Button onClick={handleClick}>Add Filter</Button>
             <Row>
                 {filterWidgets.map((widget, i) => {
@@ -92,7 +87,8 @@ export const TableFilters = (props) => {
                         remove: handleRemoveWidget,
                         changeWidgetValue: handleChangeWidgetValue,
                         value: '',
-                        index: i
+                        index: i,
+                        hasFocus: i == filterWidgets.length - 1
                     }
                     return <Comp {...widgetProps} key={i} />
                 })}

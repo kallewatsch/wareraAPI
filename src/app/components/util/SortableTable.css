@@ -13,3 +13,7 @@
 .sortableTable td {
     font-size: smaller;
 } */
+.highlightEmpty > input {
+    border: solid thick orange;
+    border-radius: 5px;
+}
