@@ -4,6 +4,10 @@ import userEvent from "@testing-library/user-event"
 import { renderWithProviders } from "../../../test-utils"
 import UserSkills from "./UserSkills"
 
+jest.mock('./UserSkillAttack', () => () => <mock-userskillatack data-testid="mockUserSkillAttack" />)
+jest.mock('./UserSkillRegen', () => () => <mock-userskillregen data-testid="mockUserSkillRegen" />)
+jest.mock('./UserSkillDefault', () => () => <mock-userskilldefault data-testid="mockUserSkillDefault" />)
+
 describe("User", () => {
     afterEach(() => {
         cleanup()

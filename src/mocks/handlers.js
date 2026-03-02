@@ -23,7 +23,8 @@ export const searchAnythingHandlers = {
                     countryIds: ["abc"],
                     muIds: ["asd", "bla"],
                     regionIds: [],
-                    userIds: ["a", "b", "yxz"]
+                    userIds: ["a", "b", "yxz"],
+                    partyIds: []
                 }
             }
         })
