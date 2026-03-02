@@ -10,35 +10,9 @@ import Party from "../party/Party"
 import Region from "../region/Region"
 import User from "../user/User"
 import "./SortableTable.css"
+import TableFilters from "./TableFilters"
+import { sortByFoo, getObjKeyViaAttrPath } from "../../utils/fooStuff"
 
-
-export const getObjKeyViaAttrPath = (obj, attrPath, key) => {
-
-    let _obj = Object.assign({}, obj)
-
-    for (let prop of attrPath) {
-        if (!_obj.hasOwnProperty(prop)) {
-            return undefined
-        }
-        _obj = Object.assign({}, { ..._obj[prop] })
-    }
-    return _obj[key]
-
-}
-
-export const sortByFoo = (items, attrPath, key) => {
-    return [...items].sort((a, b) => {
-        const foo = getObjKeyViaAttrPath(a, attrPath, key)
-        const bar = getObjKeyViaAttrPath(b, attrPath, key)
-        if (foo == undefined) {
-            return 1
-        }
-        if (bar == undefined) {
-            return 1
-        }
-        return foo > bar ? -1 : foo < bar ? 1 : 0
-    })
-}
 
 export const ResultDefault = props => {
     return <h1>default</h1>
@@ -67,6 +41,7 @@ export const SortableTable = (props) => {
     const { items, ths, component } = props
     const [sortedItems, setSortedItems] = useState(items)
     const [showModal, setShowModal] = useState(false)
+    const [filters, setFilters] = useState([])
     const [modalCompProps, setModalCompProps] = useState()
 
     const handleClose = event => {
@@ -86,20 +61,46 @@ export const SortableTable = (props) => {
         else {
             setSortedItems(sortedFucks)
         }
-
     }
 
-    const meh = sortedItems.length ? sortedItems : items
+    const handleApplyFilters = (filters) => {
+        setFilters(filters)
+    }
+
+    const fuckThisShit = value => {
+        return isNaN(parseFloat(value)) ? value : parseFloat(value)
+    }
+
+    let meh = sortedItems
+
+    for (let filter of filters) {
+        const { th, value, filter: condition } = filter
+        let checkCondition
+        const _th = ths.find(x => x.txt == th)
+        const { attrPath, target } = _th
+        switch (condition) {
+            case "bigger":
+                checkCondition = (item, attrPath, target) => getObjKeyViaAttrPath(item, attrPath, target) >= fuckThisShit(value)
+                break;
+            case "smaller":
+                checkCondition = (item, attrPath, target) => getObjKeyViaAttrPath(item, attrPath, target) <= fuckThisShit(value)
+                break;
+            case "equal":
+                checkCondition = (item, attrPath, target) => getObjKeyViaAttrPath(item, attrPath, target) == fuckThisShit(value)
+                break;
+            default:
+                checkCondition = () => true
+        }
+        meh = meh.filter(item => {
+            return checkCondition(item, attrPath, target)
+        })
+    }
 
     const Comp = getComponent(component)
 
     return (
         <Row className="sortableTable-container">
-
-            <h6>{items.length} Items</h6>
-
-            <b>TODO: add interface for all the filtering stuff.</b>
-
+            <TableFilters items={[...items]} ths={ths} applyFilters={handleApplyFilters} />
             <Table className="sortableTable">
                 <TableHeader ths={ths} sortItems={handleSortTable} />
                 <tbody>

@@ -7,14 +7,14 @@ import CountrySelectModal from "../util/CountrySelectModal"
 import { useLazyGetUsersByCountryQuery, useLazyGetAnythingBatchedPostQuery } from "../../api"
 import { setIsLoading, setUsers } from "../../appSlice"
 import SortableTable from "../util/SortableTable"
-import { getExpectedDamage } from "../../utils/fooStuff"
+import { getExpectedDamage, getHoursUntilLastOnline } from "../../utils/fooStuff"
 import "./Intel.css"
 
 
 export const Intel = (props) => {
 
     const { countries, users } = useSelector(state => state.app)
-    const [showModal, setShowModal] = useState(true)
+    const [showModal, setShowModal] = useState(false)
     const [country, setCountry] = useState('')
     const [thMode, setThMode] = useState('realtime')
 
@@ -96,6 +96,7 @@ export const Intel = (props) => {
         { txt: 'health', attrPath: ['skills', 'health'], target: 'currentBarValue' },
         { txt: 'hunger', attrPath: ['skills', 'hunger'], target: 'currentBarValue' },
         { txt: 'en now', attrPath: ['skills', 'entrepreneurship'], target: 'currentBarValue' },
+        { txt: 'last online hours', attrPath: ["extended"], target: 'hoursUntilLastOnline' }
     ]
 
     const thSkillsEco = [
@@ -111,7 +112,7 @@ export const Intel = (props) => {
     const availableThs = {
         eco: thSkillsEco,
         war: thsSkillsWar,
-        realtime: thsRealTime 
+        realtime: thsRealTime
     }
 
     const thsSkills = availableThs[thMode] || []
@@ -122,16 +123,34 @@ export const Intel = (props) => {
     ]
 
     // TODO: add function to calculate expected values for amount of attacks a user can do (based on hp, armor & dodge). lootChance aswell
-    const extendedUsers = [...users].map((user => Object.assign({}, { ...user }, { extended: { expDmg: getExpectedDamage({ ...user?.skills, useEquipment: true }) } })))
+    const extendedUsers = [...users].map((user =>
+        Object.assign(
+            {},
+            { ...user },
+            {
+                extended: {
+                    expDmg: getExpectedDamage({ ...user?.skills, useEquipment: true }),
+                    hoursUntilLastOnline: getHoursUntilLastOnline(user?.dates?.lastConnectionAt)
+                }
+            }
+        )
+    ))
 
     return (
-        <Row>
-            <Button onClick={() => setShowModal(true)}>change Country</Button>
-            <Button onClick={handleSetThMode}>toggle mode</Button>
-            <h5>{country?.name} | current mode: <Badge bg={thMode} txt={thMode}>{thMode}</Badge></h5>
-            <SortableTable items={[...extendedUsers]} ths={[...ths]} component="user" key={`${country?._id}`} />
+        <>
+            <Row>
+                <Button onClick={() => setShowModal(true)}>change Country</Button>
+            </Row>
+            <hr />
+            {
+                country && <Row>
+                    <Button onClick={handleSetThMode}>toggle mode</Button>
+                    <h5>{country?.name} | current mode: <Badge bg={thMode} txt={thMode}>{thMode}</Badge></h5>
+                    <SortableTable items={[...extendedUsers]} ths={[...ths]} component="user" key={`${country?._id}`} />
+                </Row>
+            }
             <CountrySelectModal {...modalProps} />
-        </Row>
+        </>
     )
 
 }

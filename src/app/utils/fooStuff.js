@@ -20,3 +20,36 @@ export const getExpectedDamage = (skills, useEquipment = true) => {
 
 }
 
+export const getObjKeyViaAttrPath = (obj, attrPath, key) => {
+
+    let _obj = Object.assign({}, obj)
+
+    for (let prop of attrPath) {
+        if (!_obj.hasOwnProperty(prop)) {
+            return undefined
+        }
+        _obj = Object.assign({}, { ..._obj[prop] })
+    }
+    return _obj[key]
+
+}
+
+export const sortByFoo = (items, attrPath, key) => {
+    return [...items].sort((a, b) => {
+        const foo = getObjKeyViaAttrPath(a, attrPath, key)
+        const bar = getObjKeyViaAttrPath(b, attrPath, key)
+        if (foo == undefined) {
+            return 1
+        }
+        if (bar == undefined) {
+            return 1
+        }
+        return foo > bar ? -1 : foo < bar ? 1 : 0
+    })
+}
+
+export const getHoursUntilLastOnline = (datetimestr) => {
+    const now = Date.now()
+    const past = new Date(datetimestr)
+    return Math.ceil((now - past) / 3600000)
+}
