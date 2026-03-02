@@ -37,7 +37,8 @@ describe("appSlice", () => {
                     allies: [],
                     excluded: []
                 }
-            }
+            },
+            config: {}
         })
     })
     it("should return initialState", () => {

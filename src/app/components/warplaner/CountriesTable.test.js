@@ -2,7 +2,7 @@ import React from "react"
 import { cleanup, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { renderWithProviders } from "../../../test-utils"
-import { initialStateWarplaner } from "../../../mocks/initialStateWarplaner"
+import { initialStateWarplaner } from "../../../mocks/states/initialStateWarplaner"
 import CountriesTable from "./CountriesTable"
 
 
