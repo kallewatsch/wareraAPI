@@ -146,7 +146,7 @@ export const Intel = (props) => {
                 country && <Row>
                     <Button onClick={handleSetThMode}>toggle mode</Button>
                     <h5>{country?.name} | current mode: <Badge bg={thMode} txt={thMode}>{thMode}</Badge></h5>
-                    <SortableTable items={[...extendedUsers]} ths={[...ths]} component="user" key={`${country?._id}`} />
+                    <SortableTable items={[...extendedUsers]} ths={[...ths]} component="user" key={`${country?._id}-${thMode}`} />
                 </Row>
             }
             <CountrySelectModal {...modalProps} />
