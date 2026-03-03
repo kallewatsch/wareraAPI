@@ -18,15 +18,16 @@ export const getObjKeyViaAttrPath = (obj, attrPath, key) => {
 
 export const TableRow = (props) => {
 
-    const { item, tds, bla } = props
-    
-    const handleBla = event => {
-        bla(item)
+    const { item, tds, openModal, decimals } = props
+
+    const handleClickDetails = event => {
+        openModal(item)
     }
 
     const foobar = (x) => {
+        // TODO: cleanup this and the formatValue madness in ./SortableTable
         try {
-            return x.toFixed(2)
+            return decimals ? x.toFixed(decimals) : x
         }
         catch {
             return x
@@ -35,7 +36,7 @@ export const TableRow = (props) => {
 
     return (
         <tr>
-            <td><Button onClick={handleBla}>details</Button></td>
+            <td><Button onClick={handleClickDetails}>details</Button></td>
             {tds && tds.map((td, i) => {
                 const displayVal = getObjKeyViaAttrPath(item, td.attrPath, td.target)
                 return <td key={i}>{foobar(displayVal)}</td>

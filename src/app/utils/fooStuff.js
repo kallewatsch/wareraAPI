@@ -20,6 +20,25 @@ export const getExpectedDamage = (skills, useEquipment = true) => {
 
 }
 
+export const getExpectedAttackCost = (skills, useEquipment = true) => {
+    const { dodge, armor } = skills || {}
+    const key = useEquipment ? "total" : "value"
+    const attackBaseCost = 10 // TODO: use gameConfig for this?
+
+    const { _dodge, _armor } = {
+        _dodge: dodge?.[key] || 0,
+        _armor: armor?.[armor] || 0
+    }
+
+    return (attackBaseCost - ((_armor / 100) * attackBaseCost)) * (1 - (_dodge / 100))
+}
+
+export const getCanAttackTimes = (skills, useEquipment = true) => {
+    const { health: {currentBarValue: health } } = skills // what about currentBarValue vs total or value? use diffrent functions?
+    const attackCost = getExpectedAttackCost(skills, useEquipment)
+    return Math.floor(health / attackCost)
+}
+
 export const getObjKeyViaAttrPath = (obj, attrPath, key) => {
 
     let _obj = Object.assign({}, obj)
@@ -38,11 +57,14 @@ export const sortByFoo = (items, attrPath, key) => {
     return [...items].sort((a, b) => {
         const foo = getObjKeyViaAttrPath(a, attrPath, key)
         const bar = getObjKeyViaAttrPath(b, attrPath, key)
+        if (foo == undefined && bar == undefined) {
+            return 0
+        }
         if (foo == undefined) {
             return 1
         }
         if (bar == undefined) {
-            return 1
+            return -1
         }
         return foo > bar ? -1 : foo < bar ? 1 : 0
     })

@@ -1,12 +1,10 @@
 import React, { useState } from "react"
-import { getObjKeyViaAttrPath } from "../../utils/fooStuff"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
 import Modal from "react-bootstrap/Modal"
 import TableFilterItem from "./TableFilterItem"
 import FilterWidgetSingleValue from "./FilterWidgetSingleValue"
-import FilterWidgetIncludes from "./FilterWidgetIncludes"
 import FilterWidgetBetween from "./FilterWidgetBetween"
 
 export const SearchResultDefault = props => {
@@ -15,14 +13,15 @@ export const SearchResultDefault = props => {
 
 const getComponent = (s) => {
     switch (s) {
-        case "smaller":
         case "equal":
+        case "smaller":
+        case "smallerEqual":
         case "bigger":
+        case "biggerEqual":
+        case "includes":
             return FilterWidgetSingleValue
         case "between":
             return FilterWidgetBetween
-        case "includes":
-            return FilterWidgetIncludes
         default:
             return SearchResultDefault
     }
@@ -31,17 +30,19 @@ const getComponent = (s) => {
 
 export const TableFilters = (props) => {
 
-    const { items, ths, applyFilters } = props
+    const { ths, applyFilters } = props
 
     const [showModal, setShowModal] = useState(false)
     const [filterWidgets, setFilterWidgets] = useState([])
 
     const filters = [
-        { name: 'bigger' },
-        { name: 'smaller' },
-        /* { name: 'between' }, */
         { name: 'equal' },
-        /* { name: 'includes' } */
+        { name: 'smaller' },
+        { name: 'smallerEqual' },
+        { name: 'bigger' },
+        { name: 'biggerEqual' },
+        { name: 'includes' },
+        /* { name: 'between' }, */
     ]
 
     const handleClick = event => {
@@ -78,7 +79,10 @@ export const TableFilters = (props) => {
 
     return (
         <>
-            <Button onClick={handleClick}>Add Filter</Button>
+            <Row>
+                <Button onClick={handleClick}>Add Filter</Button>
+            </Row>
+            <hr />
             <Row>
                 {filterWidgets.map((widget, i) => {
                     const Comp = getComponent(widget?.filter)

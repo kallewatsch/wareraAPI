@@ -7,7 +7,7 @@ import CountrySelectModal from "../util/CountrySelectModal"
 import { useLazyGetUsersByCountryQuery, useLazyGetAnythingBatchedPostQuery } from "../../api"
 import { setIsLoading, setUsers } from "../../appSlice"
 import SortableTable from "../util/SortableTable"
-import { getExpectedDamage, getHoursUntilLastOnline } from "../../utils/fooStuff"
+import { getCanAttackTimes, getExpectedAttackCost, getExpectedDamage, getHoursUntilLastOnline } from "../../utils/fooStuff"
 import "./Intel.css"
 
 
@@ -16,7 +16,7 @@ export const Intel = (props) => {
     const { countries, users } = useSelector(state => state.app)
     const [showModal, setShowModal] = useState(false)
     const [country, setCountry] = useState('')
-    const [thMode, setThMode] = useState('realtime')
+    const [thMode, setThMode] = useState('war')
 
     const [getUserIds] = useLazyGetUsersByCountryQuery()
     const [getAnythingBatched] = useLazyGetAnythingBatchedPostQuery()
@@ -78,6 +78,8 @@ export const Intel = (props) => {
 
     const thsSkillsWar = [
         { txt: 'expected dmg', attrPath: ["extended"], target: "expDmg" },
+        { txt: 'expected attack health cost', attrPath: ["extended"], target: "expAttCost" },
+        { txt: 'Can Attack Times', attrPath: ["extended"], target: "canAttackTimes" },
         { txt: 'attack total', attrPath: ['skills', 'attack'], target: 'total' },
         { txt: 'health', attrPath: ['skills', 'health'], target: 'total' },
         { txt: 'h now', attrPath: ['skills', 'health'], target: 'currentBarValue' },
@@ -129,7 +131,9 @@ export const Intel = (props) => {
             { ...user },
             {
                 extended: {
-                    expDmg: getExpectedDamage({ ...user?.skills, useEquipment: true }),
+                    expDmg: getExpectedDamage({ ...user?.skills }),
+                    expAttCost: getExpectedAttackCost({ ...user?.skills }, false),
+                    canAttackTimes: getCanAttackTimes({ ...user?.skills }),
                     hoursUntilLastOnline: getHoursUntilLastOnline(user?.dates?.lastConnectionAt)
                 }
             }
