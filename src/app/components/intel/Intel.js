@@ -80,6 +80,7 @@ export const Intel = (props) => {
         { txt: 'expected dmg', attrPath: ["extended"], target: "expDmg" },
         { txt: 'expected attack health cost', attrPath: ["extended"], target: "expAttCost" },
         { txt: 'Can Attack Times', attrPath: ["extended"], target: "canAttackTimes" },
+        { txt: 'available Dmg', attrPath: ["extended"], target: "availableDmg" },
         { txt: 'attack total', attrPath: ['skills', 'attack'], target: 'total' },
         { txt: 'health', attrPath: ['skills', 'health'], target: 'total' },
         { txt: 'h now', attrPath: ['skills', 'health'], target: 'currentBarValue' },
@@ -134,11 +135,14 @@ export const Intel = (props) => {
                     expDmg: getExpectedDamage({ ...user?.skills }),
                     expAttCost: getExpectedAttackCost({ ...user?.skills }, false),
                     canAttackTimes: getCanAttackTimes({ ...user?.skills }),
+                    availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimes({ ...user?.skills }),
                     hoursUntilLastOnline: getHoursUntilLastOnline(user?.dates?.lastConnectionAt)
                 }
             }
         )
     ))
+
+    const totalAvailableCountryDmg = Math.round(extendedUsers.reduce((acc, curr) => acc + curr.extended.availableDmg, 0)).toLocaleString()
 
     return (
         <>
@@ -150,6 +154,7 @@ export const Intel = (props) => {
                 country && <Row>
                     <Button onClick={handleSetThMode}>toggle mode</Button>
                     <h5>{country?.name} | current mode: <Badge bg={thMode} txt={thMode}>{thMode}</Badge></h5>
+                    <h4 style={{border: "solid red"}}>Total available Dmg: {totalAvailableCountryDmg}</h4>
                     <SortableTable items={[...extendedUsers]} ths={[...ths]} component="user" key={`${country?._id}-${thMode}`} />
                 </Row>
             }
