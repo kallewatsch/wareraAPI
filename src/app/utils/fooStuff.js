@@ -34,7 +34,9 @@ export const getExpectedAttackCost = (skills, useEquipment = true) => {
 }
 
 export const getCanAttackTimes = (skills, useEquipment = true) => {
-    const { health: {currentBarValue: health } } = skills // what about currentBarValue vs total or value? use diffrent functions?
+    //const { health: {currentBarValue: health } } = skills // what about currentBarValue vs total or value? use diffrent functions?
+    // this is meh...
+    const health = skills?.health?.currentBarValue || 0
     const attackCost = getExpectedAttackCost(skills, useEquipment)
     return Math.floor(health / attackCost)
 }
