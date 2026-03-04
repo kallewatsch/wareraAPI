@@ -26,16 +26,27 @@ export const TableRow = (props) => {
 
     const foobar = (x) => {
         // TODO: cleanup this and the formatValue madness in ./SortableTable
+        let val
         try {
+            val = decimals ? x.toFixed(decimals) : x
+        } catch(err) {
+            //console.log("foobar", err)
+            val = x
+        } finally {
+            return `${val}`
+        }
+        /* try {
             return decimals ? x.toFixed(decimals) : x
         }
         catch {
             return x
-        }
+        } */
     }
 
+    const clsName = item.infos?.isBanned ? 'tr-banned' : ''
+
     return (
-        <tr>
+        <tr className={clsName}>
             <td><Button onClick={handleClickDetails}>details</Button></td>
             {tds && tds.map((td, i) => {
                 const displayVal = getObjKeyViaAttrPath(item, td.attrPath, td.target)

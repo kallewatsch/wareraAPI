@@ -110,13 +110,12 @@ export const wareraApi = createApi({
             }
         }),
         getBattles: builder.query({
-            query: ({ battleId }) => {
+            query: (data) => {
                 // TODO: there are multiple params
-                let trpcData = { battleId: battleId }
                 return {
                     url: 'battle.getBattles',
                     method: 'GET',
-                    params: { input: JSON.stringify(trpcData) }
+                    params: { input: JSON.stringify(data) }
                 }
             }
         }),
@@ -320,6 +319,17 @@ export const wareraApi = createApi({
                 }
             }
         }),
+       /*  getTransactions: builder.query({
+            query: (args) => {
+                const { data, headers } = args
+                return {
+                    headers,
+                    url: 'transaction.getPaginatedTransactions',
+                    method: 'POST',
+                    body: { data }
+                }
+            }
+        }), */
         getUpgrade: builder.query({
             query: ({ muId }) => {
                 // TODO: there are multiple params

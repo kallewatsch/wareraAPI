@@ -28,7 +28,8 @@ export const initialState = {
     warplaner: initialStateWarplaner,
     search: {},
     market: {},
-    config: {}
+    config: {},
+    transactions: [],
 }
 
 export const appSlice = createSlice({

@@ -1,0 +1,236 @@
+{
+    "result": {
+        "data": {
+            "items": [
+                {
+                    "_id": "69a31a5c82916de978631ed1",
+                    "countries": [
+                        "6813b6d446e731854c7ac79c",
+                        "6813b6d446e731854c7ac7f2"
+                    ],
+                    "priority": "2",
+                    "data": {
+                        "type": "countryMoneyTransfer",
+                        "money": 500,
+                        "countries": [
+                            "6813b6d446e731854c7ac79c",
+                            "6813b6d446e731854c7ac7f2"
+                        ]
+                    },
+                    "createdAt": "2026-02-28T16:39:56.992Z",
+                    "updatedAt": "2026-02-28T16:39:56.992Z",
+                    "__v": 0
+                },
+                {
+                    "_id": "69a06b98cd9cc27fdaac527d",
+                    "countries": [
+                        "6813b6d446e731854c7ac79c",
+                        "6813b6d446e731854c7ac7f2"
+                    ],
+                    "priority": "2",
+                    "data": {
+                        "type": "countryMoneyTransfer",
+                        "money": 500,
+                        "countries": [
+                            "6813b6d446e731854c7ac79c",
+                            "6813b6d446e731854c7ac7f2"
+                        ]
+                    },
+                    "createdAt": "2026-02-26T15:49:44.667Z",
+                    "updatedAt": "2026-02-26T15:49:44.667Z",
+                    "__v": 0
+                },
+                {
+                    "_id": "699dadd55a538fc336f024e2",
+                    "countries": [
+                        "6813b6d446e731854c7ac7aa",
+                        "6813b6d446e731854c7ac79c"
+                    ],
+                    "priority": "2",
+                    "data": {
+                        "type": "countryMoneyTransfer",
+                        "money": 1000,
+                        "countries": [
+                            "6813b6d446e731854c7ac7aa",
+                            "6813b6d446e731854c7ac79c"
+                        ]
+                    },
+                    "createdAt": "2026-02-24T13:55:33.594Z",
+                    "updatedAt": "2026-02-24T13:55:33.594Z",
+                    "__v": 0
+                },
+                {
+                    "_id": "699d5e130fc8c21bf3cfe2df",
+                    "countries": [
+                        "6813b6d546e731854c7ac87d",
+                        "6813b6d446e731854c7ac79c"
+                    ],
+                    "priority": "2",
+                    "data": {
+                        "type": "countryMoneyTransfer",
+                        "money": 800,
+                        "countries": [
+                            "6813b6d546e731854c7ac87d",
+                            "6813b6d446e731854c7ac79c"
+                        ]
+                    },
+                    "createdAt": "2026-02-24T08:15:15.438Z",
+                    "updatedAt": "2026-02-24T08:15:15.438Z",
+                    "__v": 0
+                },
+                {
+                    "_id": "699cb57ff8bf3bb1109b98b7",
+                    "countries": [
+                        "6813b6d446e731854c7ac79c",
+                        "6813b6d546e731854c7ac858"
+                    ],
+                    "priority": "2",
+                    "data": {
+                        "type": "countryMoneyTransfer",
+                        "money": 550,
+                        "countries": [
+                            "6813b6d446e731854c7ac79c",
+                            "6813b6d546e731854c7ac858"
+                        ]
+                    },
+                    "createdAt": "2026-02-23T20:15:59.125Z",
+                    "updatedAt": "2026-02-23T20:15:59.125Z",
+                    "__v": 0
+                },
+                {
+                    "_id": "698dbe34fbbee25382a9045a",
+                    "countries": [
+                        "683ddd2c24b5a2e114af15c3",
+                        "6813b6d446e731854c7ac79c"
+                    ],
+                    "priority": "2",
+                    "data": {
+                        "type": "countryMoneyTransfer",
+                        "money": 6.9,
+                        "countries": [
+                            "683ddd2c24b5a2e114af15c3",
+                            "6813b6d446e731854c7ac79c"
+                        ]
+                    },
+                    "createdAt": "2026-02-12T11:49:08.334Z",
+                    "updatedAt": "2026-02-12T11:49:08.334Z",
+                    "__v": 0
+                },
+                {
+                    "_id": "698dbe2f28209da53480c04c",
+                    "countries": [
+                        "683ddd2c24b5a2e114af15c3",
+                        "6813b6d446e731854c7ac79c"
+                    ],
+                    "priority": "2",
+                    "data": {
+                        "type": "countryMoneyTransfer",
+                        "money": 6.9,
+                        "countries": [
+                            "683ddd2c24b5a2e114af15c3",
+                            "6813b6d446e731854c7ac79c"
+                        ]
+                    },
+                    "createdAt": "2026-02-12T11:49:03.807Z",
+                    "updatedAt": "2026-02-12T11:49:03.807Z",
+                    "__v": 0
+                },
+                {
+                    "_id": "698d6af27286098457fca621",
+                    "countries": [
+                        "6813b6d446e731854c7ac79c",
+                        "683ddd2c24b5a2e114af15c3"
+                    ],
+                    "priority": "2",
+                    "data": {
+                        "type": "countryMoneyTransfer",
+                        "money": 10,
+                        "countries": [
+                            "6813b6d446e731854c7ac79c",
+                            "683ddd2c24b5a2e114af15c3"
+                        ]
+                    },
+                    "createdAt": "2026-02-12T05:53:54.412Z",
+                    "updatedAt": "2026-02-12T05:53:54.412Z",
+                    "__v": 0
+                },
+                {
+                    "_id": "697633e4ca9bb7b06932662c",
+                    "countries": [
+                        "6813b6d446e731854c7ac7eb",
+                        "6813b6d446e731854c7ac79c"
+                    ],
+                    "priority": "2",
+                    "data": {
+                        "type": "countryMoneyTransfer",
+                        "money": 500,
+                        "countries": [
+                            "6813b6d446e731854c7ac7eb",
+                            "6813b6d446e731854c7ac79c"
+                        ]
+                    },
+                    "createdAt": "2026-01-25T15:16:52.636Z",
+                    "updatedAt": "2026-01-25T15:16:52.636Z",
+                    "__v": 0
+                },
+                {
+                    "_id": "69520ddc1b011d0647b03c7c",
+                    "countries": [
+                        "6813b6d446e731854c7ac79c",
+                        "6813b6d546e731854c7ac862"
+                    ],
+                    "priority": "2",
+                    "data": {
+                        "type": "countryMoneyTransfer",
+                        "money": 3,
+                        "countries": [
+                            "6813b6d446e731854c7ac79c",
+                            "6813b6d546e731854c7ac862"
+                        ]
+                    },
+                    "createdAt": "2025-12-29T05:13:00.934Z",
+                    "updatedAt": "2025-12-29T05:13:00.934Z",
+                    "__v": 0
+                },
+                {
+                    "_id": "6851ca61a177b8795e295552",
+                    "countries": [
+                        "6813b6d446e731854c7ac7b6",
+                        "6813b6d446e731854c7ac79c"
+                    ],
+                    "priority": "medium",
+                    "data": {
+                        "type": "countryMoneyTransfer",
+                        "money": 50,
+                        "countries": [
+                            "6813b6d446e731854c7ac7b6",
+                            "6813b6d446e731854c7ac79c"
+                        ]
+                    },
+                    "createdAt": "2025-06-17T20:04:49.470Z",
+                    "updatedAt": "2025-06-17T20:04:49.470Z",
+                    "__v": 0
+                },
+                {
+                    "_id": "6848cf680769ef233eaf7da2",
+                    "countries": [
+                        "6813b6d446e731854c7ac79c",
+                        "6813b6d446e731854c7ac7b6"
+                    ],
+                    "priority": "medium",
+                    "data": {
+                        "type": "countryMoneyTransfer",
+                        "money": 50,
+                        "countries": [
+                            "6813b6d446e731854c7ac79c",
+                            "6813b6d446e731854c7ac7b6"
+                        ]
+                    },
+                    "createdAt": "2025-06-11T00:35:52.568Z",
+                    "updatedAt": "2025-06-11T00:35:52.568Z",
+                    "__v": 0
+                }
+            ]
+        }
+    }
+}

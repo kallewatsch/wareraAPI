@@ -8,6 +8,7 @@ import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import CountrySelectModal from "../util/CountrySelectModal"
 import { setIsLoading } from "../../appSlice"
+import CountryMoneyTransfers from "./countrymoneytransfers/CountryMoneyTransfers"
 
 const eventTypes = [
     'countryMoneyTransfer',
@@ -38,11 +39,10 @@ export const WareraEvents = () => {
 
     const { countries } = useSelector(state => state.app)
     const [filterEvents, setFilterEvents] = useState([])
+    const [events, setEvents] = useState([])
     const [showModal, setShowModal] = useState(true)
     const [countryId, setCountryId] = useState('')
     const [getEvents] = useLazyGetEventsPaginatedQuery()
-    const [senders, setSenders] = useState({})
-    const [receivers, setReceivers] = useState({})
 
     const dispatch = useDispatch()
 
@@ -62,7 +62,6 @@ export const WareraEvents = () => {
 
     const handleGetEvents = async event => {
 
-
         let allEvents = []
 
         try {
@@ -81,18 +80,7 @@ export const WareraEvents = () => {
         } finally {
             dispatch(setIsLoading(false))
         }
-
-        const sendMoneyEvents = allEvents.filter(x => x.countries[0] == countryId)
-        const receiveMoneyEvents = allEvents.filter(x => x.countries[1] == countryId)
-
-        const _receivers = sendMoneyEvents.map(x => ({ id: x.data.countries[1], money: x.data.money }))
-        const _senders = receiveMoneyEvents.map(x => ({ id: x.data.countries[0], money: x.data.money }))
-
-        const receiversGrouped = Object.groupBy(_receivers, ({ id }) => id)
-        const sendersGrouped = Object.groupBy(_senders, ({ id }) => id)
-
-        setReceivers(receiversGrouped)
-        setSenders(sendersGrouped)
+        setEvents(allEvents)
     }
 
 
@@ -102,15 +90,7 @@ export const WareraEvents = () => {
         title: 'bla'
     }
 
-    const receiversFucked = Object.keys(receivers).map((key, i) => {
-        const totalMoney = receivers[key].reduce((accumulator, currentValue) => accumulator + currentValue.money, 0)
-        return ({ id: getValueFromArrayItem(countries, '_id', key, 'name'), totalMoney })
-    }).sort((a, b) => a.totalMoney > b.totalMoney ? -1 : a.totalMoney < b.totalMoney ? 1 : 0)
-
-    const sendersFucked = Object.keys(senders).map((key, i) => {
-        const totalMoney = senders[key].reduce((accumulator, currentValue) => accumulator + currentValue.money, 0)
-        return ({ id: getValueFromArrayItem(countries, '_id', key, 'name'), totalMoney })
-    }).sort((a, b) => a.totalMoney > b.totalMoney ? -1 : a.totalMoney < b.totalMoney ? 1 : 0)
+    const countryMoneyTransferEvents = events.filter(x => x.data.type == "countryMoneyTransfer")
 
     return (
         <>
@@ -122,16 +102,7 @@ export const WareraEvents = () => {
                 </Col>
             </Row>
             <h6>{countryId && getValueFromArrayItem(countries, '_id', countryId, 'name')}</h6>
-            <Row>
-                <Col>
-                    <h6>Receivers</h6>
-                    {receiversFucked.map((x, i) => <div key={i}>{x.id}: {x.totalMoney}</div>)}
-                </Col>
-                <Col>
-                    <h6>Senders</h6>
-                    {sendersFucked.map((x, i) => <div key={i}>{x.id}: {x.totalMoney}</div>)}
-                </Col>
-            </Row>
+            {countryMoneyTransferEvents.length && <CountryMoneyTransfers events={countryMoneyTransferEvents} countryId={countryId} countries={countries} />}
             <CountrySelectModal {...modalProps} />
         </>
     )

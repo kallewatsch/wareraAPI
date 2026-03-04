@@ -41,6 +41,23 @@ export const getCanAttackTimes = (skills, useEquipment = true) => {
     return Math.floor(health / attackCost)
 }
 
+export const getDaysUntil = (date) => {
+    const now = Date.now()
+    const past = new Date(date)
+    const day = (1000 * 60 * 60 * 24)
+
+    return Math.floor((now - past) / day)
+}
+
+export const getPrice = (transaction) => {
+    return transaction.money / transaction.quantity
+}
+
+export const getTransactionUser = (users, id) => {
+    const user = users.find(user => user._id == id)
+    return  user?.username
+}
+
 export const getObjKeyViaAttrPath = (obj, attrPath, key) => {
 
     let _obj = Object.assign({}, obj)

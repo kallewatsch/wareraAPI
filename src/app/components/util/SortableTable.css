@@ -17,3 +17,7 @@
     border: solid thick orange;
     border-radius: 5px;
 }
+
+.tr-banned td {
+    background-color: red;
+}

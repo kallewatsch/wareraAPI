@@ -92,6 +92,7 @@ export const Intel = (props) => {
         { txt: 'precision', attrPath: ['skills', 'precision'], target: 'total' },
         { txt: 'dodge', attrPath: ['skills', 'dodge'], target: 'total' },
         { txt: 'lootChance', attrPath: ['skills', 'lootChance'], target: 'total' },
+        { txt: 'ban', attrPath: ['infos'], target: 'isBanned' },
     ]
 
     const thsRealTime = [
@@ -142,8 +143,12 @@ export const Intel = (props) => {
         )
     ))
 
-    const totalAvailableCountryDmg = Math.round(extendedUsers.reduce((acc, curr) => acc + curr.extended.availableDmg, 0)).toLocaleString()
+    const extendedUsersWithBan = extendedUsers.filter(user => user.infos?.isBanned)
+    const extendedUsersWithoutBan = extendedUsers.filter(user => !user.infos?.isBanned)
 
+    const totalAvailableCountryDmg = Math.round(extendedUsersWithoutBan.reduce((acc, curr) => acc + curr.extended.availableDmg, 0)).toLocaleString()
+    const totalAvailableCountryDmgBan = Math.round(extendedUsersWithBan.reduce((acc, curr) => acc + curr.extended.availableDmg, 0)).toLocaleString()
+    const totalAvailableCountryDmgTotal = Math.round(extendedUsers.reduce((acc, curr) => acc + curr.extended.availableDmg, 0)).toLocaleString()
     return (
         <>
             <Row>
@@ -154,7 +159,9 @@ export const Intel = (props) => {
                 country && <Row>
                     <Button onClick={handleSetThMode}>toggle mode</Button>
                     <h5>{country?.name} | current mode: <Badge bg={thMode} txt={thMode}>{thMode}</Badge></h5>
-                    <h4 style={{border: "solid red"}}>Total available Dmg: {totalAvailableCountryDmg}</h4>
+                    <h4 style={{ border: "solid red" }}>Total available Dmg: {totalAvailableCountryDmg}</h4>
+                    <h4 style={{ border: "solid red" }}>Total banned Dmg: {totalAvailableCountryDmgBan}</h4>
+                    <h4 style={{ border: "solid red" }}>Total available Dmg including Banned: {totalAvailableCountryDmgTotal}</h4>
                     <SortableTable items={[...extendedUsers]} ths={[...ths]} component="user" key={`${country?._id}-${thMode}`} />
                 </Row>
             }
