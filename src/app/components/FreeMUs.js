@@ -6,7 +6,7 @@ import { BsBoxArrowInRight } from "react-icons/bs";
 import CountrySelectModal from "./util/CountrySelectModal"
 import { useLazyGetMusPaginatedQuery, useLazyGetUserQuery, useLazyGetUsersByCountryQuery } from "../api"
 import { addMus, setMus, setFreeMUs, setIsLoading, setUsers, addUsers } from "../appSlice"
-import { getFreeMUsByCountry } from "../utils/arrayStuff"
+import { getFreeMUsByCountry, getMUsByCountry, hasFreeSlots } from "../utils/arrayStuff"
 import Mu from "./mu/Mu"
 
 
@@ -72,22 +72,25 @@ export const FreeMUs = () => {
         title: 'bla'
     }
 
-    const freeMUs = getFreeMUsByCountry(mus, users)
-    const cuntMUs = mus.filter(mu => users.some(user => user._id == mu.user))
-        .filter(mu => freeMUs.every(fmu => fmu._id != mu._id))
+    //const freeMUs = getFreeMUsByCountry(mus, users)
+    const cuntMus = getMUsByCountry(mus, users)
+    //.filter(mu => freeMUs.every(fmu => fmu._id != mu._id))
+    const countryMus = cuntMus.sort((a, b) => hasFreeSlots(a) > hasFreeSlots(b) ? -1 : hasFreeSlots(a) < hasFreeSlots(b) ? 1 : 0)
 
     return (
         <>
             <Button onClick={() => setShowModal(true)}>change Country</Button>
-            {freeMUs && country && <h3>There are {freeMUs.length} MUs with free slots for country {country.name}</h3>}
+            {cuntMus && country && <h3>There are {cuntMus.length} MUs for country {country.name}</h3>}
 
             <Accordion activeKey={activeKey} onSelect={handleSetActiveKeyAndScroll}>
-                {freeMUs.map((mu, i) => {
+                {countryMus && countryMus.map((mu, i) => {
                     const eventKey = mu._id
-                    const slots = `${mu.members.length}/${mu.activeUpgradeLevels.dormitories * 5}`
+                    const slots = mu.members.length - 1
+                    const maxSlots = (mu.activeUpgradeLevels.dormitories * 5) - 1
+                    //const slots = `${mu.members.length - 1}/${(mu.activeUpgradeLevels.dormitories * 5) - 1}`
                     return (
                         <Accordion.Item eventKey={eventKey} id={eventKey} key={i}>
-                            <Accordion.Header>{mu.name} {slots} <span className="freeSlotsMadness">!!!FREE SLOTS!!!</span></Accordion.Header>
+                            <Accordion.Header>{mu.name} {slots}/{maxSlots} {slots < maxSlots && <span className="freeSlotsMadness">!!!FREE SLOTS!!!</span>}</Accordion.Header>
                             <Accordion.Body>
                                 <Button target="_blank" href={`https://app.warera.io/mu/${mu._id}`}>Visit Military Unit<BsBoxArrowInRight /></Button>
                                 <Mu {...mu} />
@@ -95,17 +98,18 @@ export const FreeMUs = () => {
                         </Accordion.Item>
                     )
                 })}
-                {cuntMUs.map((mu, i) => {
+                {/* {cuntMUs.map((mu, i) => {
                     const eventKey = mu._id
+                    const slots = `${mu.members.length - 1}/${(mu.activeUpgradeLevels.dormitories * 5) - 1}`
                     return (
                         <Accordion.Item eventKey={eventKey} id={eventKey} key={`bla-${i}`}>
-                            <Accordion.Header>{mu.name}</Accordion.Header>
+                            <Accordion.Header>{mu.name} {slots}</Accordion.Header>
                             <Accordion.Body>
                                 <Mu {...mu} />
                             </Accordion.Body>
                         </Accordion.Item>
                     )
-                })}
+                })} */}
             </Accordion>
             <CountrySelectModal {...modalProps} />
         </>
