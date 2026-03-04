@@ -11,7 +11,7 @@ export const UserSkillDefault = (props) => {
         ...otherProps
     } = props
 
-    const fuck = config?.skills?.[skillName] || {}
+    const fuck = config?.skills?.[skillName]?.levels || {}
 
     const maxVal = skill?.total
     const indexKey = Object.keys(fuck).at(-1)
