@@ -1,9 +1,7 @@
 import React from "react"
-import { IconContext } from "react-icons"
 import { GiRoundStar, GiShield, GiGlobe, GiChart, GiGreekTemple } from "react-icons/gi"
-import OverlayTrigger from "react-bootstrap/OverlayTrigger"
-import Tooltip from "react-bootstrap/Tooltip"
 import "./UserInfos.css"
+import IconsWithOverlay from "../util/IconsWithOverlay"
 
 
 export const UserInfos = (props) => {
@@ -18,45 +16,32 @@ export const UserInfos = (props) => {
         countryName
     } = props
 
-    const renderTooltip = (props, txt) => (
-        <Tooltip id="button-tooltip" {...props}>
-            {txt}
-        </Tooltip>
-    );
+    const availablTexts = [
+        `President ${countryName}`,
+        `Vice President ${countryName}`,
+        `Minister of Defense ${countryName}`,
+        `Minister of Economics ${countryName}`,
+        `Minister of Foreign Affairs ${countryName}`,
+        `Member of Congress ${countryName}`
+    ]
+
+    const availableIcons = [
+        [presidentOf, <GiRoundStar className="icon-gold" />],
+        [vicePresidentOf, <GiRoundStar className="icon-silver" />],
+        [minOfDefenseOf, <GiShield className="icon-red" />],
+        [minOfEconomyOf, <GiChart className="icon-green" />],
+        [minOfForeignAffairsOf, <GiGlobe className="icon-blue" />],
+        [congressMemberOf, <GiGreekTemple className="icon-gray" />],
+    ]
+
+    const icons = availableIcons.filter(x => x[0]).map(x => x[1])
+    const txts = availablTexts.filter((x, i) => availableIcons[i]?.[0])
 
     return (
-        <IconContext.Provider value={{ size: "2em" }}>
-            {presidentOf && (
-                <OverlayTrigger overlay={(props) => renderTooltip(props, `President ${countryName}`)}>
-                    <GiRoundStar className="icon-gold" />
-                </OverlayTrigger>
-            )}
-            {vicePresidentOf && (
-                <OverlayTrigger overlay={(props) => renderTooltip(props, `Vice President ${countryName}`)}>
-                    <GiRoundStar className="icon-silver" />
-                </OverlayTrigger>
-            )}
-            {minOfDefenseOf && (
-                <OverlayTrigger overlay={(props) => renderTooltip(props, `Minister of Defense ${countryName}`)}>
-                    <GiShield className="icon-red" />
-                </OverlayTrigger>
-            )}
-            {minOfEconomyOf && (
-                <OverlayTrigger overlay={(props) => renderTooltip(props, `Minister of Economy ${countryName}`)}>
-                    <GiChart className="icon-green" />
-                </OverlayTrigger>
-            )}
-            {minOfForeignAffairsOf && (
-                <OverlayTrigger overlay={(props) => renderTooltip(props, `Minister of Foreign Affairs ${countryName}`)}>
-                    <GiGlobe className="icon-blue" />
-                </OverlayTrigger>
-            )}
-            {congressMemberOf && (
-                <OverlayTrigger overlay={(props) => renderTooltip(props, `Congress Member ${countryName}`)}>
-                    <GiGreekTemple className="icon-gray" />
-                </OverlayTrigger>
-            )}
-        </IconContext.Provider>
+        <IconsWithOverlay providerValue={{ size: "2em" }} txts={txts}>
+            {icons}
+        </IconsWithOverlay>
+
     )
 
 }
