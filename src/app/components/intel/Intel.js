@@ -122,7 +122,9 @@ export const Intel = (props) => {
     const thsSkills = availableThs[thMode] || []
 
     const ths = [
-        { txt: 'username', attrPath: "", target: "username" },
+        { txt: 'username', attrPath: [], target: "username" },
+        { txt: 'level', attrPath: ["leveling"], target: "level" },
+        { txt: 'xp', attrPath: ["leveling"], target: "totalXp" },
         ...thsSkills
     ]
 
