@@ -20,13 +20,14 @@ export const User = (props) => {
         dates,
         leveling,
         infos,
+        country: countryId,
         ...otherProps
     } = props
 
     const [key, setKey] = useState('skills');
 
-    const userCardHederProps = {
-        avatarUrl, username, leveling, infos, otherProps
+    const userCardHeaderProps = {
+        avatarUrl, username, leveling, infos, countryId, otherProps
     }
 
     const expectedDmg = getExpectedDamage({ useEquipment: true, ...skills })
@@ -34,7 +35,7 @@ export const User = (props) => {
     return (
         <Card bg={infos?.isBanned ? 'danger' : undefined}>
             <Card.Header>
-                <UserCardHeader {...userCardHederProps} />
+                <UserCardHeader {...userCardHeaderProps} />
                 expectedDmg per attack: {expectedDmg}
             </Card.Header>
             {/* <Card.Img src={avatarUrl} /> */}
@@ -46,6 +47,9 @@ export const User = (props) => {
                 >
                     <Tab eventKey="other" title="Other">
                         <SimpleStats {...otherProps} />
+                    </Tab>
+                    <Tab eventKey="infos" title="Infos">
+                        <SimpleStats {...infos} />
                     </Tab>
                     <Tab eventKey="dates" title="Dates">
                         <UserDates dates={dates} />

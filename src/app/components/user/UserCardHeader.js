@@ -7,19 +7,27 @@ import Badge from "react-bootstrap/Badge"
 import ProgressBar from "react-bootstrap/ProgressBar"
 import { GiSpellBook } from "react-icons/gi"
 import "./UserCardHeader.css"
+import UserInfos from "./UserInfos"
 
 
 export const UserCardHeader = (props) => {
 
-    const { username, avatarUrl, leveling, infos, otherProps } = props
+    const { username, avatarUrl, leveling, infos, countryId, otherProps } = props
 
     const {
+        isBanned,
         isPremium,
         premiumMonthsCount,
+        premiumGiftsCount,
+        description,
+        presidentOf,
+        vicePresidentOf,
+        minOfDefenseOf,
+        minOfEconomyOf,
+        minOfForeignAffairsOf,
+        congressMemberOf,
         colorScheme,
         font,
-        description,
-        vicePresidentOf,
     } = infos || {}
 
     const {
@@ -32,7 +40,9 @@ export const UserCardHeader = (props) => {
         freeReset
     } = leveling || {}
 
-    const { config } = useSelector(state => state.app)
+    const { countries } = useSelector(state => state.app)
+    const country = countries.find(country => country._id == countryId)
+
 
     return (
         <Row>
@@ -51,9 +61,12 @@ export const UserCardHeader = (props) => {
                 </Figure>
             </Col>
             <Col>
-                <span className="user-username"><Badge pill>{leveling.level}</Badge> {username} {infos?.isBanned && '(banned user)'}</span>
+                <span className="user-username">
+                    <Badge pill>{level}</Badge> {username} <img src={`https://app.warera.io/images/flags/${country?.code}.svg?v=16`}/>{isBanned && '(banned user)'}
+                </span>
+                <UserInfos {...infos} countryName={country?.name}/>
                 <hr />
-                <GiSpellBook /> {`${leveling.availableSkillPoints}/${leveling.totalSkillPoints}`}
+                <GiSpellBook /> {`${availableSkillPoints}/${totalSkillPoints}`}
                 {/* <ProgressBar now={leveling.totalXp} /> */}
             </Col>
 
