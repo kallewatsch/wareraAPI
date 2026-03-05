@@ -5,45 +5,35 @@ import Button from "react-bootstrap/Button"
 import { BsBoxArrowInRight } from "react-icons/bs";
 import CountrySelectModal from "./util/CountrySelectModal"
 import { useLazyGetMusPaginatedQuery, useLazyGetUserQuery, useLazyGetUsersByCountryQuery } from "../api"
-import { addMus, setMus, setFreeMUs, setIsLoading, setUsers, addUsers } from "../appSlice"
-import { getFreeMUsByCountry, getMUsByCountry, hasFreeSlots } from "../utils/arrayStuff"
+import { setIsLoading, setUsers, addUsers } from "../appSlice"
+import { getMUsByCountry, hasFreeSlots } from "../utils/arrayStuff"
 import Mu from "./mu/Mu"
 
 
 export const FreeMUs = () => {
 
-    const [getMUsPaginated] = useLazyGetMusPaginatedQuery()
     const [getUsers] = useLazyGetUsersByCountryQuery()
-    const { countries, mus, /* freeMUs, */ users } = useSelector(state => state.app)
-    const [countryId, setCountryId] = useState('')
+    const { countries, mus, users } = useSelector(state => state.app)
     const [country, setCountry] = useState()
     const [activeKey, setActiveKey] = useState()
     const [showModal, setShowModal] = useState(true)
 
     const dispatch = useDispatch()
 
-    const handleSetCountry = async country => {
+    const handleSetCountry = async countryId => {
         setShowModal(false)
-        setCountry(countries.find(cunt => cunt._id == country))
+        setCountry(countries.find(cunt => cunt._id == countryId))
         dispatch(setUsers([]))
         dispatch(setIsLoading(true))
         try {
-            let { result: { data: { items: users, nextCursor: nextCursorU }, errorU } } = await getUsers({ countryId: country, limit: 100 }).unwrap()
+            let { result: { data: { items: users, nextCursor: nextCursorU }, errorU } } = await getUsers({ countryId, limit: 100 }).unwrap()
             let allItemsU = [...users]
             while (nextCursorU) {
-                let { result: { data: moreData }, errorU } = await getUsers({ countryId: country, cursor: nextCursorU, limit: 100 }).unwrap()
+                let { result: { data: moreData }, errorU } = await getUsers({ countryId, cursor: nextCursorU, limit: 100 }).unwrap()
                 allItemsU = [...allItemsU, ...moreData.items]
                 nextCursorU = moreData.nextCursor
             }
-            let { result: { data: { items, nextCursor }, error } } = await getMUsPaginated({ limit: 100 }).unwrap()
-            let allItems = [...items]
-            while (nextCursor) {
-                let { result: { data: moreData }, error } = await getMUsPaginated({ cursor: nextCursor, limit: 100 }).unwrap()
-                allItems = [...allItems, ...moreData.items]
-                nextCursor = moreData.nextCursor
-            }
             dispatch(setUsers(allItemsU))
-            dispatch(setMus(allItems))
         } catch (err) {
             console.log(err)
         } finally {
@@ -72,9 +62,7 @@ export const FreeMUs = () => {
         title: 'bla'
     }
 
-    //const freeMUs = getFreeMUsByCountry(mus, users)
     const cuntMus = getMUsByCountry(mus, users)
-    //.filter(mu => freeMUs.every(fmu => fmu._id != mu._id))
     const countryMus = cuntMus.sort((a, b) => hasFreeSlots(a) > hasFreeSlots(b) ? -1 : hasFreeSlots(a) < hasFreeSlots(b) ? 1 : 0)
 
     return (
@@ -85,12 +73,12 @@ export const FreeMUs = () => {
             <Accordion activeKey={activeKey} onSelect={handleSetActiveKeyAndScroll}>
                 {countryMus && countryMus.map((mu, i) => {
                     const eventKey = mu._id
-                    const slots = mu.members.length - 1
-                    const maxSlots = (mu.activeUpgradeLevels.dormitories * 5) - 1
-                    //const slots = `${mu.members.length - 1}/${(mu.activeUpgradeLevels.dormitories * 5) - 1}`
+                    const filledSlots = mu.members.length
+                    const maxSlots = (mu.activeUpgradeLevels.dormitories * 5)
+                    const empySlots = maxSlots - filledSlots
                     return (
                         <Accordion.Item eventKey={eventKey} id={eventKey} key={i}>
-                            <Accordion.Header>{mu.name} {slots}/{maxSlots} {slots < maxSlots && <span className="freeSlotsMadness">!!!FREE SLOTS!!!</span>}</Accordion.Header>
+                            <Accordion.Header>{mu.name} {filledSlots}/{maxSlots} {empySlots > 1 && <span className="freeSlotsMadness">!!!FREE SLOTS!!!</span>}</Accordion.Header>
                             <Accordion.Body>
                                 <Button target="_blank" href={`https://app.warera.io/mu/${mu._id}`}>Visit Military Unit<BsBoxArrowInRight /></Button>
                                 <Mu {...mu} />
@@ -98,18 +86,6 @@ export const FreeMUs = () => {
                         </Accordion.Item>
                     )
                 })}
-                {/* {cuntMUs.map((mu, i) => {
-                    const eventKey = mu._id
-                    const slots = `${mu.members.length - 1}/${(mu.activeUpgradeLevels.dormitories * 5) - 1}`
-                    return (
-                        <Accordion.Item eventKey={eventKey} id={eventKey} key={`bla-${i}`}>
-                            <Accordion.Header>{mu.name} {slots}</Accordion.Header>
-                            <Accordion.Body>
-                                <Mu {...mu} />
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    )
-                })} */}
             </Accordion>
             <CountrySelectModal {...modalProps} />
         </>

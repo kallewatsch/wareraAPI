@@ -29,7 +29,7 @@ export const initialState = {
     search: {},
     market: {},
     config: {},
-    transactions: [],
+    //transactions: [],
 }
 
 export const appSlice = createSlice({

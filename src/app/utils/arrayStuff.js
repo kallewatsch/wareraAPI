@@ -63,7 +63,7 @@ export const getNonExcludedCountries = (countries, excludedIds) => {
 
 export const getFreeMUsByCountry = (mus, users) => {
     return mus.filter(mu => {
-        const cond1 = mu.members.length  < (mu.activeUpgradeLevels.dormitories * 5) - 1
+        const cond1 = mu.members.length < (mu.activeUpgradeLevels.dormitories * 5) - 1
         const cond2 = users.some((user) => mu.user == user._id)
         return cond1 && cond2
     })
@@ -73,6 +73,9 @@ export const getMUsByCountry = (mus, users) => {
     return mus.filter(mu => users.some((user) => mu.user == user._id))
 }
 
-export const hasFreeSlots = (mu) => {
-    return mu.members.length - 1 < (mu.activeUpgradeLevels.dormitories * 5) - 1
+export const hasFreeSlots = (mu, treshold=1) => {
+    const filledSlots = mu.members.length
+    const maxSlots = (mu.activeUpgradeLevels.dormitories * 5)
+    const empySlots = maxSlots - filledSlots
+    return empySlots > treshold
 }

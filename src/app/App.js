@@ -6,8 +6,8 @@ import {
 import { useSelector, useDispatch } from "react-redux"
 import Container from "react-bootstrap/Container"
 import Spinner from "react-bootstrap/Spinner"
-import { useGetAllCountriesQuery, useGetGameConfigQuery, useGetRegionsQuery } from "./api"
-import { setConfig, setCountries, setRegions } from "./appSlice"
+import { useGetAllCountriesQuery, useGetGameConfigQuery, useGetRegionsQuery, useLazyGetMusPaginatedQuery } from "./api"
+import { setConfig, setCountries, setMus, setRegions } from "./appSlice"
 import "./App.css"
 import Search from "./components/search/Search"
 import Countries from "./components/Countries"
@@ -85,11 +85,12 @@ export const App = () => {
     const { data: countries, countriesError } = useGetAllCountriesQuery()
     const { data: regions, error: regionsError } = useGetRegionsQuery()
     const { data: config, error: configError } = useGetGameConfigQuery()
+    const [getMUsPaginated, { data: mus, error: musError }] = useLazyGetMusPaginatedQuery()
     const { isLoading } = useSelector(state => state.app)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if(!config) return;
+        if (!config) return;
         dispatch(setConfig(config.result.data))
     }, [config])
 
@@ -102,6 +103,25 @@ export const App = () => {
         if (!regions) return;
         dispatch(setRegions(regions.result.data))
     }, [regions])
+
+    useEffect(() => {
+        const asyncGetMus = async () => {
+            try {
+                let { result: { data: { items, nextCursor }, error } } = await getMUsPaginated({ limit: 100 }).unwrap()
+                let allItems = [...items]
+                while (nextCursor) {
+                    let { result: { data: moreData }, error } = await getMUsPaginated({ cursor: nextCursor, limit: 100 }).unwrap()
+                    allItems = [...allItems, ...moreData.items]
+                    nextCursor = moreData.nextCursor
+                }
+                dispatch(setMus(allItems))
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        asyncGetMus()
+
+    }, [])
 
     return (
         <>{isLoading && <div id="loadingSpinner" ><Spinner /></div>}
