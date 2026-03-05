@@ -10,7 +10,9 @@ import {
     getRankingSum,
     sortCountryByRankingKey,
     getNonExcludedCountries,
-    getFreeMUsByCountry
+    getFreeMUsByCountry,
+    getMUsByCountry,
+    hasFreeSlots
 } from "./arrayStuff"
 
 describe("arrayStuff", () => {
@@ -156,4 +158,17 @@ describe("arrayStuff", () => {
     ])('getFreeMUsByCountry($mus, $users) returns $expected', ({ mus, users, expected }) => {
         expect(getFreeMUsByCountry(mus, users)).toEqual(expected)
     })
+    it.each([
+        { mus: [{ user: 'foo' }], users: [{ _id: 'foo' }], expected: [{ user: 'foo' }] }
+    ])
+        ('getMUsByCountry($mus, $users) returns $expected', ({ mus, users, expected }) => {
+            expect(getMUsByCountry(mus, users)).toEqual(expected)
+        })
+     it.each([
+        {mu: {members: ['a'], activeUpgradeLevels: {dormitories: 1}}, expected: true},
+        {mu: {members: Array(10), activeUpgradeLevels: {dormitories: 1}}, expected: false}
+     ])
+         ('hasFreeSlots($mu) returns $expected', ({mu, expected}) => {
+             expect(hasFreeSlots(mu)).toEqual(expected)
+         })
 })

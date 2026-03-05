@@ -27,7 +27,7 @@ export const getExpectedAttackCost = (skills, useEquipment = true) => {
 
     const { _dodge, _armor } = {
         _dodge: dodge?.[key] || 0,
-        _armor: armor?.[armor] || 0
+        _armor: armor?.[key] || 0
     }
 
     return (attackBaseCost - ((_armor / 100) * attackBaseCost)) * (1 - (_dodge / 100))
@@ -39,14 +39,6 @@ export const getCanAttackTimes = (skills, useEquipment = true) => {
     const health = skills?.health?.currentBarValue || 0
     const attackCost = getExpectedAttackCost(skills, useEquipment)
     return Math.floor(health / attackCost)
-}
-
-export const getDaysUntil = (date) => {
-    const now = Date.now()
-    const past = new Date(date)
-    const day = (1000 * 60 * 60 * 24)
-
-    return Math.floor((now - past) / day)
 }
 
 export const getPrice = (transaction) => {
@@ -87,6 +79,14 @@ export const sortByFoo = (items, attrPath, key) => {
         }
         return foo > bar ? -1 : foo < bar ? 1 : 0
     })
+}
+
+export const getDaysUntil = (date) => {
+    const now = Date.now()
+    const past = new Date(date)
+    const day = (1000 * 60 * 60 * 24)
+
+    return Math.floor((now - past) / day)
 }
 
 export const getHoursUntilLastOnline = (datetimestr) => {
