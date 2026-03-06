@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import CountrySelectModal from "../util/CountrySelectModal"
-import { setIsLoading } from "../../appSlice"
+import { setIsLoading, setToast } from "../../appSlice"
 import CountryMoneyTransfers from "./countrymoneytransfers/CountryMoneyTransfers"
 
 const eventTypes = [
@@ -76,7 +76,7 @@ export const WareraEvents = () => {
                 nextCursor = moreData.nextCursor
             }
         } catch (err) {
-            console.log(err)
+            dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
         } finally {
             dispatch(setIsLoading(false))
         }

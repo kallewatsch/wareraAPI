@@ -8,7 +8,7 @@ import InputGroup from "react-bootstrap/InputGroup"
 import ListGroup from "react-bootstrap/ListGroup"
 import { BsSearch } from "react-icons/bs";
 import { useLazySearchAnythingQuery } from "../../api"
-import { setIsLoading, setSearchResult } from "../../appSlice"
+import { setIsLoading, setSearchResult, setToast } from "../../appSlice"
 import SearchResult from "./SearchResult"
 
 export const resultArrayNames = [
@@ -37,7 +37,7 @@ export const Search = () => {
             const { result: { data, error } } = await searchAnything({ searchText }).unwrap()
             data && dispatch(setSearchResult(data))
         } catch (err) {
-            console.log(err)
+            dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
         } finally {
             dispatch(setIsLoading(false))
         }

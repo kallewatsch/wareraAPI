@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button"
 import { BsBoxArrowInRight } from "react-icons/bs";
 import CountrySelectModal from "./util/CountrySelectModal"
 import { useLazyGetMusPaginatedQuery, useLazyGetUserQuery, useLazyGetUsersByCountryQuery } from "../api"
-import { setIsLoading, setUsers, addUsers } from "../appSlice"
+import { setIsLoading, setUsers, addUsers, setToast } from "../appSlice"
 import { getMUsByCountry, hasFreeSlots } from "../utils/arrayStuff"
 import Mu from "./mu/Mu"
 
@@ -35,7 +35,7 @@ export const FreeMUs = () => {
             }
             dispatch(setUsers(allItemsU))
         } catch (err) {
-            console.log(err)
+            dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: 'danger' }))
         } finally {
             dispatch(setIsLoading(false))
         }

@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button"
 import Accordion from "react-bootstrap/Accordion"
 import Alert from "react-bootstrap/Alert"
 import { useLazyGetRegionsQuery } from "../api"
-import { setRegions } from "../appSlice"
+import { setRegions, setToast } from "../appSlice"
 import Region from "./Region"
 
 export const Regions = () => {
@@ -32,16 +32,16 @@ export const Regions = () => {
         }
     }
 
-    const handleGetRegions = async event => {
+    /* const handleGetRegions = async event => {
         try {
             const { result: { data: regions } } = await getRegions().unwrap()
             dispatch(setRegions(regions))
         } catch (err) {
-            console.log(err)
+            dispatch(setToast({ show: true, content: JSON.stringfy(err, null, 2), bg: "danger" }))
         } finally {
             console.log("done")
         }
-    }
+    } */
 
     const sortedRegions = regions && Object.keys(regions)
         .map(region => regions[region])
@@ -49,10 +49,10 @@ export const Regions = () => {
 
     return <>
         <Alert variant="warning">Regions don't contain information about strategic resources but the country does?! WIP</Alert>
-        <Button onClick={handleGetRegions}>getRegions</Button>
+        {/* <Button onClick={handleGetRegions}>getRegions</Button> */}
         <Accordion activeKey={activeKey} onSelect={handleSetActiveKeyAndScroll}>
             {sortedRegions.map((region, i) => {
-                let regionProps = Object.assign({}, { ...region }, {setActiveKeyAndScroll: handleSetActiveKeyAndScroll })
+                let regionProps = Object.assign({}, { ...region }, { setActiveKeyAndScroll: handleSetActiveKeyAndScroll })
                 return <Region key={i} {...regionProps} />
             })}
         </Accordion>

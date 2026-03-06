@@ -83,8 +83,7 @@ export const Companies = (props) => {
             dispatch(setCompanies(allCompanies))
 
         } catch (err) {
-            console.log(err)
-            dispatch(setIsLoading(false))
+            dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
         } finally {
             dispatch(setIsLoading(false))
             const finishedAt = Date.now()

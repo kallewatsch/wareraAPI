@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button"
 import Badge from "react-bootstrap/Badge"
 import CountrySelectModal from "../util/CountrySelectModal"
 import { useLazyGetUsersByCountryQuery, useLazyGetAnythingBatchedPostQuery } from "../../api"
-import { setIsLoading, setUsers } from "../../appSlice"
+import { setIsLoading, setToast, setUsers, setWorldUsers } from "../../appSlice"
 import SortableTable from "../util/SortableTable"
 import { getCanAttackTimes, getExpectedAttackCost, getExpectedDamage, getHoursUntilLastOnline } from "../../utils/fooStuff"
 import "./Intel.css"
@@ -13,7 +13,7 @@ import "./Intel.css"
 
 export const Intel = (props) => {
 
-    const { countries, users } = useSelector(state => state.app)
+    const { countries, users, worldusers } = useSelector(state => state.app)
     const [showModal, setShowModal] = useState(false)
     const [country, setCountry] = useState('')
     const [thMode, setThMode] = useState('war')
@@ -31,15 +31,15 @@ export const Intel = (props) => {
         setThMode(_thMode)
     }
 
-    const handleSetCountry = async country => {
+    const handleSetCountry = async countryId => {
         const startedAt = Date.now()
         setShowModal(false)
         dispatch(setIsLoading(true))
         try {
-            let { result: { data: { items, nextCursor }, error } } = await getUserIds({ countryId: country, limit: 100 }).unwrap()
+            let { result: { data: { items, nextCursor }, error } } = await getUserIds({ countryId: countryId, limit: 100 }).unwrap()
             let allItems = [...items]
             while (nextCursor) {
-                let { result: { data: moreData }, error } = await getUserIds({ countryId: country, cursor: nextCursor, limit: 100 }).unwrap()
+                let { result: { data: moreData }, error } = await getUserIds({ countryId: countryId, cursor: nextCursor, limit: 100 }).unwrap()
                 allItems = [...allItems, ...moreData.items]
                 nextCursor = moreData.nextCursor
             }
@@ -56,14 +56,13 @@ export const Intel = (props) => {
                 const someUsers = await getAnythingBatched(payloadPost).unwrap()
                 allUsers = [...allUsers, ...someUsers]
             }
-
+            dispatch(setWorldUsers(Object.assign({}, { ...worldusers }, { [countryId]: allUsers })))
             dispatch(setUsers(allUsers))
 
         } catch (err) {
-            console.log(err)
-            dispatch(setIsLoading(false))
+            dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
         } finally {
-            setCountry(countries.find(cunt => cunt._id == country))
+            setCountry(countries.find(cunt => cunt._id == countryId))
             dispatch(setIsLoading(false))
             const finishedAt = Date.now()
             console.log(`finished after ${(finishedAt - startedAt) / 1000} seconds`)

@@ -1,14 +1,10 @@
 import React, { useEffect } from "react"
-import {
-    createHashRouter,
-    RouterProvider
-} from "react-router-dom"
+import { createHashRouter, RouterProvider } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import Container from "react-bootstrap/Container"
 import Spinner from "react-bootstrap/Spinner"
 import { useGetAllCountriesQuery, useGetGameConfigQuery, useGetRegionsQuery, useLazyGetMusPaginatedQuery } from "./api"
-import { setConfig, setCountries, setMus, setRegions } from "./appSlice"
-import "./App.css"
+import { setConfig, setCountries, setMus, setRegions, setToast } from "./appSlice"
 import Search from "./components/search/Search"
 import Countries from "./components/Countries"
 import Companies from "./components/companies/Companies"
@@ -22,6 +18,8 @@ import LineChart from "./components/LineChart"
 import Intel from "./components/intel/Intel"
 import WareraEvents from "./components/events/WareraEvents"
 import CasesSimulator from "./components/cases/CasesSimulator"
+import ToastContainer from "./components/ToastContainer"
+import "./App.css"
 
 const router = createHashRouter(
     [
@@ -82,27 +80,60 @@ const router = createHashRouter(
 
 export const App = () => {
 
-    const { data: countries, countriesError } = useGetAllCountriesQuery()
-    const { data: regions, error: regionsError } = useGetRegionsQuery()
-    const { data: config, error: configError } = useGetGameConfigQuery()
-    const [getMUsPaginated, { data: mus, error: musError }] = useLazyGetMusPaginatedQuery()
+    const { data: countriesData, error: countriesError, isLoading: countriesIsLoading } = useGetAllCountriesQuery()
+    const { data: regionsData, error: regionsError, isLoading: regionsIsLoading } = useGetRegionsQuery()
+    const { data: configData, error: configError, isLoading: configIsLoading } = useGetGameConfigQuery()
+    const [getMUsPaginated] = useLazyGetMusPaginatedQuery()
     const { isLoading } = useSelector(state => state.app)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (!config) return;
-        dispatch(setConfig(config.result.data))
-    }, [config])
+        if (configIsLoading) return;
+        try {
+            if (configError) {
+                dispatch(setToast({ show: true, content: JSON.stringify(configError, null, 2), bg: "danger" }))
+
+            } else {
+                const { result: { data: config } } = configData
+                dispatch(setConfig(config))
+            }
+
+        } catch (err) {
+            dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
+        }
+    }, [configIsLoading])
 
     useEffect(() => {
-        if (!countries) return;
-        dispatch(setCountries(countries.result.data))
-    }, [countries])
+        if (regionsIsLoading) return;
+        try {
+            if (regionsError) {
+                dispatch(setToast({ show: true, content: JSON.stringify(configError, null, 2), bg: "danger" }))
+
+            } else {
+                const { result: { data: regions } } = regionsData
+                dispatch(setRegions(regions))
+            }
+
+        } catch (err) {
+            dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
+        }
+    }, [regionsIsLoading])
 
     useEffect(() => {
-        if (!regions) return;
-        dispatch(setRegions(regions.result.data))
-    }, [regions])
+        if (countriesIsLoading) return;
+        try {
+            if (countriesError) {
+                dispatch(setToast({ show: true, content: JSON.stringify(configError, null, 2), bg: "danger" }))
+
+            } else {
+                const { result: { data: countries } } = countriesData
+                dispatch(setCountries(countries))
+            }
+
+        } catch (err) {
+            dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
+        }
+    }, [countriesIsLoading])
 
     useEffect(() => {
         const asyncGetMus = async () => {
@@ -116,17 +147,17 @@ export const App = () => {
                 }
                 dispatch(setMus(allItems))
             } catch (err) {
-                console.log(err)
+                dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
             }
         }
         asyncGetMus()
-
     }, [])
 
     return (
         <>{isLoading && <div id="loadingSpinner" ><Spinner /></div>}
             <Container>
                 <Navigation />
+                <ToastContainer />
                 <RouterProvider router={router} />
             </Container>
         </>

@@ -29,6 +29,8 @@ export const initialState = {
     search: {},
     market: {},
     config: {},
+    worldusers: {},
+    toast: {show: false, content: '', bg: 'danger'}
     //transactions: [],
 }
 
@@ -74,11 +76,20 @@ export const appSlice = createSlice({
             }
         },
         addUsers(state, action) {
-            const newUsers = [...state.users, ...action.payload]
+            // This is the stupid approach, one big ass array ob objects
+            // If this doesnt work, try changing users from array to object
+            // with countryId as keys and array of users as value
+            const existingUsers = [...state.users]
+            //const newUsers = [...state.users, ...action.payload]
+            const newUsers = action.payload.filter(user => existingUsers.every(existingUser => existingUser._id !== user._id))
             return {
                 ...state,
-                users: newUsers
+                users: [...existingUsers, ...newUsers]
             }
+            /* return {
+                ...state,
+                users: newUsers
+            } */
         },
         setRegions(state, action) {
             return {
@@ -124,6 +135,18 @@ export const appSlice = createSlice({
                 ...state,
                 config: action.payload
             }
+        },
+        setWorldUsers(state, action) {
+            return {
+                ...state,
+                worldusers: action.payload
+            }
+        },
+        setToast(state, action) {
+            return {
+                ...state,
+                toast: action.payload
+            }
         }
     }
 })
@@ -143,7 +166,9 @@ export const {
     resetWarPlaner,
     setSearchResult,
     setMarket,
-    setConfig
+    setConfig,
+    setWorldUsers,
+    setToast,
 } = appSlice.actions
 
 
