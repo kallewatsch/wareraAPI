@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useDispatch } from "react-redux"
 import { useLazyGetTransactionsQuery, useLazyGetAnythingBatchedPostQuery } from "../../api"
-import { setIsLoading } from "../../appSlice"
+import { setIsLoading, setToast } from "../../appSlice"
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 import SimpleStats from "../SimpleStats"
@@ -64,7 +64,7 @@ export const UserInventory = (props) => {
             }
             setUsers(allUsers)
         } catch (err) {
-            console.log(err)
+            dispatch(setToast({show: true, content: JSON.stringify(err, null, 2), bg: "danger"}))
         } finally {
             dispatch(setIsLoading(false))
         }

@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { initialStateWarplaner as stateMock } from '../mocks/states/initialStateWarplaner'
+//import { initialStateWarplaner as stateMock } from '../mocks/states/initialStateWarplaner'
+//import initialStateUsers from "../mocks/states/initialStateUsers.json"
 
 const initialStateWarplaner = {
     attackers: {
@@ -21,7 +22,7 @@ export const initialState = {
     countries: [],
     mus: [],
     isLoading: false,
-    users: [],
+    users: /* initialStateUsers, */[],
     regions: [],
     companies: [],
     //warplaner: stateMock,
@@ -29,7 +30,6 @@ export const initialState = {
     search: {},
     market: {},
     config: {},
-    worldusers: {},
     toast: {show: false, content: '', bg: 'danger'}
     //transactions: [],
 }
@@ -136,12 +136,6 @@ export const appSlice = createSlice({
                 config: action.payload
             }
         },
-        setWorldUsers(state, action) {
-            return {
-                ...state,
-                worldusers: action.payload
-            }
-        },
         setToast(state, action) {
             return {
                 ...state,
@@ -167,7 +161,6 @@ export const {
     setSearchResult,
     setMarket,
     setConfig,
-    setWorldUsers,
     setToast,
 } = appSlice.actions
 

@@ -33,7 +33,7 @@ export const User = (props) => {
     const expectedDmg = getExpectedDamage({ useEquipment: true, ...skills })
 
     return (
-        <Card bg={infos?.isBanned ? 'danger' : undefined}>
+        <Card /* className={infos?.isBanned ? 'banned' : undefined} */>
             <Card.Header>
                 <UserCardHeader {...userCardHeaderProps} />
                 expectedDmg per attack: {expectedDmg}

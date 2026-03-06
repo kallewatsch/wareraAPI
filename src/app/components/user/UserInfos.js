@@ -1,5 +1,5 @@
 import React from "react"
-import { GiRoundStar, GiShield, GiGlobe, GiChart, GiGreekTemple } from "react-icons/gi"
+import { GiRoundStar, GiShield, GiGlobe, GiChart, GiGreekTemple, GiCongress, GiConvict, GiHandcuffs } from "react-icons/gi"
 import "./UserInfos.css"
 import IconsWithOverlay from "../util/IconsWithOverlay"
 
@@ -13,25 +13,32 @@ export const UserInfos = (props) => {
         minOfEconomyOf,
         minOfForeignAffairsOf,
         congressMemberOf,
-        countryName
+        countryName,
+        isBanned
     } = props
 
     const availablTexts = [
+        `Banned User`,
+        `Gottem!`,
         `President ${countryName}`,
         `Vice President ${countryName}`,
         `Minister of Defense ${countryName}`,
         `Minister of Economics ${countryName}`,
         `Minister of Foreign Affairs ${countryName}`,
-        `Member of Congress ${countryName}`
+        `Member of Congress ${countryName}`,
+        `Member of Congress (alernative icon) ${countryName}`,
     ]
 
     const availableIcons = [
+        [isBanned, <GiConvict className="icon-red" />],
+        [isBanned, <GiHandcuffs />],
         [presidentOf, <GiRoundStar className="icon-gold" />],
         [vicePresidentOf, <GiRoundStar className="icon-silver" />],
         [minOfDefenseOf, <GiShield className="icon-red" />],
         [minOfEconomyOf, <GiChart className="icon-green" />],
         [minOfForeignAffairsOf, <GiGlobe className="icon-blue" />],
         [congressMemberOf, <GiGreekTemple className="icon-gray" />],
+        [congressMemberOf, <GiCongress className="icon-gray" />],
     ]
 
     const icons = availableIcons.filter(x => x[0]).map(x => x[1])

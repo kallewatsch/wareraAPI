@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col"
 import Figure from "react-bootstrap/Figure"
 import Badge from "react-bootstrap/Badge"
 import ProgressBar from "react-bootstrap/ProgressBar"
-import { GiSpellBook } from "react-icons/gi"
+import { GiSpellBook, GiStarMedal } from "react-icons/gi"
 import "./UserCardHeader.css"
 import UserInfos from "./UserInfos"
 import UserLeveling from "./UserLeveling"
@@ -99,9 +99,10 @@ export const UserCardHeader = (props) => {
             </Col>
             <Col>
                 <span className="user-username">
-                    <Badge pill>{level}</Badge> {username} <img src={`https://app.warera.io/images/flags/${country?.code}.svg?v=16`} />{isBanned && '(banned user)'}
+                    <Badge pill><GiStarMedal />{level}</Badge>
+                    <span className={isBanned && `banned`}><img src={`https://app.warera.io/images/flags/${country?.code}.svg?v=16`} alt={country?.name}/> {username}</span>
                 </span>
-                <UserInfos {...infos} countryName={country?.name} />
+                <UserInfos {...infos} countryName={country?.name} isBanned={isBanned} />
                 <hr />
                 <UserLeveling {...leveling} />
                 <GiSpellBook /> {`${availableSkillPoints}/${totalSkillPoints}`}

@@ -1,11 +1,9 @@
 import React, { useState } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
 import Row from "react-bootstrap/Row"
 import Button from "react-bootstrap/Button"
 import Badge from "react-bootstrap/Badge"
 import CountrySelectModal from "../util/CountrySelectModal"
-import { useLazyGetUsersByCountryQuery, useLazyGetAnythingBatchedPostQuery } from "../../api"
-import { setIsLoading, setToast, setUsers, setWorldUsers } from "../../appSlice"
 import SortableTable from "../util/SortableTable"
 import { getCanAttackTimes, getExpectedAttackCost, getExpectedDamage, getHoursUntilLastOnline } from "../../utils/fooStuff"
 import "./Intel.css"
@@ -13,15 +11,10 @@ import "./Intel.css"
 
 export const Intel = (props) => {
 
-    const { countries, users, worldusers } = useSelector(state => state.app)
+    const { countries, users } = useSelector(state => state.app)
     const [showModal, setShowModal] = useState(false)
     const [country, setCountry] = useState('')
     const [thMode, setThMode] = useState('war')
-
-    const [getUserIds] = useLazyGetUsersByCountryQuery()
-    const [getAnythingBatched] = useLazyGetAnythingBatchedPostQuery()
-
-    const dispatch = useDispatch()
 
     const handleSetThMode = event => {
         const modes = ["war", "eco", "realtime"]
@@ -32,42 +25,8 @@ export const Intel = (props) => {
     }
 
     const handleSetCountry = async countryId => {
-        const startedAt = Date.now()
         setShowModal(false)
-        dispatch(setIsLoading(true))
-        try {
-            let { result: { data: { items, nextCursor }, error } } = await getUserIds({ countryId: countryId, limit: 100 }).unwrap()
-            let allItems = [...items]
-            while (nextCursor) {
-                let { result: { data: moreData }, error } = await getUserIds({ countryId: countryId, cursor: nextCursor, limit: 100 }).unwrap()
-                allItems = [...allItems, ...moreData.items]
-                nextCursor = moreData.nextCursor
-            }
-
-            let allUsers = []
-            const ep = 'user.getUserLite'
-            while (allItems.length) {
-                const chunk = allItems.splice(0, 800)
-
-                const payloadPost = {
-                    endpoints: chunk.map(item => ep),
-                    obj: Object.fromEntries(chunk.map((val, i) => [i, { userId: val._id }]))
-                }
-                const someUsers = await getAnythingBatched(payloadPost).unwrap()
-                allUsers = [...allUsers, ...someUsers]
-            }
-            dispatch(setWorldUsers(Object.assign({}, { ...worldusers }, { [countryId]: allUsers })))
-            dispatch(setUsers(allUsers))
-
-        } catch (err) {
-            dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
-        } finally {
-            setCountry(countries.find(cunt => cunt._id == countryId))
-            dispatch(setIsLoading(false))
-            const finishedAt = Date.now()
-            console.log(`finished after ${(finishedAt - startedAt) / 1000} seconds`)
-        }
-
+        setCountry(countries.find(cunt => cunt._id == countryId))
     }
 
     const modalProps = {
@@ -128,7 +87,8 @@ export const Intel = (props) => {
     ]
 
     // TODO: add function to calculate expected values for amount of attacks a user can do (based on hp, armor & dodge). lootChance aswell
-    const extendedUsers = [...users].map((user =>
+    //const extendedUsers = [...worldusers["6813b6d446e731854c7ac79c"]].map((user =>
+    const extendedUsers = users.filter(user => user.country == country?._id).map((user =>
         Object.assign(
             {},
             { ...user },
