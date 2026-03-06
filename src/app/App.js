@@ -89,9 +89,15 @@ export const App = () => {
     const { data: regionsData, error: regionsError, isLoading: regionsIsLoading } = useGetRegionsQuery()
     const { data: configData, error: configError, isLoading: configIsLoading } = useGetGameConfigQuery()
     const [getMUsPaginated] = useLazyGetMusPaginatedQuery()
-    const [getAnythingBatched] = useLazyGetAnythingBatchedQuery()
+    const [getAnythingBatched] = useLazyGetAnythingBatchedPostQuery() //useLazyGetAnythingBatchedQuery() // if it won't properly change back to GET
     const { isLoading } = useSelector(state => state.app)
     const dispatch = useDispatch()
+
+    // TODO: calculate and check if url is below max size. check POST body aswell
+    const CHUNKSIZES = {
+        'GET': [100, 200],
+        'POST': [800, 800]
+    }
 
     useEffect(() => {
         if (configIsLoading) return;
@@ -163,6 +169,7 @@ export const App = () => {
         if (countriesIsLoading) return;
         const asyncGetWorldUsers = async () => {
             try {
+                const method = 'POST'
                 dispatch(setIsLoading(true))
                 const { result: {data: countries}} = countriesData
                 const startedAt = Date.now()
@@ -173,7 +180,7 @@ export const App = () => {
                 const fuckIds = [...countryIds]
 
                 while (fuckIds.length) {
-                    const chunk = fuckIds.splice(0, 100)
+                    const chunk = fuckIds.splice(0, CHUNKSIZES[method][0])
                     const obj = Object.fromEntries(chunk.map((val, i) => [i, { countryId: val, limit: 100 }]))
                     const payloadPost = {
                         endpoints: chunk.map(item => ep),
@@ -207,7 +214,7 @@ export const App = () => {
                 let allUsers = []
                 const ep3 = 'user.getUserLite'
                 while (worldUserIds.length) {
-                    const chunk = worldUserIds.splice(0, 200)
+                    const chunk = worldUserIds.splice(0, CHUNKSIZES[method][1])
                     //console.log(worldUserIds, chunk)
                     const payloadPost = {
                         endpoints: chunk.map(item => ep3),
@@ -236,7 +243,7 @@ export const App = () => {
     }, [countriesIsLoading])
 
     return (
-        <>{isLoading && <div id="loadingSpinner" >Loading... <i>Initial Load might take some time!</i><Spinner /></div>}
+        <>{isLoading && <div id="loadingSpinner" >Loading... <i>Initial Load might take some time</i><Spinner /></div>}
             <Container>
                 <Navigation />
                 <ToastContainer />
