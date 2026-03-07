@@ -1,9 +1,21 @@
 import React from "react"
-
 import IconsWithOverlay from "../util/IconsWithOverlay"
 import Bunker from "./Bunker"
 import Base from "./Base"
 import PacificationCenter from "./PacificationCenter"
+
+export const getUpgradeClassName = (status) => {
+    switch (status) {
+        case 'active':
+            return 'icon-green'
+        case 'disabled':
+            return 'icon-red'
+        case 'pending':
+            return 'icon-gold'
+        default:
+            return 'icon-gray'
+    }
+}
 
 export const RegionUpgrades = (props) => {
 

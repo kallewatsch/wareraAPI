@@ -9,11 +9,6 @@ import { GiBroadsword, GiCapitol, GiPeaceDove, GiShield, GiTrail } from "react-i
 import RegionUpgrades from "./RegionUpgrades"
 
 
-export const getUpgradeClassName = (data) => {
-    return data ? data.status == 'active' ? 'icon-green' : 'icon-red' : 'icon-gray'
-}
-
-
 export const Region = props => {
 
     const {

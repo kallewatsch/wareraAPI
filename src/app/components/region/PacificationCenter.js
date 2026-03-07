@@ -1,5 +1,6 @@
 import React from "react"
 import { GiPeaceDove, GiAlarmClock } from "react-icons/gi"
+import { getUpgradeClassName } from "./RegionUpgrades"
 
 
 export const PacificationCenter = (props) => {
@@ -9,7 +10,7 @@ export const PacificationCenter = (props) => {
 
     return (
         <span>
-            <GiPeaceDove className={status == 'active' ? 'icon-green' : status == 'disabled' ? 'icon-red' : 'icon-gray'} />{level}
+            <GiPeaceDove className={getUpgradeClassName(status)} />{level}
             {willBeActiveAt && <><GiAlarmClock />{foo}</>}
         </span>
     )

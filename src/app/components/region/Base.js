@@ -1,5 +1,6 @@
 import React from "react"
 import { GiBroadsword, GiAlarmClock } from "react-icons/gi"
+import { getUpgradeClassName } from "./RegionUpgrades"
 
 
 export const Base = (props) => {
@@ -9,7 +10,7 @@ export const Base = (props) => {
 
     return (
         <span>
-            <GiBroadsword className={status == 'active' ? 'icon-green' : status == 'disabled' ? 'icon-red' : 'icon-gray'} />{level}
+            <GiBroadsword className={getUpgradeClassName(status)} />{level}
             {willBeActiveAt && <><GiAlarmClock />{foo}</>}
         </span>
     )
