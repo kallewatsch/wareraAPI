@@ -319,25 +319,23 @@ export const wareraApi = createApi({
                 }
             }
         }),
-       /*  getTransactions: builder.query({
-            query: (args) => {
-                const { data, headers } = args
-                return {
-                    headers,
-                    url: 'transaction.getPaginatedTransactions',
-                    method: 'POST',
-                    body: { data }
-                }
-            }
-        }), */
+        /*  getTransactions: builder.query({
+             query: (args) => {
+                 const { data, headers } = args
+                 return {
+                     headers,
+                     url: 'transaction.getPaginatedTransactions',
+                     method: 'POST',
+                     body: { data }
+                 }
+             }
+         }), */
         getUpgrade: builder.query({
-            query: ({ muId }) => {
-                // TODO: there are multiple params
-                let trpcData = { muId: muId }
+            query: (data) => {
                 return {
                     url: 'upgrade.getUpgradeByTypeAndEntity',
                     method: 'GET',
-                    params: { input: JSON.stringify(trpcData) }
+                    params: { input: JSON.stringify(data) }
                 }
             }
         }),
@@ -418,12 +416,14 @@ export const wareraApi = createApi({
                 }
             },
             transformResponse: (response) => {
-                return response.map(x => x.result.data)
+                return response.filter(x => x.result?.data).map(x => x.result.data)
             }
         }),
     })
 })
 
+
+// TODO: clean this up
 export const {
     useLazyGetCompanyByIdQuery,
     useLazyGetCompaniesQuery,
@@ -439,8 +439,10 @@ export const {
     useGetRegionsQuery,
     useLazyGetRegionsQuery,
     useLazyGetBattleByIdQuery,
+    useGetBattleByIdQuery,
     useLazyGetBattleLiveQuery,
     useLazyGetBattlesQuery,
+    useGetBattlesQuery,
     useLazyGetRoundByIdQuery,
     useLazyGetRoundLastHitsQuery,
     useLazyGetBattleRankingQuery,
@@ -466,6 +468,7 @@ export const {
     useGetMuByIdQuery,
     useLazyGetMusPaginatedQuery,
     useLazyGetTransactionsQuery,
+    useGetUpgradeQuery,
     useLazyGetUpgradeQuery,
     useGetWorkersQuery,
     useLazyGetWorkersQuery,

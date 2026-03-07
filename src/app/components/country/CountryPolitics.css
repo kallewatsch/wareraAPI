@@ -6,3 +6,8 @@
 .countryPolitics > .progress {
     width: 80%;
 }
+
+img.avatar {
+    height: 64px;
+    width:64px;
+}

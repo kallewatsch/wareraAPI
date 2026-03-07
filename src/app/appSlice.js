@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 //import { initialStateWarplaner as stateMock } from '../mocks/states/initialStateWarplaner'
 //import initialStateUsers from "../mocks/states/initialStateUsers.json"
+//import initialStateUpgrades from "../mocks/states/initialStateUpgrades.json"
 
 const initialStateWarplaner = {
     attackers: {
@@ -22,15 +23,16 @@ export const initialState = {
     countries: [],
     mus: [],
     isLoading: false,
-    users: /* initialStateUsers, */[],
-    regions: [],
+    users: [],//initialStateUsers,//[],
+    regions: [], // regions is object not array?!
     companies: [],
     //warplaner: stateMock,
     warplaner: initialStateWarplaner,
     search: {},
     market: {},
     config: {},
-    toast: {show: false, content: '', bg: 'danger'}
+    toast: {show: false, content: '', bg: 'danger'},
+    upgrades: [] //initialStateUpgrades//[]
     //transactions: [],
 }
 
@@ -141,6 +143,12 @@ export const appSlice = createSlice({
                 ...state,
                 toast: action.payload
             }
+        },
+        setUpgrades(state, action) {
+            return {
+                ...state,
+                upgrades: action.payload
+            }
         }
     }
 })
@@ -162,6 +170,7 @@ export const {
     setMarket,
     setConfig,
     setToast,
+    setUpgrades
 } = appSlice.actions
 
 

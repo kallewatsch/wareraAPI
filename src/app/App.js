@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux"
 import Container from "react-bootstrap/Container"
 import Spinner from "react-bootstrap/Spinner"
 import { useGetAllCountriesQuery, useGetGameConfigQuery, useGetRegionsQuery, useLazyGetAnythingBatchedPostQuery, useLazyGetAnythingBatchedQuery, useLazyGetMusPaginatedQuery } from "./api"
-import { setConfig, setCountries, setIsLoading, setMus, setRegions, setToast, setUsers } from "./appSlice"
+import { setConfig, setCountries, setIsLoading, setMus, setRegions, setToast, setUpgrades, setUsers } from "./appSlice"
 import Search from "./components/search/Search"
 import Countries from "./components/Countries"
 import Companies from "./components/companies/Companies"
@@ -148,6 +148,52 @@ export const App = () => {
     }, [countriesIsLoading])
 
     useEffect(() => {
+        if (!regionsData) return;
+        const asyncFunc = async () => {
+            try {
+                //const { result: { data: regions } } = regionsData
+                const regions = regionsData?.result?.data
+                const regionIds = Object.keys(regions).map(key => regions[key]._id)
+                let allUpgrades = []
+
+                const ep = 'upgrade.getUpgradeByTypeAndEntity'
+                while (regionIds.length) {
+
+                    const chunk = regionIds.splice(0, 400)
+
+                    const obj1 = Object.fromEntries(chunk.map((id, i) => [i, { regionId: id, upgradeType: "bunker" }]))
+                    const obj2 = Object.fromEntries(chunk.map((id, i) => [i, { regionId: id, upgradeType: "base" }]))
+                    const obj3 = Object.fromEntries(chunk.map((id, i) => [i, { regionId: id, upgradeType: "pacificationCenter" }]))
+                    const payload1 = {
+                        endpoints: chunk.map(item => ep),
+                        obj: obj1
+                    }
+                    const payload2 = {
+                        endpoints: chunk.map(item => ep),
+                        obj: obj2
+                    }
+                    const payload3 = {
+                        endpoints: chunk.map(item => ep),
+                        obj: obj3
+                    }
+                    const bunkersResult = await getAnythingBatched(payload1).unwrap()
+                    const basesResult = await getAnythingBatched(payload2).unwrap()
+                    const pacificationCentersResult = await getAnythingBatched(payload3).unwrap()
+
+                    allUpgrades = [...allUpgrades, ...bunkersResult, ...basesResult, ...pacificationCentersResult]
+                }
+                const allUpgradesFlat = allUpgrades.flat()
+                dispatch(setUpgrades(allUpgradesFlat))
+
+            } catch (err) {
+                console.log(err)
+                dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
+            }
+        }
+        asyncFunc()
+    }, [regionsIsLoading])
+
+    useEffect(() => {
         const asyncGetMus = async () => {
             try {
                 let { result: { data: { items, nextCursor }, error } } = await getMUsPaginated({ limit: 100 }).unwrap()
@@ -171,7 +217,7 @@ export const App = () => {
             try {
                 const method = 'POST'
                 dispatch(setIsLoading(true))
-                const { result: {data: countries}} = countriesData
+                const { result: { data: countries } } = countriesData
                 const startedAt = Date.now()
                 const countryIds = countries.map(x => x._id)
                 const ep = 'user.getUsersByCountry'
@@ -193,12 +239,12 @@ export const App = () => {
 
                 let worldUserIds = allCountryUserIds.map(x => x.items.map(item => item._id)).flat()
 
-                let incompleteCountryUserIds = allCountryUserIds.filter(item => item.nextCursor) // [{id: 'abc', items: [], nextCursor}]
+                let regionIds = allCountryUserIds.filter(item => item.nextCursor) // [{id: 'abc', items: [], nextCursor}]
 
-                while (incompleteCountryUserIds.length) {
-                    const obj2 = Object.fromEntries(incompleteCountryUserIds.map((val, i) => [i, { countryId: val.countryId, limit: 100, cursor: val.nextCursor }]))
+                while (regionIds.length) {
+                    const obj2 = Object.fromEntries(regionIds.map((val, i) => [i, { countryId: val.countryId, limit: 100, cursor: val.nextCursor }]))
                     const payloadPost2 = {
-                        endpoints: incompleteCountryUserIds.map(item => ep),
+                        endpoints: regionIds.map(item => ep),
                         obj: obj2
                     }
                     const moreCountryUsers = await getAnythingBatched(payloadPost2).unwrap()
@@ -208,14 +254,13 @@ export const App = () => {
                     worldUserIds = [...worldUserIds, ...moreWorldUserIds]
                     const shit = moreCountryUsers.map((x, i) => ({ countryId: obj2[i]?.countryId, ...x }))
 
-                    incompleteCountryUserIds = shit.filter(item => item.nextCursor)
+                    regionIds = shit.filter(item => item.nextCursor)
                 }
 
                 let allUsers = []
                 const ep3 = 'user.getUserLite'
                 while (worldUserIds.length) {
                     const chunk = worldUserIds.splice(0, CHUNKSIZES[method][1])
-                    //console.log(worldUserIds, chunk)
                     const payloadPost = {
                         endpoints: chunk.map(item => ep3),
                         obj: Object.fromEntries(chunk.map((val, i) => [i, { userId: val }]))
@@ -223,12 +268,8 @@ export const App = () => {
                     const someUsers = await getAnythingBatched(payloadPost).unwrap()
                     allUsers = [...allUsers, ...someUsers]
                 }
-                //const bla = Object.fromEntries(countryIds.map(id => [id, [...allUsers.filter(user => user.country == id)]]))
                 const finishedAt = Date.now()
                 console.log(`finished after ${(finishedAt - startedAt) / 1000} seconds`)
-                //console.log("bla", bla)
-                //console.log(allUsers)
-                //dispatch(setWorldUsers(bla))
                 dispatch(setUsers(allUsers))
 
             } catch (err) {

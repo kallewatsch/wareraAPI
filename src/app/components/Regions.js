@@ -3,14 +3,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import Button from "react-bootstrap/Button"
 import Accordion from "react-bootstrap/Accordion"
 import Alert from "react-bootstrap/Alert"
-import { useLazyGetRegionsQuery } from "../api"
-import { setRegions, setToast } from "../appSlice"
 import Region from "./Region"
+import SortableTable from "./util/SortableTable"
 
 export const Regions = () => {
 
-    const [getRegions, { data: regionsData, error: regionsError, isLoading: regionsIsLoading }] = useLazyGetRegionsQuery()
-    const { regions } = useSelector(state => state.app)
+    const { regions, countries, upgrades } = useSelector(state => state.app)
     const [activeKey, setActiveKey] = useState()
 
     const dispatch = useDispatch()
@@ -32,30 +30,53 @@ export const Regions = () => {
         }
     }
 
-    /* const handleGetRegions = async event => {
-        try {
-            const { result: { data: regions } } = await getRegions().unwrap()
-            dispatch(setRegions(regions))
-        } catch (err) {
-            dispatch(setToast({ show: true, content: JSON.stringfy(err, null, 2), bg: "danger" }))
-        } finally {
-            console.log("done")
-        }
-    } */
-
     const sortedRegions = regions && Object.keys(regions)
         .map(region => regions[region])
         .sort((a, b) => a.code > b.code ? 1 : a.code < b.code ? -1 : 0)
 
+    const ths = [
+        { txt: "Name", attrPath: [], target: "name" },
+        { txt: "Capital", attrPath: [], target: "mainCity" },
+        /* { txt: "Base Level (might be deprecated)", attrPath: ["upgradesV2", "upgrades", "base"], target: "level" },
+        { txt: "Active Bunker Level (this one too)", attrPath: ["activeUpgradeLevels"], target: "bunker" },
+        { txt: "Active Miltary Base Level (also deprecated)", attrPath: ["activeUpgradeLevels"], target: "base" }, */
+        { txt: "Bunker Level", attrPath: ["extended"], target: "bunkerLevel" },
+        { txt: "Bunker Status", attrPath: ["extended"], target: "bunkerStatus" },
+        { txt: "Military Base Level", attrPath: ["extended"], target: "baseLevel" },
+        { txt: "Military Base Status", attrPath: ["extended"], target: "baseStatus" },
+        { txt: "Pacification Center Level", attrPath: ["extended"], target: "pacificationCenterLevel" },
+        { txt: "Pacification Center Status", attrPath: ["extended"], target: "pacificationCenterStatus" },
+        { txt: "Region Origin", attrPath: ["extended"], target: "regionCountryOrigin" },
+        { txt: "Region Current", attrPath: ["extended"], target: "regionCountryCurrent" }
+    ]
+    const items = Object.keys(regions).map(key => {
+
+        const region = regions[key]
+        const regionUpgrades = upgrades.filter(upgrade => upgrade?.region == region._id)
+
+        return Object.assign({}, { ...regions[key] }, {
+            extended: {
+                regionCountryOrigin: countries.find(country => country._id == region.initialCountry)?.name,
+                regionCountryCurrent: countries.find(country => country._id == region.country)?.name,
+                bunkerLevel: regionUpgrades?.find(upgrade => upgrade.upgradeType == "bunker")?.level,
+                bunkerStatus: regionUpgrades?.find(upgrade => upgrade.upgradeType == "bunker")?.status,
+                baseLevel: regionUpgrades?.find(upgrade => upgrade.upgradeType == "base")?.level,
+                baseStatus: regionUpgrades?.find(upgrade => upgrade.upgradeType == "base")?.status,
+                pacificationCenterLevel: regionUpgrades?.find(upgrade => upgrade.upgradeType == "pacificationCenter")?.level,
+                pacificationCenterStatus: regionUpgrades?.find(upgrade => upgrade.upgradeType == "pacificationCenter")?.status
+            }
+        })
+    })
+
     return <>
-        <Alert variant="warning">Regions don't contain information about strategic resources but the country does?! WIP</Alert>
-        {/* <Button onClick={handleGetRegions}>getRegions</Button> */}
+        {/* <Alert variant="warning">Regions don't contain information about strategic resources but the country does?! WIP</Alert>
         <Accordion activeKey={activeKey} onSelect={handleSetActiveKeyAndScroll}>
             {sortedRegions.map((region, i) => {
                 let regionProps = Object.assign({}, { ...region }, { setActiveKeyAndScroll: handleSetActiveKeyAndScroll })
                 return <Region key={i} {...regionProps} />
             })}
-        </Accordion>
+        </Accordion> */}
+        <SortableTable items={items} ths={ths} component="region" key={items.length} />
     </>
 }
 

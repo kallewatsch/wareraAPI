@@ -7,7 +7,7 @@ import { getCanAttackTimes, getExpectedAttackCost, getExpectedDamage, getHoursUn
 
 export const Countries = () => {
 
-    const { countries, users } = useSelector(state => state.app)
+    const { countries, users, regions } = useSelector(state => state.app)
     //const [thMode, setThMode] = useState('realtime')
 
     // [...countries].map() to assign some wicked values. See intel/Intel
@@ -36,6 +36,9 @@ export const Countries = () => {
         const totalAvailableCountryDmgBan = Math.round(extendedUsersWithBan.reduce((acc, curr) => acc + curr.extended.availableDmg, 0))//.toLocaleString()
         const totalAvailableCountryDmgTotal = Math.round(extendedUsers.reduce((acc, curr) => acc + curr.extended.availableDmg, 0))//.toLocaleString()
 
+        const activeBunkers = Object.keys(regions).filter(key => regions[key].activeUpgradeLevels?.bunker && regions[key].country == country._id)
+        const activeBases = Object.keys(regions).filter(key => regions[key].activeUpgradeLevels?.base && regions[key].country == country._id)
+
         return Object.assign(
             {},
             { ...country },
@@ -43,7 +46,9 @@ export const Countries = () => {
                 extended: {
                     totalAvailableCountryDmg,
                     totalAvailableCountryDmgBan,
-                    totalAvailableCountryDmgTotal
+                    totalAvailableCountryDmgTotal,
+                    activeBunkers: activeBunkers.length,
+                    activeBases: activeBases.length
                 }
             })
     })
@@ -51,7 +56,9 @@ export const Countries = () => {
     const ths = [
         { txt: "Name", attrPath: "", target: "name" },
         { txt: "Available Damage (No Food)", attrPath: ["extended"], target: "totalAvailableCountryDmg" },
-        { txt: "Region Diff", attrPath: ["rankings", "countryRegionDiff"], target: "value" },
+        { txt: "Active Bunkers", attrPath: ["extended"], target: "activeBunkers" },
+        { txt: "Active Bases", attrPath: ["extended"], target: "activeBases" },
+        /* { txt: "Region Diff", attrPath: ["rankings", "countryRegionDiff"], target: "value" },
         { txt: "Damages", attrPath: ["rankings", "countryDamages"], target: "value" },
         { txt: "Weekly Damages", attrPath: ["rankings", "weeklyCountryDamages"], target: "value" },
         { txt: "Damage per Citizen", attrPath: ["rankings", "weeklyCountryDamagesPerCitizen"], target: "value" },
@@ -61,7 +68,7 @@ export const Countries = () => {
         { txt: "Bounty", attrPath: ["rankings", "countryBounty"], target: "value" },
         { txt: "Production Bonus", attrPath: ["rankings", "countryProductionBonus"], target: "value" },
         { txt: "Development", attrPath: "", target: "development" },
-        { txt: "Specialized Item", attrPath: "", target: "specializedItem" },
+        { txt: "Specialized Item", attrPath: "", target: "specializedItem" }, */
     ]
 
     return <>

@@ -1,12 +1,15 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useSelector } from "react-redux"
 import Alert from "react-bootstrap/Alert"
+import { BsDiscord } from "react-icons/bs";
 import CountryRanking from "./CountryRanking"
 import CountryStrategicResources from "./CountryStrategicResources"
 import SimpleStats from "../SimpleStats"
 import CountryDiplomacy from "./CountryDiplomacy"
 import CountryEconomy from "./CountryEconomy"
 import CountryPolitics from "./CountryPolitics"
+import { Badge } from "react-bootstrap";
+//import { useLazyGetArticleQuery } from "../../api"
 
 /* 
 
@@ -99,34 +102,45 @@ import CountryPolitics from "./CountryPolitics"
 
 export const Country = props => {
 
-  /* const { taxes, _id, name, code, money, orgs, allies, warsWith, scheme, mapAccent, __v,
-      rankings, updatedAt, development, specializedItem, enemy
-  } = props */
+    const { name, discordUrl, taxes, money, development, specializedItem,
+        rankings, strategicResources, allies, warsWith, enemy,
+        rulingParty, unrest, code, _id: countryId,
+        pinnedArticle: articleId,
+        ...simpleStatsProps
+    } = props
 
-  const { name, discordUrl, taxes, money, development, specializedItem,
-    rankings, strategicResources, allies, warsWith, enemy,
-    rulingParty, unrest, code, _id: countryId,
-    ...simpleStatsProps } = props
+    const diplomacyProps = { allies, warsWith, enemy }
+    const economyProps = { taxes, money, development, specializedItem }
+    const politicsProps = { rulingParty, unrest, countryId }
 
-  const diplomacyProps = { allies, warsWith, enemy }
-  const economyProps = { taxes, money, development, specializedItem }
-  const politicsProps = { rulingParty, unrest, countryId }
+    // getting the whole article possible but overkill at this point. need to sanitize the html etc. just put link to the article instead
+    /* const [getArticle, { data: articleData, error, isLoading }] = useLazyGetArticleQuery()
 
-  return (
-    <>
-      <img
-        alt={name}
-        src={`https://app.warera.io/images/flags/${code}.svg?v=16`} />
-      <span>{name}</span>
-      <a href={discordUrl} target="_blank">{discordUrl}</a>
-      <CountryPolitics {...politicsProps} />
-      <CountryDiplomacy {...diplomacyProps} />
-      <CountryEconomy {...economyProps} />
-      {/* <SimpleStats {...simpleStatsProps} /> */}
-      <CountryStrategicResources {...strategicResources} />
-      <CountryRanking {...rankings} />
-    </>
-  )
+    useEffect(() => {
+        if (!articleId) return;
+        getArticle({articleId})
+    }, [articleId])
+
+    console.log({articleData, error, isLoading})
+
+    const article = articleData?.result?.data */
+
+    return (
+        <>
+            <img
+                alt={name}
+                src={`https://app.warera.io/images/flags/${code}.svg?v=16`} />
+            <span>{name}</span>
+
+            <Badge bg={discordUrl ? 'primary' : 'secondary'}><BsDiscord /></Badge>{discordUrl ? <a href={discordUrl} target="_blank">{discordUrl}</a> : 'No Discord Server'}
+            <CountryPolitics {...politicsProps} />
+            <CountryDiplomacy {...diplomacyProps} />
+            <CountryEconomy {...economyProps} />
+            {/* <SimpleStats {...simpleStatsProps} /> */}
+            <CountryStrategicResources {...strategicResources} />
+            <CountryRanking {...rankings} />
+        </>
+    )
 
 }
 
