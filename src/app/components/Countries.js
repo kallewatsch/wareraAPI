@@ -4,10 +4,18 @@ import Row from "react-bootstrap/Row"
 import SortableTable from "./util/SortableTable"
 import { getCanAttackTimes, getExpectedAttackCost, getExpectedDamage, getHoursUntilLastOnline } from "../utils/fooStuff"
 
+export const getUpgradesData = (upgrades) => {
+    return ({
+        total: upgrades.length,
+        pending: upgrades.filter(upgrade => upgrade.status == "pending").length,
+        active: upgrades.filter(upgrade => upgrade.status == "active").length,
+        disabled: upgrades.filter(upgrade => upgrade.status == "disabled").length,
+    })
+}
 
 export const Countries = () => {
 
-    const { countries, users, regions } = useSelector(state => state.app)
+    const { countries, users, regions, upgrades } = useSelector(state => state.app)
     //const [thMode, setThMode] = useState('realtime')
 
     // [...countries].map() to assign some wicked values. See intel/Intel
@@ -36,8 +44,12 @@ export const Countries = () => {
         const totalAvailableCountryDmgBan = Math.round(extendedUsersWithBan.reduce((acc, curr) => acc + curr.extended.availableDmg, 0))//.toLocaleString()
         const totalAvailableCountryDmgTotal = Math.round(extendedUsers.reduce((acc, curr) => acc + curr.extended.availableDmg, 0))//.toLocaleString()
 
-        const activeBunkers = Object.keys(regions).filter(key => regions[key].activeUpgradeLevels?.bunker && regions[key].country == country._id)
-        const activeBases = Object.keys(regions).filter(key => regions[key].activeUpgradeLevels?.base && regions[key].country == country._id)
+        const countryRegionIds = Object.keys(regions).filter(key => regions[key].country == country._id)
+        const countryRegionUprades = upgrades.filter(upgrade => countryRegionIds.some(regionId => regionId == upgrade.region))
+
+        const bunkerUpgrades = countryRegionUprades.filter(upgrade => upgrade.upgradeType == "bunker")
+        const baseUpgrades = countryRegionUprades.filter(upgrade => upgrade.upgradeType == "base")
+        const pacificationCenterUpgrades = countryRegionUprades.filter(upgrade => upgrade.upgradeType == "pacificationCenter")
 
         return Object.assign(
             {},
@@ -47,8 +59,9 @@ export const Countries = () => {
                     totalAvailableCountryDmg,
                     totalAvailableCountryDmgBan,
                     totalAvailableCountryDmgTotal,
-                    activeBunkers: activeBunkers.length,
-                    activeBases: activeBases.length
+                    bunkers: getUpgradesData(bunkerUpgrades),
+                    bases: getUpgradesData(baseUpgrades),
+                    pacificationCenters: getUpgradesData(pacificationCenterUpgrades)
                 }
             })
     })
@@ -56,8 +69,18 @@ export const Countries = () => {
     const ths = [
         { txt: "Name", attrPath: "", target: "name" },
         { txt: "Available Damage (No Food)", attrPath: ["extended"], target: "totalAvailableCountryDmg" },
-        { txt: "Active Bunkers", attrPath: ["extended"], target: "activeBunkers" },
-        { txt: "Active Bases", attrPath: ["extended"], target: "activeBases" },
+        { txt: "Total Bunkers", attrPath: ["extended", "bunkers"], target: "total" },
+        { txt: "Pending Bunkers", attrPath: ["extended", "bunkers"], target: "pending" },
+        { txt: "Active Bunkers", attrPath: ["extended", "bunkers"], target: "active" },
+        { txt: "Disabled Bunkers", attrPath: ["extended", "bunkers"], target: "disabled" },
+        { txt: "Total Military Bases", attrPath: ["extended", "bases"], target: "total" },
+        { txt: "Pending Military Bases", attrPath: ["extended", "bases"], target: "pending" },
+        { txt: "Active Military Bases", attrPath: ["extended", "bases"], target: "active" },
+        { txt: "Disabled Military Bases", attrPath: ["extended", "bases"], target: "disabled" },
+        { txt: "Total Pacification Centers", attrPath: ["extended", "pacificationCenters"], target: "total"},
+        { txt: "Pending Pacification Centers", attrPath: ["extended", "pacificationCenters"], target: "pending" },
+        { txt: "Active Pacification Centers", attrPath: ["extended", "pacificationCenters"], target: "active" },
+        { txt: "Disabled Pacification Centers", attrPath: ["extended", "pacificationCenters"], target: "disabled" },
         /* { txt: "Region Diff", attrPath: ["rankings", "countryRegionDiff"], target: "value" },
         { txt: "Damages", attrPath: ["rankings", "countryDamages"], target: "value" },
         { txt: "Weekly Damages", attrPath: ["rankings", "weeklyCountryDamages"], target: "value" },
