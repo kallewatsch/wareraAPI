@@ -7,6 +7,9 @@ import Col from "react-bootstrap/Col"
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js"
 import { Pie } from "react-chartjs-2"
 import RegionUpgrades from "../region/RegionUpgrades"
+import Bunker from "../region/Bunker"
+import Base from "../region/Base"
+import PacificationCenter from "../region/PacificationCenter"
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -58,20 +61,31 @@ export const CountryRegions = (props) => {
     const pacPieData = getPieData(getFooStatus(pacCenters).map(x => x.length), 'Pacification Centers')
     return (
         <>
-            <Row style={{ paddingBottom: "20px", marginBottom: "20px", minHeight: "350px" }}>
-                <Col style={{ maxHeight: "300px" }}>
+            <Row style={{ paddingBottom: "20px", marginBottom: "20px" }}>
+                <Col>
                     <h6>Bunkers</h6>
-                    <Pie data={bunkerPieData} />
+                    <div style={{height: "400px"}}><Pie data={bunkerPieData} /></div>
+                    <ol>
+                        {bunkers.filter(bunker => bunker.status == "pending").map((bunker, i) => <li key={i}><Bunker {...bunker} /></li>)}
+                    </ol>
+
                 </Col>
-                <Col style={{ maxHeight: "300px" }}>
+                <Col>
                     <h6>Military Bases</h6>
-                    <Pie data={basePieData} />
+                    <div style={{height: "400px"}}><Pie data={basePieData} /></div>
+                    <ol>
+                        {bases.filter(bunker => bunker.status == "pending").map((bunker, i) => <li key={i}><Base  {...bunker} /></li>)}
+                    </ol>
                 </Col>
-                <Col style={{ maxHeight: "300px" }}>
+                <Col>
                     <h6>Pacification Centers</h6>
-                    <Pie data={pacPieData} />
+                    <div style={{height: "400px"}}><Pie data={pacPieData} /></div>
+                    <ol>
+                        {pacCenters.filter(bunker => bunker.status == "pending").map((bunker, i) => <li key={i}><PacificationCenter  {...bunker} /></li>)}
+                    </ol>
                 </Col>
             </Row>
+            <hr />
             <Row>
                 <Accordion>
                     <Accordion.Item eventKey="0">
