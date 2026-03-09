@@ -7,6 +7,7 @@ import CountrySelectModal from "../util/CountrySelectModal"
 import SortableTable from "../util/SortableTable"
 import { getCanAttackTimes, getExpectedAttackCost, getExpectedDamage, getHoursUntilLastOnline } from "../../utils/fooStuff"
 import "./Intel.css"
+import SortableTableWithTabs from "../util/SortableTableWithTabs"
 
 
 export const Intel = (props) => {
@@ -34,34 +35,32 @@ export const Intel = (props) => {
         title: 'bla'
     }
 
-    const thsSkillsWar = [
-        { txt: 'expected dmg', attrPath: ["extended"], target: "expDmg" },
-        { txt: 'expected attack health cost', attrPath: ["extended"], target: "expAttCost" },
-        { txt: 'Can Attack Times', attrPath: ["extended"], target: "canAttackTimes" },
-        { txt: 'available Dmg', attrPath: ["extended"], target: "availableDmg" },
+    const thsWar = [
+        { txt: 'username', attrPath: [], target: "username" },
         { txt: 'attack total', attrPath: ['skills', 'attack'], target: 'total' },
         { txt: 'health', attrPath: ['skills', 'health'], target: 'total' },
-        { txt: 'h now', attrPath: ['skills', 'health'], target: 'currentBarValue' },
+        { txt: 'health now', attrPath: ['skills', 'health'], target: 'currentBarValue' },
         { txt: 'hunger', attrPath: ['skills', 'hunger'], target: 'total' },
-        { txt: 'hu now', attrPath: ['skills', 'hunger'], target: 'currentBarValue' },
+        { txt: 'hunger now', attrPath: ['skills', 'hunger'], target: 'currentBarValue' },
         { txt: 'crit chance', attrPath: ['skills', 'criticalChance'], target: 'total' },
         { txt: 'crit dmg', attrPath: ['skills', 'criticalDamages'], target: 'total' },
         { txt: 'armor', attrPath: ['skills', 'armor'], target: 'total' },
         { txt: 'precision', attrPath: ['skills', 'precision'], target: 'total' },
         { txt: 'dodge', attrPath: ['skills', 'dodge'], target: 'total' },
         { txt: 'lootChance', attrPath: ['skills', 'lootChance'], target: 'total' },
-        { txt: 'ban', attrPath: ['infos'], target: 'isBanned' },
     ]
 
-    const thsRealTime = [
+    /* const thsRealTime = [
+        { txt: 'username', attrPath: [], target: "username" },
         { txt: 'energy', attrPath: ['skills', 'energy'], target: 'currentBarValue' },
         { txt: 'health', attrPath: ['skills', 'health'], target: 'currentBarValue' },
         { txt: 'hunger', attrPath: ['skills', 'hunger'], target: 'currentBarValue' },
         { txt: 'en now', attrPath: ['skills', 'entrepreneurship'], target: 'currentBarValue' },
         { txt: 'last online hours', attrPath: ["extended"], target: 'hoursUntilLastOnline' }
-    ]
+    ] */
 
-    const thSkillsEco = [
+    /* const thSkillsEco = [
+        { txt: 'username', attrPath: [], target: "username" },
         { txt: 'energy', attrPath: ['skills', 'energy'], target: 'total' },
         { txt: 'e now', attrPath: ['skills', 'energy'], target: 'currentBarValue' },
         { txt: 'entrepreneurship', attrPath: ['skills', 'entrepreneurship'], target: 'total' },
@@ -69,21 +68,50 @@ export const Intel = (props) => {
         { txt: 'production', attrPath: ['skills', 'production'], target: 'total' },
         { txt: 'companies', attrPath: ['skills', 'companies'], target: 'total' },
         { txt: 'management', attrPath: ['skills', 'management'], target: 'total' }
+    ] */
+
+    const thsEco = [
+        { txt: 'username', attrPath: [], target: "username" },
+        { txt: 'energy', attrPath: ['skills', 'energy'], target: 'total' },
+        { txt: 'energy now', attrPath: ['skills', 'energy'], target: 'currentBarValue' },
+        { txt: 'entrepreneurship', attrPath: ['skills', 'entrepreneurship'], target: 'total' },
+        { txt: 'entrepreneurship', attrPath: ['skills', 'entrepreneurship'], target: 'currentBarValue' },
+        { txt: 'production', attrPath: ['skills', 'production'], target: 'total' },
+        { txt: 'companies', attrPath: ['skills', 'companies'], target: 'total' },
+        { txt: 'management', attrPath: ['skills', 'management'], target: 'total' }
     ]
 
-    const availableThs = {
+    const thsExtended = [
+        { txt: 'expected dmg', attrPath: ["extended"], target: "expDmg" },
+        { txt: 'expected attack health cost', attrPath: ["extended"], target: "expAttCost" },
+        { txt: 'Can Attack Times', attrPath: ["extended"], target: "canAttackTimes" },
+        { txt: 'available Dmg', attrPath: ["extended"], target: "availableDmg" }
+    ]
+
+    const thsMisc = [
+        { txt: 'ban', attrPath: ['infos'], target: 'isBanned' }
+    ]
+
+    /* const availableThs = {
         eco: thSkillsEco,
         war: thsSkillsWar,
         realtime: thsRealTime
-    }
+    } */
 
-    const thsSkills = availableThs[thMode] || []
+    //const thsSkills = availableThs[thMode] || []
 
     const ths = [
         { txt: 'username', attrPath: [], target: "username" },
         { txt: 'level', attrPath: ["leveling"], target: "level" },
         { txt: 'xp', attrPath: ["leveling"], target: "totalXp" },
-        ...thsSkills
+        //...thsSkills
+    ]
+
+    const tabs = [
+        { name: 'Economy', ths: thsEco },
+        { name: 'War', ths: thsWar },
+        { name: 'Extended', ths: thsExtended },
+        { name: 'Misc', ths: thsMisc }
     ]
 
     // TODO: add function to calculate expected values for amount of attacks a user can do (based on hp, armor & dodge). lootChance aswell
@@ -118,12 +146,11 @@ export const Intel = (props) => {
             <hr />
             {
                 country && <Row>
-                    <Button onClick={handleSetThMode}>toggle mode</Button>
-                    <h5>{country?.name} | current mode: <Badge bg={thMode} txt={thMode}>{thMode}</Badge></h5>
-                    <h4 style={{ border: "solid red" }}>Total available Dmg: {totalAvailableCountryDmg}</h4>
+                    {/* <h4 style={{ border: "solid red" }}>Total available Dmg: {totalAvailableCountryDmg}</h4>
                     <h4 style={{ border: "solid red" }}>Total banned Dmg: {totalAvailableCountryDmgBan}</h4>
-                    <h4 style={{ border: "solid red" }}>Total available Dmg including Banned: {totalAvailableCountryDmgTotal}</h4>
-                    <SortableTable items={[...extendedUsers]} ths={[...ths]} component="user" key={`${country?._id}-${thMode}`} />
+                    <h4 style={{ border: "solid red" }}>Total available Dmg including Banned: {totalAvailableCountryDmgTotal}</h4> */}
+                    {/* <SortableTable items={[...extendedUsers]} ths={[...ths]} component="user" key={`${country?._id}-${thMode}`} /> */}
+                    <SortableTableWithTabs tabs={tabs} items={[...extendedUsers]} component="user" />
                 </Row>
             }
             <CountrySelectModal {...modalProps} />

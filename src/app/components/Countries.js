@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import Row from "react-bootstrap/Row"
 import SortableTable from "./util/SortableTable"
 import { getCanAttackTimes, getExpectedAttackCost, getExpectedDamage, getHoursUntilLastOnline } from "../utils/fooStuff"
+import SortableTableWithTabs from "./util/SortableTableWithTabs"
 
 export const getUpgradesData = (upgrades) => {
     return ({
@@ -16,7 +17,6 @@ export const getUpgradesData = (upgrades) => {
 export const Countries = () => {
 
     const { countries, users, regions, upgrades } = useSelector(state => state.app)
-    //const [thMode, setThMode] = useState('realtime')
 
     // [...countries].map() to assign some wicked values. See intel/Intel
     const extendedCountries = [...countries].map(country => {
@@ -66,22 +66,38 @@ export const Countries = () => {
             })
     })
 
-    const ths = [
+    const thsBunkers = [
         { txt: "Name", attrPath: "", target: "name" },
-        { txt: "Available Damage (No Food)", attrPath: ["extended"], target: "totalAvailableCountryDmg" },
         { txt: "Total Bunkers", attrPath: ["extended", "bunkers"], target: "total" },
         { txt: "Pending Bunkers", attrPath: ["extended", "bunkers"], target: "pending" },
         { txt: "Active Bunkers", attrPath: ["extended", "bunkers"], target: "active" },
         { txt: "Disabled Bunkers", attrPath: ["extended", "bunkers"], target: "disabled" },
+    ]
+
+    const thsBases = [
+        { txt: "Name", attrPath: "", target: "name" },
         { txt: "Total Military Bases", attrPath: ["extended", "bases"], target: "total" },
         { txt: "Pending Military Bases", attrPath: ["extended", "bases"], target: "pending" },
         { txt: "Active Military Bases", attrPath: ["extended", "bases"], target: "active" },
         { txt: "Disabled Military Bases", attrPath: ["extended", "bases"], target: "disabled" },
-        { txt: "Total Pacification Centers", attrPath: ["extended", "pacificationCenters"], target: "total"},
+    ]
+
+    const thsPacificationCenters = [
+        { txt: "Name", attrPath: "", target: "name" },
+        { txt: "Total Pacification Centers", attrPath: ["extended", "pacificationCenters"], target: "total" },
         { txt: "Pending Pacification Centers", attrPath: ["extended", "pacificationCenters"], target: "pending" },
         { txt: "Active Pacification Centers", attrPath: ["extended", "pacificationCenters"], target: "active" },
         { txt: "Disabled Pacification Centers", attrPath: ["extended", "pacificationCenters"], target: "disabled" },
-        /* { txt: "Region Diff", attrPath: ["rankings", "countryRegionDiff"], target: "value" },
+    ]
+
+    const thsBla = [
+        { txt: "Name", attrPath: "", target: "name" },
+        { txt: "Available Damage (No Food)", attrPath: ["extended"], target: "totalAvailableCountryDmg" },
+    ]
+
+    const thsFoo = [
+        { txt: "Name", attrPath: "", target: "name" },
+        { txt: "Region Diff", attrPath: ["rankings", "countryRegionDiff"], target: "value" },
         { txt: "Damages", attrPath: ["rankings", "countryDamages"], target: "value" },
         { txt: "Weekly Damages", attrPath: ["rankings", "weeklyCountryDamages"], target: "value" },
         { txt: "Damage per Citizen", attrPath: ["rankings", "weeklyCountryDamagesPerCitizen"], target: "value" },
@@ -91,14 +107,23 @@ export const Countries = () => {
         { txt: "Bounty", attrPath: ["rankings", "countryBounty"], target: "value" },
         { txt: "Production Bonus", attrPath: ["rankings", "countryProductionBonus"], target: "value" },
         { txt: "Development", attrPath: "", target: "development" },
-        { txt: "Specialized Item", attrPath: "", target: "specializedItem" }, */
+        { txt: "Specialized Item", attrPath: "", target: "specializedItem" },
+    ]
+
+    const tabs = [
+        { name: "Bunkers", ths: thsBunkers },
+        { name: "Military Bases", ths: thsBases },
+        { name: "Pacification Centers", ths: thsPacificationCenters },
+        { name: "Bla", ths: thsBla },
+        { name: "Foo", ths: thsFoo }
     ]
 
     return <>
         {countries?.length && <Row>
             {/* <Button onClick={handleSetThMode}>toggle mode</Button> */}
             <h5>Countries{/* : | current mode: <Badge bg={thMode} txt={thMode}>{thMode}</Badge> */}</h5>
-            <SortableTable items={[...extendedCountries]} ths={[...ths]} component="country" /* key={`${thMode}`} */ />
+            {/* <SortableTable items={[...extendedCountries]} ths={[...ths]} component="country" /> */}
+            <SortableTableWithTabs items={[...extendedCountries]} tabs={tabs} component="country" /* key={`${thMode}`} */ />
         </Row>}
     </>
 }
