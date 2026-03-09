@@ -11,6 +11,7 @@ import ListGroup from "react-bootstrap/ListGroup"
 import ListGroupItem from "react-bootstrap/ListGroupItem"
 import "./CountryPolitics.css"
 import SimpleStats from "../SimpleStats"
+import CountryParty from "./CountryParty"
 
 
 export const CountryPolitics = (props) => {
@@ -34,14 +35,6 @@ export const CountryPolitics = (props) => {
         getGovernmentById({ countryId })
     }, [countryId])
 
-    /* useEffect(() => {
-        if (!governmentData) return;
-        const { result: { data: { __v, _id, congressMembers, ...miscMembers } } } = governmentData
-        const userIds = [...Object.keys(miscMembers).map(key => miscMembers[key]), ...congressMembers]
-        console.log(userIds)
-        
-    }, [governmentData]) */
-
     const nowVal = (unrest.bar / unrest.barMax) * 100
 
     const party = partyData?.result?.data
@@ -54,20 +47,26 @@ export const CountryPolitics = (props) => {
 
     return (
         <div className="countryPolitics">
-            <Figure>
-                <Figure.Image
-                    fluid
-                    width={64}
-                    height={64}
-                    alt="Party Avatar"
-                    src={party?.avatarUrl}
-                />
-                <Figure.Caption>
-                    <cite>{party?.name}</cite>
-                </Figure.Caption>
-            </Figure>
+            {party ? <>
+                <Figure>
+                    {party.avatarUrl && <Figure.Image
+                        fluid
+                        width={64}
+                        height={64}
+                        alt="Party Avatar"
+                        src={party.avatarUrl}
+                    />}
+                    <Figure.Caption>
+                        <h6>{party.name}</h6>
+                        <cite>{party?.description}</cite>
+                    </Figure.Caption>
+                </Figure>
+                <CountryParty {...party} />
+            </>
+            : <div>No ruling Party</div>
+            }
+
             {/* <img className="avatar" src={party?.avatarUrl} alt="Party Avatar" /> */}
-            <h6>{party?.name}</h6>
             Last Unrest Contribution: {unrestDate?.toLocaleString() || '-'}
             <ProgressBar now={nowVal} label={`${nowVal.toFixed(2)}%`} variant="warning" />
             <Accordion>
@@ -75,14 +74,12 @@ export const CountryPolitics = (props) => {
                     <AccordionHeader>Show Government Members</AccordionHeader>
                     <AccordionBody>
                         <ListGroup>
-                            {govMembers.map((x, i) => <ListGroupItem key={i}>{x.user.username} {x.role}</ListGroupItem>)}
+                            {govMembers.map((x, i) => <ListGroupItem key={i}>{x.user?.username} {x.role}</ListGroupItem>)}
                         </ListGroup>
                     </AccordionBody>
                 </AccordionItem>
             </Accordion>
-            <hr />
-            <b>TODO: Ruling Party</b>
-            {/* {partyData && <SimpleStats {...partyData} />} */}
+            {/* {party && <SimpleStats {...party} />} */}
         </div>
     )
 

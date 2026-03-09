@@ -58,43 +58,45 @@ export const CountryRegions = (props) => {
     const pacPieData = getPieData(getFooStatus(pacCenters).map(x => x.length), 'Pacification Centers')
     return (
         <>
-            <Row>
-                <Col>
+            <Row style={{ paddingBottom: "20px", marginBottom: "20px", minHeight: "350px" }}>
+                <Col style={{ maxHeight: "300px" }}>
                     <h6>Bunkers</h6>
                     <Pie data={bunkerPieData} />
                 </Col>
-                <Col>
+                <Col style={{ maxHeight: "300px" }}>
                     <h6>Military Bases</h6>
                     <Pie data={basePieData} />
                 </Col>
-                <Col>
+                <Col style={{ maxHeight: "300px" }}>
                     <h6>Pacification Centers</h6>
                     <Pie data={pacPieData} />
                 </Col>
-
             </Row>
-            <Accordion >
-                <Accordion.Item eventKey="0">
-                    <Accordion.Header>
-                        Show {name}'s  {countryRegions?.length || 0} Regions
-                    </Accordion.Header>
-                    <Accordion.Body>
-                        <ListGroup>
-                            {countryRegions?.length ? countryRegions.map((region, i) => {
-                                const regionUpgrades = countryRegionsUpgrades?.filter(upgrade => upgrade.region == region._id)
-                                const { deposit } = region
-                                return (
-                                    <ListGroupItem key={i}>
-                                        {region.name}
-                                        {deposit && <img className="avatar" src={`https://app.warera.io/images/items/${deposit.type}.png?v=31`} alt={deposit.type} />}
-                                        <RegionUpgrades regionUpgrades={regionUpgrades} />
-                                    </ListGroupItem>
-                                )
-                            }) : <span>{name} holds no Regions!</span>}
-                        </ListGroup>
-                    </Accordion.Body>
-                </Accordion.Item>
-            </Accordion>
+            <Row>
+                <Accordion>
+                    <Accordion.Item eventKey="0">
+                        <Accordion.Header>
+                            Show {name}'s  {countryRegions?.length || 0} Regions
+                        </Accordion.Header>
+                        <Accordion.Body>
+                            <ListGroup>
+                                {countryRegions?.length ? countryRegions.map((region, i) => {
+                                    const regionUpgrades = countryRegionsUpgrades?.filter(upgrade => upgrade.region == region._id)
+                                    const { deposit } = region
+                                    return (
+                                        <ListGroupItem key={i}>
+                                            {region.name}
+                                            {deposit && <img className="avatar" src={`https://app.warera.io/images/items/${deposit.type}.png?v=31`} alt={deposit.type} />}
+                                            <RegionUpgrades regionUpgrades={regionUpgrades} />
+                                        </ListGroupItem>
+                                    )
+                                }) : <span>{name} holds no Regions!</span>}
+                            </ListGroup>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
+            </Row>
+
         </>
     )
 
