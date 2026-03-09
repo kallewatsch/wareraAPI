@@ -16,7 +16,7 @@ export const getUpgradesData = (upgrades) => {
 
 export const Countries = () => {
 
-    const { countries, users, regions, upgrades } = useSelector(state => state.app)
+    const { countries, users, regions, upgrades, isLoading } = useSelector(state => state.app)
 
     // [...countries].map() to assign some wicked values. See intel/Intel
     const extendedCountries = [...countries].map(country => {
@@ -119,7 +119,7 @@ export const Countries = () => {
     ]
 
     return <>
-        {countries?.length && <Row>
+        {!isLoading && countries?.length && <Row>
             {/* <Button onClick={handleSetThMode}>toggle mode</Button> */}
             <h5>Countries{/* : | current mode: <Badge bg={thMode} txt={thMode}>{thMode}</Badge> */}</h5>
             {/* <SortableTable items={[...extendedCountries]} ths={[...ths]} component="country" /> */}

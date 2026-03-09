@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Button from "react-bootstrap/Button"
 import Accordion from "react-bootstrap/Accordion"
 import Alert from "react-bootstrap/Alert"
@@ -8,10 +8,10 @@ import SortableTable from "./util/SortableTable"
 
 export const Regions = () => {
 
-    const { regions, countries, upgrades } = useSelector(state => state.app)
+    const { regions, countries, upgrades, isLoading } = useSelector(state => state.app)
     const [activeKey, setActiveKey] = useState()
 
-    const dispatch = useDispatch()
+
 
     // TODO: proper scrollIntoView, current one scrolls in the middle of the open accordion
     const handleSetActiveKeyAndScroll = key => {
@@ -76,7 +76,7 @@ export const Regions = () => {
                 return <Region key={i} {...regionProps} />
             })}
         </Accordion> */}
-        <SortableTable items={items} ths={ths} component="region" key={items.length} />
+        {!isLoading && <SortableTable items={items} ths={ths} component="region" key={items.length} />}
     </>
 }
 
