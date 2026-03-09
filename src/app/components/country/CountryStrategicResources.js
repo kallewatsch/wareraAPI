@@ -9,6 +9,8 @@ export const CountryStrategicResources = props => {
 
     const { regions } = useSelector(state => state.app)
 
+    console.log(props)
+
     return (
         <>
             <h6>Strategic Resources</h6>

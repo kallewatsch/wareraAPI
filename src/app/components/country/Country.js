@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import { useSelector } from "react-redux"
 import Alert from "react-bootstrap/Alert"
+import Accordion from "react-bootstrap/Accordion"
 import { BsDiscord } from "react-icons/bs";
 import CountryRanking from "./CountryRanking"
 import CountryStrategicResources from "./CountryStrategicResources"
@@ -8,7 +9,9 @@ import SimpleStats from "../SimpleStats"
 import CountryDiplomacy from "./CountryDiplomacy"
 import CountryEconomy from "./CountryEconomy"
 import CountryPolitics from "./CountryPolitics"
-import { Badge } from "react-bootstrap";
+import { Badge, ListGroup, ListGroupItem } from "react-bootstrap";
+import RegionUpgrades from "../region/RegionUpgrades";
+import CountryRegions from "./CountryRegions";
 //import { useLazyGetArticleQuery } from "../../api"
 
 /* 
@@ -113,16 +116,20 @@ export const Country = props => {
     const economyProps = { taxes, money, development, specializedItem }
     const politicsProps = { rulingParty, unrest, countryId }
 
+    const { upgrades, regions } = useSelector(state => state.app)
+
+    const countryRegions = Object.keys(regions).filter(key => regions[key].country == countryId).map(key => regions[key])
+    const countryRegionsUpgrades = upgrades.filter(upgrade => countryRegions.some(region => region._id == upgrade.region))
     // getting the whole article possible but overkill at this point. need to sanitize the html etc. just put link to the article instead
     /* const [getArticle, { data: articleData, error, isLoading }] = useLazyGetArticleQuery()
-
+  
     useEffect(() => {
         if (!articleId) return;
         getArticle({articleId})
     }, [articleId])
-
+  
     console.log({articleData, error, isLoading})
-
+  
     const article = articleData?.result?.data */
 
     return (
@@ -131,13 +138,12 @@ export const Country = props => {
                 alt={name}
                 src={`https://app.warera.io/images/flags/${code}.svg?v=16`} />
             <span>{name}</span>
-
             <Badge bg={discordUrl ? 'primary' : 'secondary'}><BsDiscord /></Badge>{discordUrl ? <a href={discordUrl} target="_blank">{discordUrl}</a> : 'No Discord Server'}
-            <CountryPolitics {...politicsProps} />
-            <CountryDiplomacy {...diplomacyProps} />
             <CountryEconomy {...economyProps} />
-            {/* <SimpleStats {...simpleStatsProps} /> */}
-            <CountryStrategicResources {...strategicResources} />
+            <CountryPolitics {...politicsProps} />
+            <CountryRegions countryRegions={countryRegions} countryRegionsUpgrades={countryRegionsUpgrades} />
+            <CountryDiplomacy {...diplomacyProps} />
+            {/* <CountryStrategicResources {...strategicResources} /> */}
             <CountryRanking {...rankings} />
         </>
     )

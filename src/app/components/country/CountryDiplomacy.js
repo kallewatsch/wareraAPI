@@ -2,6 +2,7 @@ import React from "react"
 import { useSelector } from "react-redux"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
+import Accordion from "react-bootstrap/Accordion"
 import Alert from "react-bootstrap/Alert"
 import ListGroup from "react-bootstrap/ListGroup"
 import { getValueFromArrayItem } from "../../utils/arrayStuff"
@@ -22,23 +23,32 @@ export const CountryDiplomacy = props => {
         const { arr, variant, title } = obj
         return (
             <Col key={i}>
-                <Alert variant={variant}>
-                    <h6>{title}</h6>
-                    <ListGroup>
-                        {arr && arr.map((item, j) => {
-                            const countryName = getValueFromArrayItem(countries, '_id', item, 'name')
-                            const countryCode = getValueFromArrayItem(countries, '_id', item, 'code')
-                            return (
-                                <ListGroup.Item key={j} variant={variant}>
-                                    <img
-                                        alt={countryName}
-                                        src={`https://app.warera.io/images/flags/${countryCode}.svg?v=16`} />
-                                    {countryName}
-                                </ListGroup.Item>
-                            )
-                        })}
-                    </ListGroup>
-                </Alert>
+                <Accordion >
+                    <Accordion.Item eventKey={i}>
+                        <Accordion.Header>
+                            Show {arr?.length || 0} {title}
+                        </Accordion.Header>
+                        <Accordion.Body>
+                            <Alert variant={variant}>
+                                <h6>{title}</h6>
+                                <ListGroup>
+                                    {arr && arr.map((item, j) => {
+                                        const countryName = getValueFromArrayItem(countries, '_id', item, 'name')
+                                        const countryCode = getValueFromArrayItem(countries, '_id', item, 'code')
+                                        return (
+                                            <ListGroup.Item key={j} variant={variant}>
+                                                <img
+                                                    alt={countryName}
+                                                    src={`https://app.warera.io/images/flags/${countryCode}.svg?v=16`} />
+                                                {countryName}
+                                            </ListGroup.Item>
+                                        )
+                                    })}
+                                </ListGroup>
+                            </Alert>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
             </Col>
         )
     })
