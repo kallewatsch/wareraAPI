@@ -3,7 +3,7 @@ import { createHashRouter, RouterProvider } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import Container from "react-bootstrap/Container"
 import Spinner from "react-bootstrap/Spinner"
-import { useGetAllCountriesQuery, useGetGameConfigQuery, useGetRegionsQuery, useLazyGetAnythingBatchedPostQuery, useLazyGetAnythingBatchedQuery, useLazyGetMusPaginatedQuery } from "./api"
+import { endpoints, useGetAllCountriesQuery, useGetGameConfigQuery, useGetRegionsQuery, useLazyGetAnythingBatchedPostQuery, useLazyGetAnythingBatchedQuery, useLazyGetMusPaginatedQuery } from "./api"
 import { setConfig, setCountries, setIsLoading, setMus, setRegions, setToast, setUpgrades, setUsers } from "./appSlice"
 import Search from "./components/search/Search"
 import Countries from "./components/Countries"
@@ -99,6 +99,12 @@ export const App = () => {
         'POST': [800, 800]
     }
 
+    const fooEffects = {
+        loadRegionUpgrades: true,
+        loadMusEffect: true,
+        loadUsersEffect: true
+    }
+
     useEffect(() => {
         if (configIsLoading) return;
         try {
@@ -135,7 +141,7 @@ export const App = () => {
         if (countriesIsLoading) return;
         try {
             if (countriesError) {
-                dispatch(setToast({ show: true, content: JSON.stringify(configError, null, 2), bg: "danger" }))
+                dispatch(setToast({ show: true, content: JSON.stringify(countriesError, null, 2), bg: "danger" }))
 
             } else {
                 const { result: { data: countries } } = countriesData
@@ -148,6 +154,7 @@ export const App = () => {
     }, [countriesIsLoading])
 
     useEffect(() => {
+        if(!fooEffects.loadRegionUpgrades) return;
         if (!regionsData) return;
         const asyncFunc = async () => {
             try {
@@ -194,6 +201,7 @@ export const App = () => {
     }, [regionsIsLoading])
 
     useEffect(() => {
+        if(!fooEffects.loadMusEffect) return;
         const asyncGetMus = async () => {
             try {
                 let { result: { data: { items, nextCursor }, error } } = await getMUsPaginated({ limit: 100 }).unwrap()
@@ -212,6 +220,7 @@ export const App = () => {
     }, [])
 
     useEffect(() => {
+        if(!fooEffects.loadUsersEffect) return;
         if (countriesIsLoading) return;
         const asyncGetWorldUsers = async () => {
             try {

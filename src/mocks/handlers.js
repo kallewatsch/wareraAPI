@@ -5,6 +5,14 @@ import gameConfigGetDatesResponse from "./responses/gameConfig.getDates.json"
 import gameConfigGetGameConfigResponse from "./responses/gameConfig.getGameConfig.json"
 import eventGetEventsPaginatedMoneyResponse from "./responses/event.getEventsPaginatedMoney.json"
 import transactionGetPaginatedTransactionsResponse from "./responses/transaction/transactionTradingNoPagination.json"
+import battleGetBattlesResponse from "./responses/battle/getBattlesResponse.json"
+import battleGetByIdResponse from "./responses/battle/getByIdResponse.json"
+import battleGetLiveBattleDataResponse from "./responses/battle/getLiveBattleDataResponse.json"
+import allUsers from "./states/initialStateUsers.json"
+import allMus from "./states/initialStateMus.json"
+import allRegionUpgrades from "./states/initialStateUpgrades.json"
+import { getPaginatedResponseGET, getPaginatedResponseGET_OLD, getPaginatedResponsePOST, getUpgradeByTypeAndEntityPOST, getUserLiteBatched } from "./handlersHelpers"
+
 
 export const BASE_URL = "https://api2.warera.io/trpc"
 
@@ -161,7 +169,23 @@ export const regionHandlers = {
     }
 }
 
-export const battleHandlers = {}
+export const battleHandlers = {
+    getBattles: {
+        success: http.get(`${BASE_URL}/battle.getBattles`, () => {
+            return HttpResponse.json(battleGetBattlesResponse)
+        }),
+    },
+    getById: {
+        success: http.get(`${BASE_URL}/battle.getById`, () => {
+            return HttpResponse.json(battleGetByIdResponse)
+        }),
+    },
+    getLiveBattleData: {
+        success: http.get(`${BASE_URL}/battle.getLiveBattleData`, () => {
+            return HttpResponse.json(battleGetLiveBattleDataResponse)
+        }),
+    }
+}
 
 export const roundHandlers = {}
 
@@ -179,7 +203,6 @@ export const rankingHandlers = {}
 
 export const searchHandlers = {}
 
-
 export const gameConfigHandlers = {
     getDates: {
         success: http.get(`${BASE_URL}/gameConfig.getDates`, () => {
@@ -193,11 +216,53 @@ export const gameConfigHandlers = {
     }
 }
 
-export const userHandlers = {}
+export const userHandlers = {
+
+    GET: {
+        getUsersByCountry: {
+            success: http.get(`${BASE_URL}/user.getUsersByCountry`, (args) => {
+                //const allUsersResponse = {result: {data: {items: allUsers}}}
+                console.log("dem args", args)
+                const fooResponse = getPaginatedResponseGET_OLD(args, [...allUsers], 100)
+
+                return HttpResponse.json(fooResponse)
+            }),
+        }
+    },
+    POST: {
+        getUsersByCountry: {
+            success: http.post(/((https:\/\/api2.warera.io\/trpc\/user.getUsersByCountry){1}(,user.getUsersByCountry){0,}()(\?batch=1){0,1})/gm, async (args) => {
+                //const allUsersResponse = {result: {data: {items: allUsers}}}
+                console.log("dem args", args)
+                const fooResponse = await getPaginatedResponsePOST(args, [...allUsers], 100)
+
+                return HttpResponse.json(fooResponse)
+            }),
+        }
+    },
+    getUsersByCountry: {
+        success: http.post(`${BASE_URL}/user.getUsersByCountry`, (args) => {
+            //const allUsersResponse = {result: {data: {items: allUsers}}}
+            console.log("dem args", args)
+            const fooResponse = getPaginatedResponseGET_OLD(args, allUsers, 100)
+
+            return HttpResponse.json(fooResponse)
+        }),
+    }
+}
 
 export const articleHandlers = {}
 
-export const muHandlers = {}
+export const muHandlers = {
+    GET: {
+        getManyPaginated: {
+            success: http.get(`${BASE_URL}/mu.getManyPaginated`, async (args) => {
+                const response = await getPaginatedResponseGET(args, allMus, '_id')
+                return HttpResponse.json(response)
+            })
+        }
+    }
+}
 
 export const transactionHandlers = {
     getPaginatedTransactions: {
@@ -244,11 +309,77 @@ export const transactionHandlers = {
     }
 }
 
-export const upgradeHandlers = {}
+export const upgradeHandlers = {
+    POST: {
+        getUpgradeByTypeAndEntity: {
+            success: http.post(`${BASE_URL}/upgrade.getUpgradeByTypeAndEntity`, (args) => {
+                //const allUsersResponse = {result: {data: {items: allUsers}}}
+                console.log("dem args", args)
+                const fooResponse = getPaginatedResponseGET_OLD(args, allUsers, 100)
+
+                return HttpResponse.json(fooResponse)
+            }),
+        }
+    }
+}
 
 export const workerHandlers = {}
 
+export const batchHandlers = {
+    GET: {
+        getAnythingBatched: {
+            success: http.get(/https:\/\/api2\.warera\.io\/trpc\/.*\?batch=1/, (args) => {
+                //const allUsersResponse = {result: {data: {items: allUsers}}}
+                console.log("dem args", args)
+                const fooResponse = getPaginatedResponseGET_OLD(args, [...allUsers], 100)
 
+                return HttpResponse.json(fooResponse)
+            }),
+        }
+    },
+    POST: {
+        getAnythingBatched: {
+            success: http.post(({ request, cookies }) => {
+                const url = new URL(request.url)
+                // Match all GET requests whose query params include "mock".
+                return url.searchParams.has('batch')
+            }, async (args) => {
+                //const allUsersResponse = {result: {data: {items: allUsers}}}
+                //console.log("dem args", args)
+                switch (true) {
+                    case args?.request?.url?.includes('getUsersByCountry'):
+                        console.log("getUsersByCountry Mock msw")
+                        const fooResponse = await getPaginatedResponsePOST(args, allUsers, 'countryId', 'country', '_id')
+                        return HttpResponse.json(fooResponse)
+                    case args?.request?.url?.includes('getUserLite'):
+                        console.log("getUserLite Mock msw")
+                        //const barResponse = await getPaginatedResponsePOST(args, allUsers, 'userId', '_id', undefined)
+                        const barResponse = await getUserLiteBatched(args, allUsers)
+                        return HttpResponse.json(barResponse)
+                    default:
+                        console.log("getUpgradeByTypeAndEntity Mock msw")
+                        const bazResponse = await getUpgradeByTypeAndEntityPOST(args, allRegionUpgrades, 'regionId', 'region')
+                        return HttpResponse.json(bazResponse)
+                }
+            }),
+        }/* ,
+        getAnythingBatchedUserLite: {
+            success: http.post((/((https:\/\/api2.warera.io\/trpc\/user.getUserLite){1}(,user.getUserLite){0,}()(\?batch=1){0,1})/gm), async (args) => {
+                //const allUsersResponse = {result: {data: {items: allUsers}}}
+                console.log("dem args", args)
+                let barResponse
+                try {
+                    barResponse = await getPaginatedResponsePOST(args, [...allUsers], 'userId', '_id', undefined)
+                    console.log({ barResponse })
+                } catch (err) {
+                    console.log(err)
+                }
+
+                return HttpResponse.json(barResponse)
+            }),
+        } */
+    },
+}
 
 export const handlers = {
     searchAnythingHandlers,
@@ -260,9 +391,14 @@ export const handlers = {
     // new schema
     countryHandlers,
     regionHandlers,
+    battleHandlers,
     gameConfigHandlers,
     eventHandlers,
-    transactionHandlers
+    transactionHandlers,
+    userHandlers,
+    batchHandlers,
+    upgradeHandlers,
+    muHandlers,
 }
 
 export default handlers

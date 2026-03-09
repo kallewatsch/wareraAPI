@@ -1,0 +1,34 @@
+{
+  "result": {
+    "data": {
+      "battle": {
+        "isActive": true,
+        "attackerCountryOrders": [
+          "6813b6d546e731854c7ac85c"
+        ],
+        "defenderCountryOrders": [
+          "6813b6d446e731854c7ac7eb",
+          "6813b6d546e731854c7ac829",
+          "6873d0ea1758b40e712b5f56",
+          "683ddd2c24b5a2e114af15c3"
+        ],
+        "roundIds": [
+          "69a96eb6437703caa446fc23"
+        ],
+        "roundHistory": [],
+        "defenderMoneyPer1kDamages": 0.1,
+        "defenderMoneyPool": 30.877200000000055
+      },
+      "round": {
+        "roundId": "69a96eb6437703caa446fc23",
+        "attackerDamages": 20046,
+        "defenderDamages": 192670,
+        "isActive": true,
+        "actualTickPoints": 1,
+        "attackerPoints": 0,
+        "nextTickAt": "2026-03-05T13:10:00.240Z",
+        "defenderPoints": 37
+      }
+    }
+  }
+}
