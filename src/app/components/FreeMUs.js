@@ -17,6 +17,8 @@ export const FreeMUs = () => {
 
     //const countryUsers = worldusers?.[country?._id] || []
     const countryUsers = users.filter(user => user.country == country?._id)
+    const cuntMus = getMUsByCountry(mus, countryUsers)
+    const countryMus = cuntMus.sort((a, b) => hasFreeSlots(a) > hasFreeSlots(b) ? -1 : hasFreeSlots(a) < hasFreeSlots(b) ? 1 : 0)
 
     const handleSetCountry = async countryId => {
         setShowModal(false)
@@ -39,18 +41,23 @@ export const FreeMUs = () => {
         }
     }
 
+    const handleCopyToClipboard = event => {
+        const cuntMus = getMUsByCountry(mus, countryUsers)
+        const freeMuLinks = cuntMus.filter(mu => hasFreeSlots(mu)).map(mu => `https://app.warera.io/mu/${mu._id}`).join('\n')
+        console.log({freeMuLinks})
+        navigator.clipboard.writeText(freeMuLinks)
+    }
+
     const modalProps = {
         show: showModal, handleClose: setShowModal, confirm: handleSetCountry, countries: [...countries],
         title: 'bla'
     }
 
-    const cuntMus = getMUsByCountry(mus, countryUsers)
-    const countryMus = cuntMus.sort((a, b) => hasFreeSlots(a) > hasFreeSlots(b) ? -1 : hasFreeSlots(a) < hasFreeSlots(b) ? 1 : 0)
-
     return (
         <>
             <Button onClick={() => setShowModal(true)}>change Country</Button>
             {cuntMus && country && <h3>There are {cuntMus.length} MUs for country {country.name}</h3>}
+            <Button disabled={!country} onClick={handleCopyToClipboard}>Copy Free Military Unit Links</Button>
 
             <Accordion activeKey={activeKey} onSelect={handleSetActiveKeyAndScroll}>
                 {countryMus && countryMus.map((mu, i) => {
