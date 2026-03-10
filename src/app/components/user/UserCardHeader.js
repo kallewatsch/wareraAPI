@@ -53,8 +53,7 @@ export const getXPNeededStupid = (level) => {
 export const UserCardHeader = (props) => {
 
     const { username, avatarUrl, leveling, infos, countryId, militaryRank, ...otherProps } = props
-
-    console.log({ props })
+    //console.log({ props })
 
     const {
         isBanned,

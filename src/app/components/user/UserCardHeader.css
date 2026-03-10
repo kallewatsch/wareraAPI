@@ -10,3 +10,8 @@
 .banned > img {
     filter: grayscale(1);
 }
+
+.user-equipment img {
+    width: 128px;
+    height: 128px;
+}

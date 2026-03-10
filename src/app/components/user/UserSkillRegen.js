@@ -1,4 +1,6 @@
 import React from "react"
+import ListGroup from "react-bootstrap/ListGroup"
+import ListGroupItem from "react-bootstrap/ListGroupItem"
 import ProgressBar from "react-bootstrap/ProgressBar"
 
 
@@ -17,17 +19,16 @@ export const UserSkillRegen = (props) => {
     const maxVal = skill?.total
     const fuckVal = fuck?.[10]?.value
     const label = `${skill?.currentBarValue.toFixed(1)}/${maxVal}`
+    const fuckLabel = `${maxVal}/${fuckVal}`
 
-
-
-    return <>
-        {skillName}:
-        <ProgressBar>
-            <ProgressBar max={fuckVal} now={skill?.currentBarValue} label={label} key={1} />
-            <ProgressBar max={fuckVal} now={skill?.total} label={label} key={2} variant="secondary" />
-            <ProgressBar max={fuckVal} now={fuckVal} key={3} variant="danger" striped />
-        </ProgressBar>
-    </>
+    return <ListGroup horizontal>
+        <ListGroupItem style={{ width: "20%" }}>{skillName}:</ListGroupItem>
+        <ListGroupItem style={{ width: "80%" }}><ProgressBar>
+            <ProgressBar animated max={fuckVal} now={skill?.currentBarValue} label={label} key={1} variant="success" striped />
+            <ProgressBar max={fuckVal} now={skill?.total} key={2} variant="secondary" striped />
+            <ProgressBar max={fuckVal} now={fuckVal} label={fuckLabel} key={3} variant="danger" />
+        </ProgressBar></ListGroupItem>
+    </ListGroup>
 
 }
 

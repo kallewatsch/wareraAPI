@@ -9,6 +9,7 @@ import UserInventory from "./UserInventory"
 import UserCardHeader from "./UserCardHeader"
 import UserDates from "./UserDates"
 import { getExpectedDamage } from "../../utils/fooStuff"
+import UserEquipment from "./UserEquipment"
 
 
 export const User = (props) => {
@@ -38,14 +39,33 @@ export const User = (props) => {
 
     const expectedDmg = getExpectedDamage({ useEquipment: true, ...skills })
 
+    const { attack,
+        armor,
+        dodge,
+        precision,
+        criticalChance,
+        criticalDamages
+    } = skills
+
+    const equipmentSkills = {
+        attack,
+        armor,
+        dodge,
+        precision,
+        criticalChance,
+        criticalDamages
+    }
+
     return (
         <Card /* className={infos?.isBanned ? 'banned' : undefined} */>
             <Card.Header>
                 <UserCardHeader {...userCardHeaderProps} />
-                expectedDmg per attack: {expectedDmg}
+                <UserEquipment {...equipmentSkills} />
+                {/* expectedDmg per attack: {expectedDmg} */}
             </Card.Header>
             {/* <Card.Img src={avatarUrl} /> */}
             <Card.Body>
+                {/*  <UserSkills {...skills} /> */}
                 <Tabs
                     activeKey={key}
                     onSelect={(k) => setKey(k)}

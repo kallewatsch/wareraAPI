@@ -4,6 +4,9 @@ import ListGroup from "react-bootstrap/ListGroup"
 import UserSkillAttack from "./UserSkillAttack"
 import UserSkillRegen from "./UserSkillRegen"
 import UserSkillDefault from "./UserSkillDefault"
+import UserEquipment from "./UserEquipment"
+import "./UserSkills.css"
+
 
 
 export const UserSkills = props => {
@@ -17,6 +20,8 @@ export const UserSkills = props => {
         production,
         ...otherProps
     } = props
+
+    //const { lootChance, companies, management, ...equipmentSkills } = otherProps
 
     const { config } = useSelector(state => state.app)
 
@@ -36,15 +41,19 @@ export const UserSkills = props => {
     const productionProps = Object.assign({}, { skill: production }, { config: config })
 
     return (
-        <ListGroup>
-            <ListGroup.Item><UserSkillAttack {...attack} /></ListGroup.Item>
-            <ListGroup.Item><UserSkillRegen skillName="Energy" {...energyProps} /></ListGroup.Item>
-            <ListGroup.Item><UserSkillRegen skillName="Health" {...healthProps} /></ListGroup.Item>
-            <ListGroup.Item><UserSkillRegen skillName="Hunger" {...hungerProps} /></ListGroup.Item>
-            <ListGroup.Item><UserSkillRegen skillName="Entrepreneurship" {...entrepreneurshipProps} /></ListGroup.Item>
-            <ListGroup.Item><UserSkillRegen skillName="Production" {...productionProps} /></ListGroup.Item>
-            {otherItems}
-        </ListGroup>
+        <>
+            {/* {equipmentSkills && <UserEquipment {...equipmentSkills} />} */}
+            <ListGroup className="user-skills">
+                <ListGroup.Item></ListGroup.Item>
+                {/* <ListGroup.Item><UserSkillAttack {...attack} /></ListGroup.Item> */}
+                <ListGroup.Item><UserSkillRegen skillName="Energy" {...energyProps} /></ListGroup.Item>
+                <ListGroup.Item><UserSkillRegen skillName="Health" {...healthProps} /></ListGroup.Item>
+                <ListGroup.Item><UserSkillRegen skillName="Hunger" {...hungerProps} /></ListGroup.Item>
+                <ListGroup.Item><UserSkillRegen skillName="Entrepreneurship" {...entrepreneurshipProps} /></ListGroup.Item>
+                <ListGroup.Item><UserSkillRegen skillName="Production" {...productionProps} /></ListGroup.Item>
+                {otherItems}
+            </ListGroup>
+        </>
     )
 }
 
