@@ -1,17 +1,20 @@
 import React, { useEffect } from "react"
 import { useSelector } from "react-redux"
-import Alert from "react-bootstrap/Alert"
-import Accordion from "react-bootstrap/Accordion"
-import { BsDiscord } from "react-icons/bs";
+import Card from "react-bootstrap/Card"
+import Badge from "react-bootstrap/Badge"
+import ListGroup from "react-bootstrap/ListGroup"
+import ListGroupItem from "react-bootstrap/ListGroupItem"
+import { BsDiscord } from "react-icons/bs"
 import CountryRanking from "./CountryRanking"
 import CountryStrategicResources from "./CountryStrategicResources"
 import SimpleStats from "../SimpleStats"
 import CountryDiplomacy from "./CountryDiplomacy"
 import CountryEconomy from "./CountryEconomy"
 import CountryPolitics from "./CountryPolitics"
-import { Badge, ListGroup, ListGroupItem } from "react-bootstrap";
+
 import RegionUpgrades from "../region/RegionUpgrades";
 import CountryRegions from "./CountryRegions";
+import { Col, Figure, Row } from "react-bootstrap"
 //import { useLazyGetArticleQuery } from "../../api"
 
 /* 
@@ -122,30 +125,62 @@ export const Country = props => {
     const countryRegionsUpgrades = upgrades.filter(upgrade => countryRegions.some(region => region._id == upgrade.region))
     // getting the whole article possible but overkill at this point. need to sanitize the html etc. just put link to the article instead
     /* const [getArticle, { data: articleData, error, isLoading }] = useLazyGetArticleQuery()
-  
+   
     useEffect(() => {
         if (!articleId) return;
         getArticle({articleId})
     }, [articleId])
-  
+   
     console.log({articleData, error, isLoading})
-  
+   
     const article = articleData?.result?.data */
 
     return (
-        <>
-            <img
-                alt={name}
-                src={`https://app.warera.io/images/flags/${code}.svg?v=16`} />
-            <span>{name}</span>
-            <Badge bg={discordUrl ? 'primary' : 'secondary'}><BsDiscord /></Badge>{discordUrl ? <a href={discordUrl} target="_blank">{discordUrl}</a> : 'No Discord Server'}
-            <CountryEconomy {...economyProps} />
-            <CountryPolitics {...politicsProps} />
-            <CountryRegions countryRegions={countryRegions} countryRegionsUpgrades={countryRegionsUpgrades} />
-            <CountryDiplomacy {...diplomacyProps} />
-            {/* <CountryStrategicResources {...strategicResources} /> */}
-            <CountryRanking {...rankings} />
-        </>
+        <Card>
+            <Card.Header>
+                <Row>
+                    <Col lg={2}>
+                        <Figure /* style={{placeSelf: "stretch start"}} */>
+                            <Figure.Image
+                                fluid
+                                width={128}
+                                height={128}
+                                alt="Country Flag"
+                                src={`https://app.warera.io/images/flags/${code}.svg?v=16`}
+                            />
+                            <Figure.Caption>
+                                <BsDiscord style={{ fontSize: "2em", margin: "5px" }} className={discordUrl ? 'icon-green' : 'icon-gray'} />
+                                {discordUrl ? <a href={discordUrl} target="_blank"> Join Discord</a> : 'No Discord'}
+                            </Figure.Caption>
+                        </Figure>
+                    </Col>
+                    <Col>
+                        <h2>{name}</h2>
+                        <CountryEconomy {...economyProps} />
+                    </Col>
+
+                </Row>
+
+                {/* <img
+                    alt={name}
+                    src={`https://app.warera.io/images/flags/${code}.svg?v=16`} />
+                <span>{name}</span>
+                <Badge bg={discordUrl ? 'primary' : 'secondary'}>
+                    <BsDiscord />
+                </Badge>
+                {discordUrl ? <a href={discordUrl} target="_blank">{discordUrl}</a> : 'No Discord Server'} */}
+            </Card.Header>
+            <Card.Body>
+                
+                <CountryPolitics {...politicsProps} />
+                <CountryRegions countryRegions={countryRegions} countryRegionsUpgrades={countryRegionsUpgrades} />
+                <CountryDiplomacy {...diplomacyProps} />
+                {/* <CountryStrategicResources {...strategicResources} /> */}
+                <CountryRanking {...rankings} />
+            </Card.Body>
+
+
+        </Card>
     )
 
 }

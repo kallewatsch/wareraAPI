@@ -1,8 +1,9 @@
 import React from "react"
-import IconsWithOverlay from "../util/IconsWithOverlay"
+import { IconContext } from "react-icons"
 import Bunker from "./Bunker"
 import Base from "./Base"
 import PacificationCenter from "./PacificationCenter"
+
 
 export const getUpgradeClassName = (status) => {
     switch (status) {
@@ -17,6 +18,13 @@ export const getUpgradeClassName = (status) => {
     }
 }
 
+export const getTimeDeltaHours = (willBeActiveAt) => {
+    const activeDate = new Date(willBeActiveAt)
+    const now = Date.now()
+    return Math.floor((activeDate - now) / (3600 * 1000))
+}
+
+
 export const RegionUpgrades = (props) => {
 
     const { regionUpgrades } = props || []
@@ -30,11 +38,12 @@ export const RegionUpgrades = (props) => {
     ]
 
     return (
-        <IconsWithOverlay providerValue={{size: "2em"}} txts={txts}>
+        <IconContext.Provider value={{size: "2em"}}>
             <Bunker {...bunkerData} />
             <Base {...baseData} />
             <PacificationCenter {...pacificationCenterData} />
-        </IconsWithOverlay>
+        </IconContext.Provider>
+        
     )
 
 }

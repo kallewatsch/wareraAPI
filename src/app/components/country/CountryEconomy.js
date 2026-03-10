@@ -20,7 +20,7 @@ export const CountryEconomy = props => {
     ] */
 
     return (
-        <Row>
+        <Row className="justify-content-md-center">
             <Col>
                 <IconsWithOverlay providerValue={{ size: '3em' }} txts={txts1}>
                     <span><GiCoins className="icon-gold" />: {income}%</span>

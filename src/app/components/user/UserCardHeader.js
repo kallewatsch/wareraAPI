@@ -87,10 +87,11 @@ export const UserCardHeader = (props) => {
                 <Figure>
                     <Figure.Image
                         fluid
+                        roundedCircle
                         width={128}
                         height={128}
                         alt="User Avatar"
-                        src={avatarUrl}
+                        src={avatarUrl || `https://app.warera.io/images/avatars/userAvatarPlaceholder.png?v=2`}
                     />
                     <Figure.Caption>
                         <cite>{description}</cite>
