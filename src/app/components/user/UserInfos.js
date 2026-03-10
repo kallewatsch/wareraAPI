@@ -1,5 +1,5 @@
 import React from "react"
-import { GiRoundStar, GiShield, GiGlobe, GiChart, GiGreekTemple, GiCongress, GiConvict, GiHandcuffs } from "react-icons/gi"
+import { GiRoundStar, GiShield, GiGlobe, GiChart, GiGreekTemple, GiCongress, GiConvict, GiHandcuffs, GiHearts } from "react-icons/gi"
 import "./UserInfos.css"
 import IconsWithOverlay from "../util/IconsWithOverlay"
 
@@ -14,10 +14,12 @@ export const UserInfos = (props) => {
         minOfForeignAffairsOf,
         congressMemberOf,
         countryName,
-        isBanned
+        isBanned,
+        isPremium
     } = props
 
     const availablTexts = [
+        `Premium User`,
         `Banned User`,
         `Gottem!`,
         `President ${countryName}`,
@@ -30,6 +32,7 @@ export const UserInfos = (props) => {
     ]
 
     const availableIcons = [
+        [isPremium, <GiHearts />],
         [isBanned, <GiConvict className="icon-red" />],
         [isBanned, <GiHandcuffs />],
         [presidentOf, <GiRoundStar className="icon-gold" />],

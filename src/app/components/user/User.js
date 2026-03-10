@@ -21,13 +21,19 @@ export const User = (props) => {
         leveling,
         infos,
         country: countryId,
+        mu: muId,
+        militaryRank,
+        createdAt,
         ...otherProps
     } = props
+
+    /* console.log(props)
+    console.log({otherProps}) */
 
     const [key, setKey] = useState('skills');
 
     const userCardHeaderProps = {
-        avatarUrl, username, leveling, infos, countryId, otherProps
+        avatarUrl, username, leveling, infos, countryId, muId, militaryRank, createdAt, otherProps
     }
 
     const expectedDmg = getExpectedDamage({ useEquipment: true, ...skills })
