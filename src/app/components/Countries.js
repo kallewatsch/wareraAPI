@@ -4,6 +4,7 @@ import Row from "react-bootstrap/Row"
 import SortableTable from "./util/SortableTable"
 import { getCanAttackTimes, getExpectedAttackCost, getExpectedDamage, getHoursUntilLastOnline } from "../utils/fooStuff"
 import SortableTableWithTabs from "./util/SortableTableWithTabs"
+import { extendUser } from "../utils/userStuff"
 
 export const getUpgradesData = (upgrades) => {
     return ({
@@ -21,21 +22,7 @@ export const Countries = () => {
     // [...countries].map() to assign some wicked values. See intel/Intel
     const extendedCountries = [...countries].map(country => {
 
-        const extendedUsers = users.filter(user => user.country == country?._id).map((user =>
-            Object.assign(
-                {},
-                { ...user },
-                {
-                    extended: {
-                        expDmg: getExpectedDamage({ ...user?.skills }),
-                        expAttCost: getExpectedAttackCost({ ...user?.skills }, false),
-                        canAttackTimes: getCanAttackTimes({ ...user?.skills }),
-                        availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimes({ ...user?.skills }),
-                        hoursUntilLastOnline: getHoursUntilLastOnline(user?.dates?.lastConnectionAt)
-                    }
-                }
-            )
-        ))
+        const extendedUsers = users.filter(user => user.country == country?._id).map(user => extendUser(user))
 
         const extendedUsersWithBan = extendedUsers.filter(user => user.infos?.isBanned)
         const extendedUsersWithoutBan = extendedUsers.filter(user => !user.infos?.isBanned)
@@ -120,9 +107,7 @@ export const Countries = () => {
 
     return <>
         {!isLoading && countries?.length && <Row>
-            {/* <Button onClick={handleSetThMode}>toggle mode</Button> */}
-            <h5>Countries{/* : | current mode: <Badge bg={thMode} txt={thMode}>{thMode}</Badge> */}</h5>
-            {/* <SortableTable items={[...extendedCountries]} ths={[...ths]} component="country" /> */}
+            <h5>Countries</h5>
             <SortableTableWithTabs items={[...extendedCountries]} tabs={tabs} component="country" /* key={`${thMode}`} */ />
         </Row>}
     </>
