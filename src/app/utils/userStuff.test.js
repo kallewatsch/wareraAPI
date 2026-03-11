@@ -1,4 +1,4 @@
-import { extendUser } from "./userStuff"
+import { extendUser, getUsersAvailableDmg } from "./userStuff"
 import {
     getExpectedDamage,
     getExpectedAttackCost,
@@ -37,5 +37,16 @@ describe("userStuff", () => {
         expect(getExpectedAttackCost).toHaveBeenCalledWith({}, false)
         expect(getCanAttackTimes).toHaveBeenCalledWith({})
         expect(getHoursUntilLastOnline).toHaveBeenCalledWith(undefined)
+    })
+    it.each([
+        { users: [], expected: 0 },
+        {
+            users: [
+                { extended: { availableDmg: 20 } }, { extended: { availableDmg: 22 } }
+            ],
+            expected: 42
+        }
+    ])("getUsersAvailableDmg($users) returns $expected", ({ users, expected }) => {
+        expect(getUsersAvailableDmg(users)).toEqual(expected)
     })
 })

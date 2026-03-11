@@ -123,8 +123,6 @@ export const SortableTableWithTabs = (props) => {
     const Comp = getComponent(component)
     const decimals = 2
 
-    console.log("dem tabs", tabs)
-
     const tableFilterThs = tabs.map(tab => tab.ths).flat()
 
     // TODO: name probably not the right thing to determine uniqueness?
@@ -164,6 +162,7 @@ export const SortableTableWithTabs = (props) => {
                     defaultActiveKey={0}
                     onSelect={(k) => setTabKey(k)}
                     className="mb-3"
+                    justify
                 >
                     {tabs && tabs.map((tab, i) =>
                         <Tab eventKey={i} title={tab.name} key={`${i}`}>

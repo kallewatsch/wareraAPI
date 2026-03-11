@@ -10,7 +10,7 @@ export const TableHeader = (props) => {
             <tr>
                 <th>Show</th>
                 {ths && ths.map((th, i) => {
-                    return <th onClick={event => sortItems(event, th.attrPath, th.target)} key={i}>{th.txt}</th>
+                    return <th onClick={event => sortItems(event, th.attrPath, th.target)} key={i}>{th.icon || th.txt}</th>
                 })}
             </tr>
             <tr></tr>

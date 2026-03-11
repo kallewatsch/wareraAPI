@@ -1,64 +1,55 @@
 import React, { useState } from "react"
 import { useSelector } from 'react-redux'
 import Row from "react-bootstrap/Row"
-import SortableTable from "./util/SortableTable"
-import { getCanAttackTimes, getExpectedAttackCost, getExpectedDamage, getHoursUntilLastOnline } from "../utils/fooStuff"
+import { GiAxeSword, GiPeaceDove, GiShield } from "react-icons/gi";
 import SortableTableWithTabs from "./util/SortableTableWithTabs"
-import { extendUser } from "../utils/userStuff"
+import { extendCountries } from "../utils/countryStuff"
+import { OverlayTrigger, Popover, PopoverBody, PopoverHeader, Tooltip } from "react-bootstrap";
 
-export const getUpgradesData = (upgrades) => {
-    return ({
-        total: upgrades.length,
-        pending: upgrades.filter(upgrade => upgrade.status == "pending").length,
-        active: upgrades.filter(upgrade => upgrade.status == "active").length,
-        disabled: upgrades.filter(upgrade => upgrade.status == "disabled").length,
-    })
+
+export const IconWithOverlay = ({ id, children, title, text }) => {
+
+    const renderTooltip = (props, title, text = "Lorem Ipsum") => (
+        <Popover {...props}>
+            <PopoverHeader>{title}</PopoverHeader>
+            <PopoverBody>{text}</PopoverBody>
+        </Popover>
+    )
+    return (
+        <OverlayTrigger overlay={(_props) => renderTooltip(_props, title)}>
+            {children}
+        </OverlayTrigger >
+    )
 }
 
 export const Countries = () => {
 
     const { countries, users, regions, upgrades, isLoading } = useSelector(state => state.app)
 
-    // [...countries].map() to assign some wicked values. See intel/Intel
-    const extendedCountries = [...countries].map(country => {
+    const extendedCountries = extendCountries(countries, users, regions, upgrades)
 
-        const extendedUsers = users.filter(user => user.country == country?._id).map(user => extendUser(user))
+    const thsUpgrades = [
+        ["bunkers", GiShield],
+        ["bases", GiAxeSword],
+        ["pacificationCenters", GiPeaceDove]
+    ].map(x => {
+        return ["total", "active", "pending", "disabled"].map(status => {
+            const title = `${x[0]} ${status}`
+            const FooIcon = x[1]
+            const txt = title
+            const icon = <IconWithOverlay title={title}><FooIcon size="3em" className={`icon-${status}`} /></IconWithOverlay>
+            return { icon, txt, attrPath: ["extended", x[0]], target: status }
+        })
+    }).flat()
 
-        const extendedUsersWithBan = extendedUsers.filter(user => user.infos?.isBanned)
-        const extendedUsersWithoutBan = extendedUsers.filter(user => !user.infos?.isBanned)
+    //console.log(thsUpgrades)
 
-        const totalAvailableCountryDmg = Math.round(extendedUsersWithoutBan.reduce((acc, curr) => acc + curr.extended.availableDmg, 0))//.toLocaleString()
-        const totalAvailableCountryDmgBan = Math.round(extendedUsersWithBan.reduce((acc, curr) => acc + curr.extended.availableDmg, 0))//.toLocaleString()
-        const totalAvailableCountryDmgTotal = Math.round(extendedUsers.reduce((acc, curr) => acc + curr.extended.availableDmg, 0))//.toLocaleString()
-
-        const countryRegionIds = Object.keys(regions).filter(key => regions[key].country == country._id)
-        const countryRegionUprades = upgrades.filter(upgrade => countryRegionIds.some(regionId => regionId == upgrade.region))
-
-        const bunkerUpgrades = countryRegionUprades.filter(upgrade => upgrade.upgradeType == "bunker")
-        const baseUpgrades = countryRegionUprades.filter(upgrade => upgrade.upgradeType == "base")
-        const pacificationCenterUpgrades = countryRegionUprades.filter(upgrade => upgrade.upgradeType == "pacificationCenter")
-
-        return Object.assign(
-            {},
-            { ...country },
-            {
-                extended: {
-                    totalAvailableCountryDmg,
-                    totalAvailableCountryDmgBan,
-                    totalAvailableCountryDmgTotal,
-                    bunkers: getUpgradesData(bunkerUpgrades),
-                    bases: getUpgradesData(baseUpgrades),
-                    pacificationCenters: getUpgradesData(pacificationCenterUpgrades)
-                }
-            })
-    })
-
-    const thsBunkers = [
+    /* const thsBunkers = [
         { txt: "Name", attrPath: "", target: "name" },
-        { txt: "Total Bunkers", attrPath: ["extended", "bunkers"], target: "total" },
-        { txt: "Pending Bunkers", attrPath: ["extended", "bunkers"], target: "pending" },
-        { txt: "Active Bunkers", attrPath: ["extended", "bunkers"], target: "active" },
-        { txt: "Disabled Bunkers", attrPath: ["extended", "bunkers"], target: "disabled" },
+        { txt: <OverlayTrigger overlay={<Tooltip id="meh">lalal</Tooltip>}><GiShield size="2em" /></OverlayTrigger>, attrPath: ["extended", "bunkers"], target: "total" },
+        { txt: <IconWithOverlay title="Pending Bunkers" ><GiShield size="2em" className="icon-gold" /></IconWithOverlay>, attrPath: ["extended", "bunkers"], target: "pending" },
+        { txt: <IconWithOverlay title="Pending Bunkers" ><span><GiShield size="2em" className="icon-green" />xxx</span></IconWithOverlay>, attrPath: ["extended", "bunkers"], target: "active" },
+        { txt: <GiShield size="2em" className="icon-red" />, attrPath: ["extended", "bunkers"], target: "disabled" },
     ]
 
     const thsBases = [
@@ -75,7 +66,7 @@ export const Countries = () => {
         { txt: "Pending Pacification Centers", attrPath: ["extended", "pacificationCenters"], target: "pending" },
         { txt: "Active Pacification Centers", attrPath: ["extended", "pacificationCenters"], target: "active" },
         { txt: "Disabled Pacification Centers", attrPath: ["extended", "pacificationCenters"], target: "disabled" },
-    ]
+    ] */
 
     const thsBla = [
         { txt: "Name", attrPath: "", target: "name" },
@@ -97,12 +88,15 @@ export const Countries = () => {
         { txt: "Specialized Item", attrPath: "", target: "specializedItem" },
     ]
 
+    const thName = { txt: "Name", attrPath: "", target: "name" }
+
     const tabs = [
-        { name: "Bunkers", ths: thsBunkers },
+        { name: "Upgrades", ths: [thName, ...thsUpgrades] },
+        /* { name: "Bunkers", ths: thsBunkers },
         { name: "Military Bases", ths: thsBases },
-        { name: "Pacification Centers", ths: thsPacificationCenters },
+        { name: "Pacification Centers", ths: thsPacificationCenters }, */
         { name: "Bla", ths: thsBla },
-        { name: "Foo", ths: thsFoo }
+        { name: "Foo", ths: thsFoo },
     ]
 
     return <>

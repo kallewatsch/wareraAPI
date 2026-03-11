@@ -22,3 +22,7 @@ export const extendUser = (user) => {
     )
 
 }
+
+export const getUsersAvailableDmg = (users) => {
+    return Math.round(users.reduce((acc, curr) => acc + curr.extended.availableDmg, 0))
+}

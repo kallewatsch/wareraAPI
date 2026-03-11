@@ -21,3 +21,19 @@
 .icon-gray {
     color: gray;
 }
+
+.icon-total {
+    color: lightblue
+}
+
+.icon-disabled {
+    color: gray;
+}
+
+.icon-pending {
+    color: orangered;
+}
+
+.icon-active {
+    color: lightgreen;
+}
