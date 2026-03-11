@@ -1,13 +1,14 @@
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import Row from "react-bootstrap/Row"
+import Tabs from "react-bootstrap/Tabs"
+import Tab  from "react-bootstrap/Tab"
 import Button from "react-bootstrap/Button"
-import Badge from "react-bootstrap/Badge"
 import CountrySelectModal from "../util/CountrySelectModal"
-import SortableTable from "../util/SortableTable"
-import { getCanAttackTimes, getExpectedAttackCost, getExpectedDamage, getHoursUntilLastOnline } from "../../utils/fooStuff"
-import "./Intel.css"
 import SortableTableWithTabs from "../util/SortableTableWithTabs"
+import { extendUser } from "../../utils/userStuff"
+import Country from "../country/Country"
+import "./Intel.css"
 
 
 export const Intel = (props) => {
@@ -15,15 +16,7 @@ export const Intel = (props) => {
     const { countries, users } = useSelector(state => state.app)
     const [showModal, setShowModal] = useState(false)
     const [country, setCountry] = useState('')
-    const [thMode, setThMode] = useState('war')
-
-    const handleSetThMode = event => {
-        const modes = ["war", "eco", "realtime"]
-        const index = modes.indexOf(thMode)
-        const foo = (index + 1) % modes.length
-        const _thMode = index == -1 ? modes[0] : modes[foo]
-        setThMode(_thMode)
-    }
+    const [key, setKey] = useState('users')
 
     const handleSetCountry = async countryId => {
         setShowModal(false)
@@ -32,7 +25,7 @@ export const Intel = (props) => {
 
     const modalProps = {
         show: showModal, handleClose: setShowModal, confirm: handleSetCountry, countries: [...countries],
-        title: 'bla'
+        title: 'Select Country'
     }
 
     const thsWar = [
@@ -50,26 +43,6 @@ export const Intel = (props) => {
         { txt: 'lootChance', attrPath: ['skills', 'lootChance'], target: 'total' },
     ]
 
-    /* const thsRealTime = [
-        { txt: 'username', attrPath: [], target: "username" },
-        { txt: 'energy', attrPath: ['skills', 'energy'], target: 'currentBarValue' },
-        { txt: 'health', attrPath: ['skills', 'health'], target: 'currentBarValue' },
-        { txt: 'hunger', attrPath: ['skills', 'hunger'], target: 'currentBarValue' },
-        { txt: 'en now', attrPath: ['skills', 'entrepreneurship'], target: 'currentBarValue' },
-        { txt: 'last online hours', attrPath: ["extended"], target: 'hoursUntilLastOnline' }
-    ] */
-
-    /* const thSkillsEco = [
-        { txt: 'username', attrPath: [], target: "username" },
-        { txt: 'energy', attrPath: ['skills', 'energy'], target: 'total' },
-        { txt: 'e now', attrPath: ['skills', 'energy'], target: 'currentBarValue' },
-        { txt: 'entrepreneurship', attrPath: ['skills', 'entrepreneurship'], target: 'total' },
-        { txt: 'en now', attrPath: ['skills', 'entrepreneurship'], target: 'currentBarValue' },
-        { txt: 'production', attrPath: ['skills', 'production'], target: 'total' },
-        { txt: 'companies', attrPath: ['skills', 'companies'], target: 'total' },
-        { txt: 'management', attrPath: ['skills', 'management'], target: 'total' }
-    ] */
-
     const thsEco = [
         { txt: 'username', attrPath: [], target: "username" },
         { txt: 'energy', attrPath: ['skills', 'energy'], target: 'total' },
@@ -82,6 +55,7 @@ export const Intel = (props) => {
     ]
 
     const thsExtended = [
+        { txt: 'username', attrPath: [], target: "username" },
         { txt: 'expected dmg', attrPath: ["extended"], target: "expDmg" },
         { txt: 'expected attack health cost', attrPath: ["extended"], target: "expAttCost" },
         { txt: 'Can Attack Times', attrPath: ["extended"], target: "canAttackTimes" },
@@ -89,22 +63,10 @@ export const Intel = (props) => {
     ]
 
     const thsMisc = [
-        { txt: 'ban', attrPath: ['infos'], target: 'isBanned' }
-    ]
-
-    /* const availableThs = {
-        eco: thSkillsEco,
-        war: thsSkillsWar,
-        realtime: thsRealTime
-    } */
-
-    //const thsSkills = availableThs[thMode] || []
-
-    const ths = [
         { txt: 'username', attrPath: [], target: "username" },
+        { txt: 'ban', attrPath: ['infos'], target: 'isBanned' },
         { txt: 'level', attrPath: ["leveling"], target: "level" },
         { txt: 'xp', attrPath: ["leveling"], target: "totalXp" },
-        //...thsSkills
     ]
 
     const tabs = [
@@ -116,21 +78,7 @@ export const Intel = (props) => {
 
     // TODO: add function to calculate expected values for amount of attacks a user can do (based on hp, armor & dodge). lootChance aswell
     //const extendedUsers = [...worldusers["6813b6d446e731854c7ac79c"]].map((user =>
-    const extendedUsers = users.filter(user => user.country == country?._id).map((user =>
-        Object.assign(
-            {},
-            { ...user },
-            {
-                extended: {
-                    expDmg: getExpectedDamage({ ...user?.skills }),
-                    expAttCost: getExpectedAttackCost({ ...user?.skills }, false),
-                    canAttackTimes: getCanAttackTimes({ ...user?.skills }),
-                    availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimes({ ...user?.skills }),
-                    hoursUntilLastOnline: getHoursUntilLastOnline(user?.dates?.lastConnectionAt)
-                }
-            }
-        )
-    ))
+    const extendedUsers = users?.filter(user => user.country == country?._id).map(user => extendUser(user))
 
     const extendedUsersWithBan = extendedUsers.filter(user => user.infos?.isBanned)
     const extendedUsersWithoutBan = extendedUsers.filter(user => !user.infos?.isBanned)
@@ -146,11 +94,16 @@ export const Intel = (props) => {
             <hr />
             {
                 country && <Row>
-                    {/* <h4 style={{ border: "solid red" }}>Total available Dmg: {totalAvailableCountryDmg}</h4>
-                    <h4 style={{ border: "solid red" }}>Total banned Dmg: {totalAvailableCountryDmgBan}</h4>
-                    <h4 style={{ border: "solid red" }}>Total available Dmg including Banned: {totalAvailableCountryDmgTotal}</h4> */}
-                    {/* <SortableTable items={[...extendedUsers]} ths={[...ths]} component="user" key={`${country?._id}-${thMode}`} /> */}
-                    <SortableTableWithTabs tabs={tabs} items={[...extendedUsers]} component="user" />
+                    <Tabs activeKey={key}
+                        onSelect={(k) => setKey(k)}
+                        className="mb-3">
+                        <Tab eventKey="users" title="Users">
+                            <SortableTableWithTabs tabs={tabs} items={[...extendedUsers]} component="user" key={country?._id} />
+                        </Tab>
+                        <Tab eventKey="country" title="Country">
+                            <Country {...country} /> 
+                        </Tab>
+                    </Tabs>
                 </Row>
             }
             <CountrySelectModal {...modalProps} />
