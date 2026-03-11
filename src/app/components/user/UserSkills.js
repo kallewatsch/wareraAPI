@@ -12,7 +12,7 @@ import "./UserSkills.css"
 export const UserSkills = props => {
 
     const {
-        attack,
+        //attack,
         energy,
         health,
         hunger,
@@ -39,13 +39,15 @@ export const UserSkills = props => {
     const hungerProps = Object.assign({}, { skill: hunger }, { config: config })
     const entrepreneurshipProps = Object.assign({}, { skill: entrepreneurship }, { config: config })
     const productionProps = Object.assign({}, { skill: production }, { config: config })
+    //const attackProps = Object.assign({}, {skill: attack}, {config: config})
 
+    //console.log({attack})
+    console.log({config})
     return (
         <>
             {/* {equipmentSkills && <UserEquipment {...equipmentSkills} />} */}
             <ListGroup className="user-skills">
-                <ListGroup.Item></ListGroup.Item>
-                {/* <ListGroup.Item><UserSkillAttack {...attack} /></ListGroup.Item> */}
+                {/* <ListGroup.Item><User {...attack} /></ListGroup.Item> */}
                 <ListGroup.Item><UserSkillRegen skillName="Energy" {...energyProps} /></ListGroup.Item>
                 <ListGroup.Item><UserSkillRegen skillName="Health" {...healthProps} /></ListGroup.Item>
                 <ListGroup.Item><UserSkillRegen skillName="Hunger" {...hungerProps} /></ListGroup.Item>

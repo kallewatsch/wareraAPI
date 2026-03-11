@@ -125,7 +125,7 @@ export const UserInventory = (props) => {
             {
                 extended: {
                     foo: getDaysUntil(transaction.createdAt),
-                    price: getPrice(transaction),
+                    price: getPrice(transaction.money, transaction.quantity),
                     sellerName: getTransactionUser([...users], transaction.sellerId),
                     buyerName: getTransactionUser([...users], transaction.buyerId)
                     /* expDmg: getExpectedDamage({ ...user?.skills }),

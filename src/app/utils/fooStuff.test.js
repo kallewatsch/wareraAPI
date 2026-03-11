@@ -1,6 +1,11 @@
 import {
     getExpectedDamage,
     getExpectedAttackCost,
+    getCanAttackTimes,
+    getPrice,
+    getTransactionUser,
+    getObjKeyViaAttrPath,
+    sortByFoo
 } from "./fooStuff"
 
 
@@ -42,7 +47,58 @@ describe("fooStuff", () => {
                 armor: { total: 10, value: 0 }
             }, useEquipment: false, expected: 10
         }
-    ])('getExpectedAttackCost $skills $useEquipment returns $expected', ({ skills, useEquipment, expected }) => {
-        expect(getExpectedAttackCost(skills, useEquipment)).toEqual(expected)
-    })
+    ])
+        ('getExpectedAttackCost $skills $useEquipment returns $expected',
+            ({ skills, useEquipment, expected }) => {
+                expect(getExpectedAttackCost(skills, useEquipment)).toEqual(expected)
+            })
+    it.each([
+        { skills: undefined, useEquipment: undefined, expected: 0 }
+    ])
+        (`getCanAttackTimes($skills, $useEquipment returns $expected)`,
+            ({ skills, useEquipment, expected }) => {
+                expect(getCanAttackTimes(skills, useEquipment)).toEqual(expected)
+            })
+    it.each([
+        { money: undefined, quantity: undefined, expected: NaN },
+        { money: 2, quantity: undefined, expected: NaN },
+        { money: undefined, quantity: 1, expected: NaN },
+        { money: 10, quantity: 0, expected: Infinity },
+        { money: 100, quantity: 10, expected: 10 },
+        { money: 90, quantity: 3, expected: 30 },
+    ])
+        ("getPrice($money, $quantity) returns $expected",
+            ({ money, quantity, expected }) => {
+                expect(getPrice(money, quantity)).toEqual(expected)
+            })
+    it.each([
+        { users: [], id: 'bla', expected: undefined },
+        { users: [{ _id: 'bla', username: 'foo' }], id: 'bla', expected: 'foo' },
+    ])
+        ("getTransactionUser($users, $id) returns $expected",
+            ({ users, id, expected }) => {
+                expect(getTransactionUser(users, id)).toEqual(expected)
+            })
+    it.each([
+        { obj: {}, attrPath: [], key: "bla", expected: undefined },
+        { obj: { foo: {} }, attrPath: ["foo", "bar"], key: "bla", expected: undefined },
+        { obj: { foo: { bar: {} } }, attrPath: ["foo", "bar"], key: "bla", expected: undefined },
+        { obj: { foo: { bar: { bla: 42 } } }, attrPath: ["foo", "bar"], key: "bla", expected: 42 },
+    ])
+        ("getObjKeyViaAttrPath($obj, $attrPath, $key) returns $expected",
+            ({ obj, attrPath, key, expected }) => {
+                expect(getObjKeyViaAttrPath(obj, attrPath, key)).toEqual(expected)
+            })
+    it.each([
+        { items: [], attrPath: [], key: undefined, expected: [] },
+        { items: [{ bla: 1 }, { bla: 2 }], attrPath: [], key: "baz", expected: [{ bla: 1 }, { bla: 2 }] },
+        { items: [{ bla: 1 }, { bla: 2, baz: "x" }], attrPath: [], key: "baz", expected: [{ bla: 2, baz: "x" }, { bla: 1 }] },
+        { items: [{ bla: 1, baz: "x" }, { bla: 2 }], attrPath: [], key: "baz", expected: [{ bla: 1, baz: "x" }, { bla: 2 }] },
+        { items: [{ bla: 1 }, { bla: 2 }], attrPath: [], key: "bla", expected: [{ bla: 2 }, { bla: 1 }] },
+        { items: [{ bla: 11 }, { bla: 2 }], attrPath: [], key: "bla", expected: [{ bla: 11 }, { bla: 2 }] },
+        { items: [{ bla: 1 }, { bla: 1 }], attrPath: [], key: "bla", expected: [{ bla: 1 }, { bla: 1 }] },
+    ])
+        ("sortByFoo($items, $attrPath, $key) returns $expected", ({ items, attrPath, key, expected }) => {
+            expect(sortByFoo(items, attrPath, key)).toEqual(expected)
+        })
 })

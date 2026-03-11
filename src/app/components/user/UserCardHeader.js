@@ -6,11 +6,11 @@ import Figure from "react-bootstrap/Figure"
 import Badge from "react-bootstrap/Badge"
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ProgressBar from "react-bootstrap/ProgressBar"
-import { GiPerson, GiSpellBook, GiStarMedal } from "react-icons/gi"
+import { GiExitDoor, GiPerson, GiSpellBook, GiStarMedal } from "react-icons/gi"
 import "./UserCardHeader.css"
 import UserInfos from "./UserInfos"
 import UserLeveling from "./UserLeveling"
-import { ListGroup, ListGroupItem, OverlayTrigger, Tooltip } from "react-bootstrap"
+import { Button, ListGroup, ListGroupItem, OverlayTrigger, Tooltip } from "react-bootstrap"
 
 /* 
 below is bullshit
@@ -52,7 +52,7 @@ export const getXPNeededStupid = (level) => {
 
 export const UserCardHeader = (props) => {
 
-    const { username, avatarUrl, leveling, infos, countryId, militaryRank, ...otherProps } = props
+    const { _id, username, avatarUrl, leveling, infos, countryId, militaryRank, ...otherProps } = props
     //console.log({ props })
 
     const {
@@ -111,6 +111,9 @@ export const UserCardHeader = (props) => {
             <Col>
                 <span className="user-username">
                     <ListGroup horizontal>
+                        <ListGroupItem>
+                            <Button href={`https://app.warera.io/user/${_id}`} target="_blank"><GiExitDoor size="2em" />Visit Profile</Button>
+                        </ListGroupItem>
                         <ListGroupItem>
                             <OverlayTrigger overlay={(_props) => renderTooltip(_props, tooltipUserLevelId, tooltipUserLevelTxt)}>
                                 <span><GiPerson size="2em" />{level || 0}</span>

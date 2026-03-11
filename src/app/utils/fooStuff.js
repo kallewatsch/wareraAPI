@@ -41,8 +41,8 @@ export const getCanAttackTimes = (skills, useEquipment = true) => {
     return Math.floor(health / attackCost)
 }
 
-export const getPrice = (transaction) => {
-    return transaction.money / transaction.quantity
+export const getPrice = (money, quantity) => {
+    return money / quantity
 }
 
 export const getTransactionUser = (users, id) => {

@@ -10,10 +10,12 @@ import UserCardHeader from "./UserCardHeader"
 import UserDates from "./UserDates"
 import { getExpectedDamage } from "../../utils/fooStuff"
 import UserEquipment from "./UserEquipment"
+import UserExtended from "./UserExtended"
 
 
 export const User = (props) => {
     const {
+        _id,
         username,
         avatarUrl,
         rankings,
@@ -25,6 +27,7 @@ export const User = (props) => {
         mu: muId,
         militaryRank,
         createdAt,
+        extended,
         ...otherProps
     } = props
 
@@ -34,7 +37,7 @@ export const User = (props) => {
     const [key, setKey] = useState('skills');
 
     const userCardHeaderProps = {
-        avatarUrl, username, leveling, infos, countryId, muId, militaryRank, createdAt, otherProps
+        _id, avatarUrl, username, leveling, infos, countryId, muId, militaryRank, createdAt, otherProps
     }
 
     const expectedDmg = getExpectedDamage({ useEquipment: true, ...skills })
@@ -45,7 +48,7 @@ export const User = (props) => {
         precision,
         criticalChance,
         criticalDamages
-    } = skills
+    } = skills || {}
 
     const equipmentSkills = {
         attack,
@@ -60,6 +63,7 @@ export const User = (props) => {
         <Card /* className={infos?.isBanned ? 'banned' : undefined} */>
             <Card.Header>
                 <UserCardHeader {...userCardHeaderProps} />
+                {extended && <UserExtended {...extended} />}
                 <UserEquipment {...equipmentSkills} />
                 {/* expectedDmg per attack: {expectedDmg} */}
             </Card.Header>
@@ -71,18 +75,18 @@ export const User = (props) => {
                     onSelect={(k) => setKey(k)}
                     className="mb-3"
                 >
-                    <Tab eventKey="other" title="Other">
+                    {/* <Tab eventKey="other" title="Other">
                         <SimpleStats {...otherProps} />
                     </Tab>
                     <Tab eventKey="infos" title="Infos">
                         <SimpleStats {...infos} />
-                    </Tab>
+                    </Tab> */}
                     <Tab eventKey="dates" title="Dates">
                         <UserDates dates={dates} />
                     </Tab>
-                    <Tab eventKey="leveling" title="Leveling">
+                    {/* <Tab eventKey="leveling" title="Leveling">
                         <SimpleStats {...leveling} />
-                    </Tab>
+                    </Tab> */}
                     <Tab eventKey="skills" title="Skills">
                         <UserSkills {...skills} />
                     </Tab>
