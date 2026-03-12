@@ -11,43 +11,7 @@ import "./UserCardHeader.css"
 import UserInfos from "./UserInfos"
 import UserLeveling from "./UserLeveling"
 import { Button, ListGroup, ListGroupItem, OverlayTrigger, Tooltip } from "react-bootstrap"
-
-/* 
-below is bullshit
-level 1 0-100 => 100increment 0
-level 2 100-200 => 100increment 0
-level 3 200-300 => 100increment 0
-
-level 4 300-500 => 200increment 
-level 5 500-700 => 200increment
-level 6 700-900 => 200increment
-
-level 7 900-1200 => 300increment
-level 8 1200-1600 => 300increment
-level 9 1600-2100 => 300increment
-
-level 10 2100-2700 => 600 increment + 0
-level 11 2700-3400 => 600 increment + 100
-level 12 3400-4200 => 600 increment + 200
-
-level 13 4200-5000 => 800 increment + 0
-level 14 5000-5900 => 800 increment + 100
-level 15 6200-5000 => 800 increment + 200
-*/
-export const getXPNeededStupid = (level) => {
-    let xpNeeded = 0
-
-    let incrementFactor = 1
-    const incrementStep = 3
-    for (let i = 1; i <= level; i++) {
-        xpNeeded += 100 * incrementFactor
-        if (i % incrementStep == 0) {
-            incrementFactor++
-        }
-    }
-
-    return xpNeeded
-}
+import FigureWithContainer from "../util/FigureWithContainer"
 
 
 export const UserCardHeader = (props) => {
@@ -92,57 +56,86 @@ export const UserCardHeader = (props) => {
     const renderTooltip = (_props, id, txt) => <Tooltip id={id} {..._props}>{txt}</Tooltip>
 
     return (
-        <Row>
-            <Col xs={4} lg={2}>
-                <Figure>
-                    <Figure.Image
-                        fluid
-                        roundedCircle
-                        width={128}
-                        height={128}
-                        alt="User Avatar"
-                        src={avatarUrl || `https://app.warera.io/images/avatars/userAvatarPlaceholder.png?v=2`}
-                    />
-                    <Figure.Caption>
-                        <cite>{description}</cite>
-                    </Figure.Caption>
-                </Figure>
-            </Col>
-            <Col>
-                <span className="user-username">
-                    <ListGroup horizontal>
-                        <ListGroupItem>
-                            <Button href={`https://app.warera.io/user/${_id}`} target="_blank"><GiExitDoor size="2em" />Visit Profile</Button>
-                        </ListGroupItem>
-                        <ListGroupItem>
-                            <OverlayTrigger overlay={(_props) => renderTooltip(_props, tooltipUserLevelId, tooltipUserLevelTxt)}>
-                                <span><GiPerson size="2em" />{level || 0}</span>
-                            </OverlayTrigger>
-                        </ListGroupItem>
-                        <ListGroupItem>
-                            <span className={isBanned && `banned`}>
-                                <img src={`https://app.warera.io/images/flags/${country?.code}.svg?v=16`} alt={country?.name} /> {username}
-                            </span>
-                        </ListGroupItem>
-                        <ListGroupItem>
-                            <OverlayTrigger overlay={(_props) => renderTooltip(_props, tooltipUserMilRankId, tooltipUserMilRankTxt)}>
-                                <span><GiStarMedal size="2em" />{militaryRank || 0}</span>
-                            </OverlayTrigger>
-                        </ListGroupItem>
-                        {infos && <ListGroupItem>
-                            <UserInfos {...infos} countryName={country?.name} isBanned={isBanned} />
-                        </ListGroupItem>}
-                    </ListGroup>
-
-                </span>
-                <hr />
+        <>
+            <FigureWithContainer
+                figureSrc={avatarUrl || `https://app.warera.io/images/avatars/userAvatarPlaceholder.png?v=2`}
+                figureText={description}
+            >
+                <ListGroup horizontal className="user-username">
+                    <ListGroupItem>
+                        <Button href={`https://app.warera.io/user/${_id}`} target="_blank"><GiExitDoor size="2em" />Visit Profile</Button>
+                    </ListGroupItem>
+                    <ListGroupItem>
+                        <OverlayTrigger overlay={(_props) => renderTooltip(_props, tooltipUserLevelId, tooltipUserLevelTxt)}>
+                            <span><GiPerson size="2em" />{level || 0}</span>
+                        </OverlayTrigger>
+                    </ListGroupItem>
+                    <ListGroupItem>
+                        <span className={isBanned && `banned`}>
+                            <img src={`https://app.warera.io/images/flags/${country?.code}.svg?v=16`} alt={country?.name} /> {username}
+                        </span>
+                    </ListGroupItem>
+                    <ListGroupItem>
+                        <OverlayTrigger overlay={(_props) => renderTooltip(_props, tooltipUserMilRankId, tooltipUserMilRankTxt)}>
+                            <span><GiStarMedal size="2em" />{militaryRank || 0}</span>
+                        </OverlayTrigger>
+                    </ListGroupItem>
+                    {infos && <ListGroupItem>
+                        <UserInfos {...infos} countryName={country?.name} isBanned={isBanned} />
+                    </ListGroupItem>}
+                </ListGroup>
+                {/* <hr />
                 <UserLeveling {...leveling} />
-                <GiSpellBook /> {`${availableSkillPoints}/${totalSkillPoints}`}
-                {/* <ProgressBar now={leveling.totalXp} /> */}
-            </Col>
-
-        </Row >
-
+                <GiSpellBook /> {`${availableSkillPoints}/${totalSkillPoints}`} */}
+            </FigureWithContainer>
+            {/* <Row>
+                <Col xs={4} lg={2}>
+                    <Figure>
+                        <Figure.Image
+                            fluid
+                            roundedCircle
+                            width={128}
+                            height={128}
+                            alt="User Avatar"
+                            src={avatarUrl || `https://app.warera.io/images/avatars/userAvatarPlaceholder.png?v=2`}
+                        />
+                        <Figure.Caption>
+                            <cite>{description}</cite>
+                        </Figure.Caption>
+                    </Figure>
+                </Col>
+                <Col>
+                    <span className="user-username">
+                        <ListGroup horizontal>
+                            <ListGroupItem>
+                                <Button href={`https://app.warera.io/user/${_id}`} target="_blank"><GiExitDoor size="2em" />Visit Profile</Button>
+                            </ListGroupItem>
+                            <ListGroupItem>
+                                <OverlayTrigger overlay={(_props) => renderTooltip(_props, tooltipUserLevelId, tooltipUserLevelTxt)}>
+                                    <span><GiPerson size="2em" />{level || 0}</span>
+                                </OverlayTrigger>
+                            </ListGroupItem>
+                            <ListGroupItem>
+                                <span className={isBanned && `banned`}>
+                                    <img src={`https://app.warera.io/images/flags/${country?.code}.svg?v=16`} alt={country?.name} /> {username}
+                                </span>
+                            </ListGroupItem>
+                            <ListGroupItem>
+                                <OverlayTrigger overlay={(_props) => renderTooltip(_props, tooltipUserMilRankId, tooltipUserMilRankTxt)}>
+                                    <span><GiStarMedal size="2em" />{militaryRank || 0}</span>
+                                </OverlayTrigger>
+                            </ListGroupItem>
+                            {infos && <ListGroupItem>
+                                <UserInfos {...infos} countryName={country?.name} isBanned={isBanned} />
+                            </ListGroupItem>}
+                        </ListGroup>
+                    </span>
+                    <hr />
+                    <UserLeveling {...leveling} />
+                    <GiSpellBook /> {`${availableSkillPoints}/${totalSkillPoints}`}
+                </Col>
+            </Row > */}
+        </>
     )
 
 }

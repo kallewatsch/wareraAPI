@@ -5,7 +5,7 @@ import { setIsLoading, setToast } from "../../appSlice"
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 import SimpleStats from "../SimpleStats"
-import SortableTable from "../util/SortableTable"
+import SortableTable from "../util/table/SortableTable"
 import { getDaysUntil, getPrice, getTransactionUser } from "../../utils/fooStuff"
 
 

@@ -18,7 +18,7 @@ export const UserInfos = (props) => {
         isPremium
     } = props
 
-    const availablTexts = [
+    const availableTexts = [
         `Premium User`,
         `Banned User`,
         `Gottem!`,
@@ -45,7 +45,7 @@ export const UserInfos = (props) => {
     ]
 
     const icons = availableIcons.filter(x => x[0]).map(x => x[1])
-    const txts = availablTexts.filter((x, i) => availableIcons[i]?.[0])
+    const txts = availableTexts.filter((x, i) => availableIcons[i]?.[0])
 
     return (
         <IconsWithOverlay providerValue={{ size: "2em" }} txts={txts}>
