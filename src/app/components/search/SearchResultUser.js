@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal"
 import Button from "react-bootstrap/Button"
 import { BsBoxArrowInRight } from "react-icons/bs";
 import User from "../user/User"
+import { extendUser } from "../../utils/userStuff";
 
 export const SearchResultUser = props => {
 
@@ -15,7 +16,7 @@ export const SearchResultUser = props => {
         setShow(false)
     }
 
-    const user = data && data.result.data
+    const user = data && extendUser(data.result.data)
 
     return (
         <>

@@ -14,8 +14,8 @@ export const extendUser = (user) => {
             extended: {
                 expDmg: getExpectedDamage({ ...user?.skills }),
                 expAttCost: getExpectedAttackCost({ ...user?.skills }, false),
-                canAttackTimes: getCanAttackTimes({ ...user?.skills }),
-                availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimes({ ...user?.skills }),
+                canAttackTimes: getCanAttackTimes({ ...user?.skills }, false),
+                availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimes({ ...user?.skills }, false),
                 hoursUntilLastOnline: getHoursUntilLastOnline(user?.dates?.lastConnectionAt)
             }
         }
