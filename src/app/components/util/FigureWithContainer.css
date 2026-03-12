@@ -1,0 +1,13 @@
+.figureWithContainer {
+    border: solid red 2px;
+}
+
+.figureWithContainer-figure {
+    display: inline-block;
+    width: 10%;
+}
+
+.figureWithContainer-container {
+    display: inline-block;
+    width: 90%;
+}

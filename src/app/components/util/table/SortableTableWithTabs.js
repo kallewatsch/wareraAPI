@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { IconContext } from "react-icons"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Table from "react-bootstrap/Table"
@@ -8,13 +9,13 @@ import Alert from "react-bootstrap/Alert"
 import Tabs from "react-bootstrap/Tabs"
 import Tab from "react-bootstrap/Tab"
 import TableRow from "./TableRow"
-import Country from "../country/Country"
-import Mu from "../mu/Mu"
-import Party from "../party/Party"
-import Region from "../region/Region"
-import User from "../user/User"
+import Country from "../../country/Country"
+import Mu from "../../mu/Mu"
+import Party from "../../party/Party"
+import Region from "../../region/Region"
+import User from "../../user/User"
 import TableFilters from "./TableFilters"
-import { sortByFoo, getObjKeyViaAttrPath } from "../../utils/fooStuff"
+import { sortByFoo, getObjKeyViaAttrPath } from "../../../utils/fooStuff"
 import "./SortableTable.css"
 
 
@@ -42,12 +43,22 @@ const getComponent = (s) => {
 
 export const SortableTableWithTabs = (props) => {
 
-    const { items, tabs, component } = props
+    const { items, tabs: _tabs, component } = props
     const [sortedItems, setSortedItems] = useState(items)
     const [showModal, setShowModal] = useState(false)
     const [tabKey, setTabKey] = useState()
     const [filters, setFilters] = useState([])
     const [modalCompProps, setModalCompProps] = useState()
+
+    const tabs = _tabs.map(tab => {
+        return {
+            name: tab.name,
+            ths: tab.ths.map(th => {
+                const id = [...th.attrPath, th.target].join(".")
+                return { ...th, id }
+            })
+        }
+    })
 
     const handleClose = event => {
         setShowModal(false)
@@ -82,15 +93,18 @@ export const SortableTableWithTabs = (props) => {
         return isNaN(parseFloat(value)) ? value : parseFloat(parseFloat(value).toFixed(decimals))
     }
 
+    const tableFilterThs = tabs.map(tab => tab.ths).flat()
 
+    // TODO: name probably not the right thing to determine uniqueness?
+    const map = new Map(tableFilterThs.map(pos => [pos.id, pos]));
+    const tableFilterThsUnique = [...map.values()];
 
     let filteredItems = sortedItems
 
     for (let filter of filters) {
         const { th, value, filter: condition } = filter
         let checkCondition
-        //const _th = ths.find(x => x.txt == th)
-        const _th = tabs.map(tab => tab.ths).flat().find(x => x.txt == th)
+        const _th = tabs.map(tab => tab.ths).flat().find(x => x.id == th)
         const { attrPath, target } = _th
 
         switch (condition) {
@@ -123,14 +137,8 @@ export const SortableTableWithTabs = (props) => {
     const Comp = getComponent(component)
     const decimals = 2
 
-    const tableFilterThs = tabs.map(tab => tab.ths).flat()
-
-    // TODO: name probably not the right thing to determine uniqueness?
-    const map = new Map(tableFilterThs.map(pos => [pos.txt, pos]));
-    const tableFilterThsUnique = [...map.values()];
-
     return (
-        <>
+        <IconContext.Provider value={{ size: "3em", className: "icon-gray" }}>
             <Row>
                 <Col>
                     <Alert>
@@ -186,7 +194,7 @@ export const SortableTableWithTabs = (props) => {
                     </Modal.Footer>
                 </Modal>
             </Row>
-        </>
+        </IconContext.Provider>
     )
 
 }

@@ -1,6 +1,5 @@
 import React from "react"
 
-
 export const TableHeader = (props) => {
 
     const { ths, sortItems } = props

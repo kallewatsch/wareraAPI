@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { getObjKeyViaAttrPath } from "../../utils/fooStuff"
+import { getObjKeyViaAttrPath } from "../../../utils/fooStuff"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 
@@ -27,7 +27,7 @@ export const TableFilterItem = (props) => {
             <Form.Select value={th} onChange={handleChangeTh}>
                 <option value=''>Select Table Header</option>
                 {ths && ths.map((th, i) => {
-                    return <option key={i} value={th?.txt}>{th?.txt}</option>
+                    return <option key={i} value={th.id}>{th.txt}</option>
                 })}
             </Form.Select>
 

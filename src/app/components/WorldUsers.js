@@ -1,6 +1,6 @@
 import React from "react"
 import { useSelector } from "react-redux"
-import SortableTable from "./util/SortableTable"
+import SortableTable from "./util/table/SortableTable"
 
 
 export const WorldUsers = (props) => {

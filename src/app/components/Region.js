@@ -62,6 +62,7 @@ import SimpleStats from "./SimpleStats"
 
 
 export const Region = (props) => {
+    console.lg({props})
     const { name, mainCity, neighbors, country, initialCountry, setActiveKeyAndScroll, ...todoProps } = props
     const { regions, countries } = useSelector(state => state.app)
     const neighborNames = regions && neighbors.map(n => regions[n].name)

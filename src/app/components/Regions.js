@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button"
 import Accordion from "react-bootstrap/Accordion"
 import Alert from "react-bootstrap/Alert"
 import Region from "./Region"
-import SortableTable from "./util/SortableTable"
+import SortableTable from "./util/table/SortableTable"
 
 export const Regions = () => {
 
