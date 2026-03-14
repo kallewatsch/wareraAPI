@@ -41,6 +41,15 @@ export const getCanAttackTimes = (skills, useEquipment = true) => {
     return Math.floor(health / attackCost)
 }
 
+export const getCanAttackTimesFood = (skills, useEquipment = true, food=0) => {
+    const hunger = skills?.hunger?.currentBarValue || 0
+    const healthRegen = Math.floor(hunger) * food
+    const health = skills?.health?.currentBarValue || 0
+    const totalHealth = healthRegen + health
+    const attackCost = getExpectedAttackCost(skills, useEquipment)
+    return Math.floor(totalHealth / attackCost)
+}
+
 export const getPrice = (money, quantity) => {
     return money / quantity
 }

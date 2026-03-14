@@ -34,7 +34,14 @@ const thsFoo = [
 ]
 
 const thsBla = [
-    { icon: { component: GiDeadlyStrike }, title: "Country Total Available Damage", txt: "Available Damage (No Food)", attrPath: ["extended"], target: "totalAvailableCountryDmg" },
+    {
+        icon: { component: GiDeadlyStrike }, title: "Country Total Available Damage", txt: "Available Damage (No Food)",
+        attrPath: ["extended", "foods", "noFood"], target: "totalAvailableCountryDmg"
+    },
+    {
+        icon: { component: GiDeadlyStrike, className: "icon-epic" }, title: "Country Total Available Damage", txt: "Available Damage (No Food)",
+        attrPath: ["extended", "foods", "fish"], target: "totalAvailableCountryDmg"
+    },
 ]
 
 const thsUpgrades = [

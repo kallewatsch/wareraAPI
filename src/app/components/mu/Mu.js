@@ -1,5 +1,5 @@
-import React from "react"
-import { useSelector } from "react-redux"
+import React, { useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import SimpleStats from "../SimpleStats"
 import Ranking from "../ranking/Ranking"
 import Card from "react-bootstrap/Card"
@@ -9,6 +9,10 @@ import ListGroup from "react-bootstrap/ListGroup"
 import MuMember from "./MuMember"
 import MuDonor from "./MuDonor"
 import "./Mu.css"
+//import MuTransaction from "./MuTransactions"
+import { GiFoundryBucket } from "react-icons/gi"
+import { ListGroupItem } from "react-bootstrap"
+import { addUsers } from "../../slices/usersSlice"
 
 
 export const foo = (datestring) => {
@@ -31,22 +35,33 @@ export const Mu = props => {
         ...otherProps
     } = props
 
-    const { managers, commanders } = roles || {}
+    const { managers, commanders } = roles || { managers: [], commanders: [] }
 
     const { regions, users } = useSelector(state => state.app)
 
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        //const donors = investedMoneyByUsers ? Object.keys(investedMoneyByUsers).map(key => investedMoneyByUsers[key]) : []
+        const muUserIds = [...new Set([owner, ...managers, ...commanders, ...members])]
+        const exisintUserIds = users.map(user => user._id)
+        const missingUserIds = muUserIds.filter(id => !exisintUserIds.includes(id))
+        if (missingUserIds.length) {
+            dispatch(addUsers({ userIds: missingUserIds, chunksize: 800 }))
+        }
+    }, [])
+
     const memberUsers = users.filter(user => members.includes(user._id))
         .sort((a, b) => commanders.includes(a._id) ? -1 : commanders.includes(b._id) ? - 1 : 0)
-    //const commanderUsers = users.filter(user => commanders.includes(user._id))
     const founderUsers = users.filter(user => managers.includes(user._id))
     const ownerUsers = users.filter(user => owner == user._id)
-    const donorUsers = users.filter(user => investedMoneyByUsers?.hasOwnProperty(user._id))
+    /* const donorUsers = users.filter(user => investedMoneyByUsers?.hasOwnProperty(user._id))
         .sort((a, b) => {
             const aVal = investedMoneyByUsers?.[a._id]
             const bVal = investedMoneyByUsers?.[b._id]
             return aVal > bVal ? -1 : aVal < bVal ? 1 : 0
         })
-
+ */
     return (
         <Card>
             <Card.Header>
@@ -75,11 +90,18 @@ export const Mu = props => {
                             {memberUsers.map((user, i) => <MuMember key={i} {...user} isCommander={commanders.includes(user._id)} />)}
                         </ListGroup>
                     </Col>
+                    {/* <Col>
+                        <ListGroup>
+                            {founderUsers.map((user, i) => <ListGroupItem key={i}><GiFoundryBucket size="2em" />{user.username}</ListGroupItem>)}
+                            {memberUsers.map((user, i) => <ListGroupItem key={i}><MuMember {...user} isCommander={commanders.includes(user._id)} /></ListGroupItem>)}
+                        </ListGroup>
+                    </Col> */}
                     <Col>
                         <h6>Donors</h6>
-                        <ListGroup>
+                        {/* <MuTransaction muId={_id} /> */}
+                        {/* <ListGroup>
                             {donorUsers.map((user, i) => <MuDonor key={i} username={user.username} amount={investedMoneyByUsers?.[user._id]} />)}
-                        </ListGroup>
+                        </ListGroup> */}
                     </Col>
                 </Row>
                 <SimpleStats {...otherProps} />

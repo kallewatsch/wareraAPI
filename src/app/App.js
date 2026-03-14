@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux"
 import Container from "react-bootstrap/Container"
 import Spinner from "react-bootstrap/Spinner"
 import { endpoints, useGetAllCountriesQuery, useGetGameConfigQuery, useGetRegionsQuery, useLazyGetAnythingBatchedPostQuery, useLazyGetAnythingBatchedQuery, useLazyGetMusPaginatedQuery } from "./api"
-import { setConfig, setCountries, setIsLoading, setMus, setRegions, setToast, setUpgrades, setUsers } from "./appSlice"
+import { setConfig, setCountries, setIsLoading, setMus, setRegions, setToast, setUpgrades, setUserIds, setUsers } from "./appSlice"
 import Search from "./components/search/Search"
 import Countries from "./components/Countries"
 import Companies from "./components/companies/Companies"
@@ -44,10 +44,10 @@ const router = createHashRouter(
             path: "/countries",
             element: <Countries />
         },
-        {
+        /* {
             path: "/companies",
             element: <Companies />
-        },
+        }, */
         {
             path: "/regions",
             element: <Regions />
@@ -154,7 +154,7 @@ export const App = () => {
     }, [countriesIsLoading])
 
     useEffect(() => {
-        if(!fooEffects.loadRegionUpgrades) return;
+        if (!fooEffects.loadRegionUpgrades) return;
         if (!regionsData) return;
         const asyncFunc = async () => {
             try {
@@ -201,7 +201,7 @@ export const App = () => {
     }, [regionsIsLoading])
 
     useEffect(() => {
-        if(!fooEffects.loadMusEffect) return;
+        if (!fooEffects.loadMusEffect) return;
         const asyncGetMus = async () => {
             try {
                 let { result: { data: { items, nextCursor }, error } } = await getMUsPaginated({ limit: 100 }).unwrap()
@@ -219,8 +219,9 @@ export const App = () => {
         asyncGetMus()
     }, [])
 
+    // TODO: proper variable names
     useEffect(() => {
-        if(!fooEffects.loadUsersEffect) return;
+        if (!fooEffects.loadUsersEffect) return;
         if (countriesIsLoading) return;
         const asyncGetWorldUsers = async () => {
             try {
@@ -246,40 +247,36 @@ export const App = () => {
                     allCountryUserIds = [...allCountryUserIds, ...fuck]
                 }
 
+                let blaUsersByCountry = allCountryUserIds.map(x => ({ countryId: x.countryId, users: x.items.map(item => item._id) }))
                 let worldUserIds = allCountryUserIds.map(x => x.items.map(item => item._id)).flat()
 
-                let regionIds = allCountryUserIds.filter(item => item.nextCursor) // [{id: 'abc', items: [], nextCursor}]
+                let countryUserIds = allCountryUserIds.filter(item => item.nextCursor) // [{id: 'abc', items: [], nextCursor}]
 
-                while (regionIds.length) {
-                    const obj2 = Object.fromEntries(regionIds.map((val, i) => [i, { countryId: val.countryId, limit: 100, cursor: val.nextCursor }]))
+                while (countryUserIds.length) {
+                    const obj2 = Object.fromEntries(countryUserIds.map((val, i) => [i, { countryId: val.countryId, limit: 100, cursor: val.nextCursor }]))
                     const payloadPost2 = {
-                        endpoints: regionIds.map(item => ep),
+                        endpoints: countryUserIds.map(item => ep),
                         obj: obj2
                     }
                     const moreCountryUsers = await getAnythingBatched(payloadPost2).unwrap()
                     const fuck2 = moreCountryUsers.map((x, i) => ({ countryId: obj2[i]?.countryId, ...x }))
+                    const moreBlaUsersByCountry = fuck2.map(x => ({ countryId: x.countryId, users: x.items.map(item => item._id) }))
                     let moreWorldUserIds = fuck2.map(x => x.items.map(item => item._id)).flat()
 
                     worldUserIds = [...worldUserIds, ...moreWorldUserIds]
+                    blaUsersByCountry = [...blaUsersByCountry, moreBlaUsersByCountry]
                     const shit = moreCountryUsers.map((x, i) => ({ countryId: obj2[i]?.countryId, ...x }))
 
-                    regionIds = shit.filter(item => item.nextCursor)
+                    countryUserIds = shit.filter(item => item.nextCursor)
                 }
+                const foobar = Object.groupBy(blaUsersByCountry.flat(), ({countryId}) => countryId)
+                const baz = Object.keys(foobar).flatMap(countryId => {
+                    return foobar[countryId].flatMap(x => x.users).map(userId => ({countryId, userId}))
+                })
 
-                let allUsers = []
-                const ep3 = 'user.getUserLite'
-                while (worldUserIds.length) {
-                    const chunk = worldUserIds.splice(0, CHUNKSIZES[method][1])
-                    const payloadPost = {
-                        endpoints: chunk.map(item => ep3),
-                        obj: Object.fromEntries(chunk.map((val, i) => [i, { userId: val }]))
-                    }
-                    const someUsers = await getAnythingBatched(payloadPost).unwrap()
-                    allUsers = [...allUsers, ...someUsers]
-                }
+                dispatch(setUserIds(baz))
                 const finishedAt = Date.now()
                 console.log(`finished after ${(finishedAt - startedAt) / 1000} seconds`)
-                dispatch(setUsers(allUsers))
 
             } catch (err) {
                 console.log(err)

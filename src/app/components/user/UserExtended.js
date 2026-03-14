@@ -19,10 +19,12 @@ export const UserExtended = (props) => {
         expAttCost,
         canAttackTimes,
         availableDmg,
+        foods,
         hoursUntilLastOnline
     } = props
 
     console.log("ayo", props)
+    const food = "noFood"
 
     return (
         <Col>
@@ -35,10 +37,10 @@ export const UserExtended = (props) => {
                         <GiMedicalDrip /> {expAttCost.toFixed(1) || 0}
                     </ListGroupItem>
                     <ListGroupItem>
-                        <GiMachineGunMagazine /> {canAttackTimes} (no food)
+                        <GiMachineGunMagazine /> {foods?.[food]?.canAttackTimes} (no food)
                     </ListGroupItem>
                     <ListGroupItem>
-                        <GiDeadlyStrike /> {availableDmg.toFixed(1) || 0}
+                        <GiDeadlyStrike /> {foods?.[food]?.availableDmg.toFixed(1) || 0}
                     </ListGroupItem>
                     <ListGroupItem>
                         <GiAlarmClock /> {hoursUntilLastOnline}

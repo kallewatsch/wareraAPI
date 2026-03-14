@@ -8,10 +8,11 @@ import transactionGetPaginatedTransactionsResponse from "./responses/transaction
 import battleGetBattlesResponse from "./responses/battle/getBattlesResponse.json"
 import battleGetByIdResponse from "./responses/battle/getByIdResponse.json"
 import battleGetLiveBattleDataResponse from "./responses/battle/getLiveBattleDataResponse.json"
+import allUserIdsByCountry from "./responses/user.getUsersByCountry.json"
 import allUsers from "./states/initialStateUsers.json"
 import allMus from "./states/initialStateMus.json"
 import allRegionUpgrades from "./states/initialStateUpgrades.json"
-import { getPaginatedResponseGET, getPaginatedResponseGET_OLD, getPaginatedResponsePOST, getUpgradeByTypeAndEntityPOST, getUserLiteBatched } from "./handlersHelpers"
+import { getPaginatedResponseGET, getPaginatedResponseGET_OLD, getPaginatedResponsePOST, getUpgradeByTypeAndEntityPOST, getUsersByCountryBatched, getUserLiteBatched } from "./handlersHelpers"
 
 
 export const BASE_URL = "https://api2.warera.io/trpc"
@@ -349,7 +350,7 @@ export const batchHandlers = {
                 switch (true) {
                     case args?.request?.url?.includes('getUsersByCountry'):
                         console.log("getUsersByCountry Mock msw")
-                        const fooResponse = await getPaginatedResponsePOST(args, allUsers, 'countryId', 'country', '_id')
+                        const fooResponse = await getUsersByCountryBatched(args, allUserIdsByCountry, 'countryId', 'countryId', 'items')
                         return HttpResponse.json(fooResponse)
                     case args?.request?.url?.includes('getUserLite'):
                         console.log("getUserLite Mock msw")

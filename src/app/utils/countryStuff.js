@@ -6,6 +6,14 @@ export const extendCountry = (country, extendedUsers, countryRegionUprades) => {
     const extendedUsersWithBan = extendedUsers.filter(user => user.infos?.isBanned)
     const extendedUsersWithoutBan = extendedUsers.filter(user => !user.infos?.isBanned)
 
+    const foods = Object.fromEntries(["noFood", "bread", "steak", "fish"].map(food => ([food, {
+        totalAvailableCountryDmg: getUsersAvailableDmg(extendedUsersWithoutBan, food),
+        totalAvailableCountryDmgBan: getUsersAvailableDmg(extendedUsersWithBan, food),
+        totalAvailableCountryDmgTotal: getUsersAvailableDmg(extendedUsers, food)
+    }])))
+
+    console.log({ foods })
+
     const totalAvailableCountryDmg = getUsersAvailableDmg(extendedUsersWithoutBan)
     const totalAvailableCountryDmgBan = getUsersAvailableDmg(extendedUsersWithBan)
     const totalAvailableCountryDmgTotal = getUsersAvailableDmg(extendedUsers)
@@ -29,6 +37,7 @@ export const extendCountry = (country, extendedUsers, countryRegionUprades) => {
                 totalAvailableCountryDmg,
                 totalAvailableCountryDmgBan,
                 totalAvailableCountryDmgTotal,
+                foods,
                 bunkers,
                 bases,
                 pacificationCenters,
@@ -47,6 +56,6 @@ export const extendCountries = (countries, users, regions, upgrades) => {
         const countryRegionIds = Object.keys(regions).filter(key => regions[key].country == country._id)
         const countryRegionUprades = upgrades.filter(upgrade => countryRegionIds.some(regionId => regionId == upgrade.region))
         return extendCountry(country, extendedUsers, countryRegionUprades)
-        
+
     })
 }

@@ -1,13 +1,26 @@
-import React from "react"
-import { useSelector } from "react-redux"
+import React, { useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { addUsers } from "../slices/usersSlice";
 import SortableTable from "./util/table/SortableTable"
 
 
 export const WorldUsers = (props) => {
 
-    const { users } = useSelector(state => state.app)
+    const { users, userIds } = useSelector(state => state.app)
 
-    const items = users
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (!userIds) return;
+        const worldUserIds = userIds.map(x => x.userId)
+        const exisintUserIds = users?.map(user => user._id) || []
+        const missingUserIds = worldUserIds.filter(id => !exisintUserIds.includes(id))
+        if (missingUserIds.length) {
+            dispatch(addUsers({ userIds: missingUserIds, chunksize: 800 }))
+        }
+    }, [userIds.length])
+
+    //const items = users
     const ths = [
         { txt: "Name", attrPath: [], target: "username" },
         { txt: "Country", attrPath: [], target: "country" },
@@ -16,7 +29,9 @@ export const WorldUsers = (props) => {
     ]
 
     return <>
-        <SortableTable items={items} ths={ths} component="user" key={items.length} />
+        {users
+            ? <SortableTable items={users} ths={ths} component="user" key={users.length} />
+            : 'LOADING USERS'}
     </>
 
 }

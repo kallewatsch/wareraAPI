@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react"
-import { useSelector } from "react-redux"
-import { useLazyGetAnythingBatchedPostQuery, useLazyGetGovernmentByIdQuery, useLazyGetPartyByIdQuery } from "../../api"
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useLazyGetGovernmentByIdQuery, useLazyGetPartyByIdQuery } from "../../api"
+import { addUsers } from "../../slices/usersSlice"
 import ProgressBar from "react-bootstrap/ProgressBar"
 import Accordion from "react-bootstrap/Accordion"
 import AccordionItem from "react-bootstrap/AccordionItem"
@@ -9,22 +10,32 @@ import AccordionBody from "react-bootstrap/AccordionBody"
 import Figure from "react-bootstrap/Figure"
 import ListGroup from "react-bootstrap/ListGroup"
 import ListGroupItem from "react-bootstrap/ListGroupItem"
-import "./CountryPolitics.css"
-import SimpleStats from "../SimpleStats"
+import Row from "react-bootstrap/Row"
 import CountryParty from "./CountryParty"
-import { Row } from "react-bootstrap"
+import "./CountryPolitics.css"
 
 
 export const CountryPolitics = (props) => {
 
     //console.log("politics", props)
-
     const { rulingParty: partyId, unrest, countryId } = props
 
     const { users } = useSelector(state => state.app)
 
     const [getGovernmentById, { data: governmentData, error: governmentError, isLoading: governmentIsLoading }] = useLazyGetGovernmentByIdQuery()
     const [getPartyById, { data: partyData, error: partyError, isLoading: partyIsLoading }] = useLazyGetPartyByIdQuery()
+
+    const dispatch = useDispatch()
+
+    const party = partyData?.result?.data
+    const government = governmentData?.result?.data
+    const unrestDate = unrest?.lastContributionAt && new Date(unrest.lastContributionAt)
+    const { __v, _id, country, congressMembers, ...miscMembers } = government || {}
+    const a = miscMembers && Object.keys(miscMembers).map(key => ({ role: key, id: miscMembers[key] })) || []
+    const b = congressMembers && congressMembers.map(x => ({ id: x, role: "congressMember" })) || []
+
+    const govUserIds = [...a, ...b].map(x => x.id)
+    const govMembers = [...a, ...b].map(x => ({ user: users.find(user => user._id == x.id), role: x.role }))
 
     useEffect(() => {
         if (!partyId) return;
@@ -36,15 +47,17 @@ export const CountryPolitics = (props) => {
         getGovernmentById({ countryId })
     }, [countryId])
 
+    useEffect(() => {
+        const exisintUserIds = users.map(user => user._id)
+        const missingUserIds = govUserIds.filter(id => !exisintUserIds.includes(id))
+        if (missingUserIds.length) {
+            dispatch(addUsers({ userIds: missingUserIds, chunksize: 800 }))
+        }
+    }, [govUserIds])
+
     const nowVal = (unrest.bar / unrest.barMax) * 100
 
-    const party = partyData?.result?.data
-    const government = governmentData?.result?.data
-    const unrestDate = unrest?.lastContributionAt && new Date(unrest.lastContributionAt)
-    const { __v, _id, country, congressMembers, ...miscMembers } = government || {}
-    const a = miscMembers && Object.keys(miscMembers).map(key => ({ role: key, id: miscMembers[key] })) || []
-    const b = congressMembers && congressMembers.map(x => ({ id: x, role: "congressMember" })) || []
-    const govMembers = [...a, ...b].map(x => ({ user: users.find(user => user._id == x.id), role: x.role }))
+
 
     return (
         <Row>
@@ -81,7 +94,6 @@ export const CountryPolitics = (props) => {
                         </AccordionBody>
                     </AccordionItem>
                 </Accordion>
-                {/* {party && <SimpleStats {...party} />} */}
             </div>
         </Row>
     )

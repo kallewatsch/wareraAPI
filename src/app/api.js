@@ -423,8 +423,9 @@ export const wareraApi = createApi({
 })
 
 
-// TODO: clean this up
+// TODO: clean this up. use endpoints. see rtk docs
 export const {
+    endpoints,
     useLazyGetCompanyByIdQuery,
     useLazyGetCompaniesQuery,
     useLazyGetCountryByIdQuery,

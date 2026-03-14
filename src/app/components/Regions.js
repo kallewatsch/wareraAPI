@@ -1,38 +1,11 @@
 import React, { useState } from "react"
 import { useSelector } from 'react-redux'
-import Button from "react-bootstrap/Button"
-import Accordion from "react-bootstrap/Accordion"
-import Alert from "react-bootstrap/Alert"
-import Region from "./Region"
 import SortableTable from "./util/table/SortableTable"
+
 
 export const Regions = () => {
 
     const { regions, countries, upgrades, isLoading } = useSelector(state => state.app)
-    const [activeKey, setActiveKey] = useState()
-
-
-
-    // TODO: proper scrollIntoView, current one scrolls in the middle of the open accordion
-    const handleSetActiveKeyAndScroll = key => {
-        if (key == activeKey || !key) {
-            setActiveKey("")
-        } else {
-            setActiveKey(key)
-            setTimeout(() => {
-                const el = document.getElementById(key)
-                el.scrollIntoView({
-                    behavior: "smooth",
-                    block: "end",
-                    inline: "nearest",
-                })
-            }, 500)
-        }
-    }
-
-    const sortedRegions = regions && Object.keys(regions)
-        .map(region => regions[region])
-        .sort((a, b) => a.code > b.code ? 1 : a.code < b.code ? -1 : 0)
 
     const ths = [
         { txt: "Name", attrPath: [], target: "name" },
@@ -69,13 +42,6 @@ export const Regions = () => {
     })
 
     return <>
-        {/* <Alert variant="warning">Regions don't contain information about strategic resources but the country does?! WIP</Alert>
-        <Accordion activeKey={activeKey} onSelect={handleSetActiveKeyAndScroll}>
-            {sortedRegions.map((region, i) => {
-                let regionProps = Object.assign({}, { ...region }, { setActiveKeyAndScroll: handleSetActiveKeyAndScroll })
-                return <Region key={i} {...regionProps} />
-            })}
-        </Accordion> */}
         {!isLoading && <SortableTable items={items} ths={ths} component="region" key={items.length} />}
     </>
 }

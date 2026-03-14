@@ -2,13 +2,14 @@ import React from "react"
 import { useSelector } from "react-redux"
 import ListGroupItem from "react-bootstrap/ListGroupItem"
 import Badge from "react-bootstrap/Badge"
-import { GiFirstAidKit, GiCuckooClock, GiCrown } from "react-icons/gi";
+import { GiFirstAidKit, GiCuckooClock, GiCrown, GiFrogPrince, GiFrog } from "react-icons/gi";
+import IconsWithOverlay from "../util/IconsWithOverlay";
 
 // this is basicly as User. Move it to user folder?
 
 export const foo = (datestring) => {
     const d = new Date(datestring)
-    return `${d.toLocaleDateString()} | ${d.toLocaleTimeString()}`
+    return `${d.toLocaleString()}`
 }
 
 export const canAskForHelp = (lastHelpAskedAt, cooldownHours) => {
@@ -24,17 +25,24 @@ export const MuMember = (props) => {
     const { lastHelpAskedAt, lastConnectionAt } = dates || {}
 
     const { config } = useSelector(state => state.app)
-    const { mu: muConf } = config || {}
+    const { mu: muConf } = config || { helpCooldownHours: 12 }
 
     const d = new Date(lastConnectionAt)
     const { canAsk, cooldownHours } = canAskForHelp(lastHelpAskedAt, muConf?.helpCooldownHours)
 
+    const txts = [
+        isCommander ? 'Commander' : 'Member',
+        'Last Online',
+        canAsk ? 'Can ask for Help' : 'Can not ask for Help'
+    ]
+
     return (
-        <ListGroupItem className="mu-member">
-            {isCommander && <Badge text="gold" bg="dark"><GiCrown /></Badge>}{username}
-            <Badge bg="secondary"><GiCuckooClock />{foo(d)}</Badge>
-            <Badge bg={canAsk ? 'success' : 'danger'}><GiFirstAidKit />{cooldownHours}h</Badge>
-        </ListGroupItem>
+        <IconsWithOverlay providerValue={{ size: "2em" }} txts={txts}>
+            <span>{isCommander ? <GiFrogPrince /> : <GiFrog />}{username}</span>
+            <span><GiCuckooClock />{foo(d)}</span>
+            <span><GiFirstAidKit className={canAsk ? 'icon-green' : 'icon-gray'} />{cooldownHours}h</span>
+        </IconsWithOverlay>
+
     )
 
 }

@@ -1,8 +1,8 @@
-import React, { useState } from "react"
-import { useSelector } from "react-redux"
+import React, { useState, useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import Row from "react-bootstrap/Row"
 import Tabs from "react-bootstrap/Tabs"
-import Tab  from "react-bootstrap/Tab"
+import Tab from "react-bootstrap/Tab"
 import Button from "react-bootstrap/Button"
 import CountrySelectModal from "../util/CountrySelectModal"
 import SortableTableWithTabs from "../util/table/SortableTableWithTabs"
@@ -10,14 +10,27 @@ import { extendUser } from "../../utils/userStuff"
 import Country from "../country/Country"
 import "./Intel.css"
 import { intelTabs, thsBaz, thsFoo } from "./intelTableheaders"
+import { addUsers } from "../../slices/usersSlice"
 
 
 export const Intel = (props) => {
 
-    const { countries, users } = useSelector(state => state.app)
+    const { countries, users, userIds } = useSelector(state => state.app)
     const [showModal, setShowModal] = useState(false)
     const [country, setCountry] = useState('')
     const [key, setKey] = useState('users')
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        const countryUserIds = userIds.filter(x => x.countryId == country?._id).map(x => x.userId)
+        const exisintUserIds = users.map(user => user._id)
+        const missingUserIds = countryUserIds.filter(id => !exisintUserIds.includes(id))
+        console.log({ missingUserIds })
+        if (missingUserIds.length) {
+            dispatch(addUsers({ userIds: missingUserIds, chunksize: 800 }))
+        }
+    }, [country])
 
     const handleSetCountry = async countryId => {
         setShowModal(false)
@@ -53,10 +66,13 @@ export const Intel = (props) => {
                         onSelect={(k) => setKey(k)}
                         className="mb-3">
                         <Tab eventKey="users" title="Users">
-                            <SortableTableWithTabs tabs={tabs} items={[...extendedUsers]} component="user" key={country?._id} />
+                            {extendedUsers.length
+                                ? <SortableTableWithTabs tabs={tabs} items={[...extendedUsers]} component="user" key={country?._id} />
+                                : 'LOADING USERS'
+                            }
                         </Tab>
                         <Tab eventKey="country" title="Country">
-                            <Country {...country} /> 
+                            <Country {...country} />
                         </Tab>
                     </Tabs>
                 </Row>

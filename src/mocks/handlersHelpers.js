@@ -93,6 +93,26 @@ export const getPaginatedResponsePOST = async (args, fooItems, key1, key2, retur
     return Promise.resolve(items)
 }
 
+export const getUsersByCountryBatched = async (args, fooItems) => {
+    const body = await args.request.clone().json()
+    
+    const items = Object.keys(body).map(key => {
+        const item = body[key]
+        const { countryId, limit: foolimit, cursor } = item
+        const limit = foolimit //|| 0//|| pageSize
+        const blaItems = fooItems.find(x => x.countryId == countryId).items
+        const startIndex = cursor ? parseInt(atob(cursor), 10) : 0;
+        const endIndex = startIndex + limit;
+        const pageItems = blaItems.slice(startIndex, endIndex);
+        const nextCursor = endIndex < blaItems.length
+            ? btoa(endIndex.toString())
+            : null;
+        return { "result": { "data": { "items": pageItems, "nextCursor": nextCursor } } }
+    })
+
+    return Promise.resolve(items)
+}
+
 export const getUserLiteBatched = async (args, fooItems) => {
     const body = await args.request.clone().json()
     const items = Object.keys(body).map(key => {
@@ -111,7 +131,7 @@ export const getUpgradeByTypeAndEntityPOST = async (args, allUpgrades, key1, key
         const blaItem = allUpgrades.find(x => x[key2] == id && x.upgradeType == upgradeType)//.map(x => returnKey ? ({ [returnKey]: x[returnKey] }) : x)
 
         const a = { "result": { "data": blaItem } }
-        const b = {"result": {"error": {}}}
+        const b = { "result": { "error": {} } }
         return blaItem ? a : b
         //return { "result": { "data": { "items": pageItems, "nextCursor": nextCursor } } }
     })

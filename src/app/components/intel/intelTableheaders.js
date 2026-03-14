@@ -56,8 +56,22 @@ const thsExtended = [
     { icon: { component: GiCharacter }, title: "User Name", txt: 'username', attrPath: [], target: "username" },
     { icon: { component: GiBulletImpacts }, title: "User Expected Damage", txt: 'the average damage per attack', attrPath: ["extended"], target: "expDmg" },
     { icon: { component: GiMedicalDrip }, title: "User Expected Health Cost", txt: 'the average health cost per attack', attrPath: ["extended"], target: "expAttCost" },
-    { icon: { component: GiMachineGunMagazine }, title: "User Can Attack Times", txt: 'the expected amount of attacks a user can perform', attrPath: ["extended"], target: "canAttackTimes" },
-    { icon: { component: GiDeadlyStrike }, title: "User Available Damage", txt: 'the amount of damage user can do (food not included)', attrPath: ["extended"], target: "availableDmg" }
+    {
+        icon: { component: GiMachineGunMagazine }, title: "User Can Attack Times", txt: 'the expected amount of attacks a user can perform',
+        attrPath: ["extended", "foods", "noFood"], target: "canAttackTimes"
+    },
+    {
+        icon: { component: GiDeadlyStrike }, title: "User Available Damage", txt: 'the amount of damage user can do (food not included)',
+        attrPath: ["extended", "foods", "noFood"], target: "availableDmg"
+    },
+    {
+        icon: { component: GiMachineGunMagazine, className: "icon-epic" }, title: "Food Fish", txt: 'the expected amount of attacks a user can perform',
+        attrPath: ["extended", "foods", "fish"], target: "canAttackTimes"
+    },
+    {
+        icon: { component: GiDeadlyStrike, className: "icon-epic" }, title: "Food Fish", txt: 'the amount of damage user can do (food fish)',
+        attrPath: ["extended", "foods", "fish"], target: "availableDmg"
+    }
 ]
 
 const thsMisc = [
