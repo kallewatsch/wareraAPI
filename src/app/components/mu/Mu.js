@@ -13,6 +13,7 @@ import "./Mu.css"
 import { GiFoundryBucket } from "react-icons/gi"
 import { ListGroupItem } from "react-bootstrap"
 import { addUsers } from "../../slices/usersSlice"
+import { CHUNKSIZES } from "../../config"
 
 
 export const foo = (datestring) => {
@@ -46,8 +47,9 @@ export const Mu = props => {
         const muUserIds = [...new Set([owner, ...managers, ...commanders, ...members])]
         const exisintUserIds = users.map(user => user._id)
         const missingUserIds = muUserIds.filter(id => !exisintUserIds.includes(id))
+        const chunksize = CHUNKSIZES.getUserLite
         if (missingUserIds.length) {
-            dispatch(addUsers({ userIds: missingUserIds, chunksize: 800 }))
+            dispatch(addUsers({ userIds: missingUserIds, chunksize }))
         }
     }, [])
 

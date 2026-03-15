@@ -42,11 +42,9 @@ export const usersSlice = createSlice({
                 return filtered.length ? [...state, ...filtered] : state
             })
             .addCase(addUsers.pending, (state, action) => {
-                console.log(action)
                 return state
             })
             .addCase(addUsers.rejected, (state, action) => {
-                console.log(action)
                 return state
             })
     }

@@ -36,21 +36,18 @@ export const loadingSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(addUsers.pending, (state, action) => {
-                console.log(action)
                 return {
                     isLoading: true,
                     requests: [...state.requests, { type: 'users', id: action.meta.requestId, items: action.meta.arg.userIds.length }]
                 }
             })
             .addCase(addUsers.rejected, (state, action) => {
-                console.log(action)
                 return {
                     isLoading: state.requests.filter(item => item.id != action.meta.requestId).length > 0,
                     requests: state.requests.filter(item => item.id != action.meta.requestId)
                 }
             })
             .addCase(addUsers.fulfilled, (state, action) => {
-                console.log(action)
                 return {
                     isLoading: state.requests.filter(item => item.id != action.meta.requestId).length > 0,
                     requests: state.requests.filter(item => item.id != action.meta.requestId)

@@ -4,6 +4,7 @@ import { addUsers } from "../slices/usersSlice";
 import SortableTableWithTabs from "./util/table/SortableTableWithTabs"
 import { intelTabs } from "./intel/intelTableheaders";
 import { extendUser } from "../utils/userStuff"
+import { CHUNKSIZES } from "../config";
 
 export const WorldUsers = (props) => {
 
@@ -16,9 +17,9 @@ export const WorldUsers = (props) => {
         const worldUserIds = userIds.map(x => x.userId)
         const exisintUserIds = users?.map(user => user._id) || []
         const missingUserIds = worldUserIds.filter(id => !exisintUserIds.includes(id))
-        console.log({missingUserIds})
+        const chunksize = CHUNKSIZES.getUserLite
         if (missingUserIds.length) {
-            dispatch(addUsers({ userIds: missingUserIds, chunksize: 800 }))
+            dispatch(addUsers({ userIds: missingUserIds, chunksize }))
         }
     }, [userIds.length])
 

@@ -11,6 +11,7 @@ import Country from "../country/Country"
 import "./Intel.css"
 import { intelTabs, thsBaz, thsFoo } from "./intelTableheaders"
 import { addUsers } from "../../slices/usersSlice"
+import { CHUNKSIZES } from "../../config"
 
 
 export const Intel = (props) => {
@@ -27,9 +28,9 @@ export const Intel = (props) => {
         const countryUserIds = userIds.filter(x => x.countryId == country?._id).map(x => x.userId)
         const exisintUserIds = users.map(user => user._id)
         const missingUserIds = countryUserIds.filter(id => !exisintUserIds.includes(id))
-        console.log({ missingUserIds })
+        const chunksize = CHUNKSIZES.getUserLite
         if (missingUserIds.length) {
-            dispatch(addUsers({ userIds: missingUserIds, chunksize: 800 }))
+            dispatch(addUsers({ userIds: missingUserIds, chunksize }))
         }
     }, [country])
 

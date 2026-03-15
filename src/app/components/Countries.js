@@ -6,6 +6,7 @@ import { GiAxeSword, GiPeaceDove, GiShield } from "react-icons/gi"
 import SortableTableWithTabs from "./util/table/SortableTableWithTabs"
 import { extendCountries } from "../utils/countryStuff"
 import { countriesTabs } from "./countriesTableheaders"
+import { CHUNKSIZES } from "../config"
 
 
 export const Countries = () => {
@@ -23,8 +24,9 @@ export const Countries = () => {
         const worldUserIds = userIds.map(x => x.userId)
         const exisintUserIds = users?.map(user => user._id) || []
         const missingUserIds = worldUserIds.filter(id => !exisintUserIds.includes(id))
+        const chunksize = CHUNKSIZES.getUserLite
         if (missingUserIds.length) {
-            dispatch(addUsers({ userIds: missingUserIds, chunksize: 800 }))
+            dispatch(addUsers({ userIds: missingUserIds, chunksize }))
         }
     }, [userIds.length])
 

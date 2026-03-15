@@ -12,8 +12,6 @@ export const extendCountry = (country, extendedUsers, countryRegionUprades) => {
         totalAvailableCountryDmgTotal: getUsersAvailableDmg(extendedUsers, food)
     }])))
 
-    console.log({ foods })
-
     const totalAvailableCountryDmg = getUsersAvailableDmg(extendedUsersWithoutBan)
     const totalAvailableCountryDmgBan = getUsersAvailableDmg(extendedUsersWithBan)
     const totalAvailableCountryDmgTotal = getUsersAvailableDmg(extendedUsers)

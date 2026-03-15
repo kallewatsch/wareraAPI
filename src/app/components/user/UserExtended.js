@@ -23,7 +23,6 @@ export const UserExtended = (props) => {
         hoursUntilLastOnline
     } = props
 
-    console.log("ayo", props)
     const food = "noFood"
 
     return (
