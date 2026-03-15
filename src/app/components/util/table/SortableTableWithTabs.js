@@ -134,6 +134,8 @@ export const SortableTableWithTabs = (props) => {
         })
     }
 
+    const filteredItems1000 = [...filteredItems].slice(0,1000)
+
     const Comp = getComponent(component)
     const decimals = 2
 
@@ -164,7 +166,7 @@ export const SortableTableWithTabs = (props) => {
             <Row className="sortableTable-container">
                 <TableFilters items={[...items]} ths={tableFilterThsUnique} applyFilters={handleApplyFilters} decimals={decimals} />
 
-                <h6>{filteredItems.length} items</h6>
+                <h6>Showing {filteredItems1000.length} out of {filteredItems.length} filtered items. unfiltered:  {sortedItems.length}</h6>
                 <Tabs
                     activeKey={tabKey}
                     defaultActiveKey={0}
@@ -177,7 +179,7 @@ export const SortableTableWithTabs = (props) => {
                             <Table className="sortableTable">
                                 <TableHeader ths={tab.ths} sortItems={handleSortTable} />
                                 <tbody>
-                                    {filteredItems.map((item, i) => <TableRow key={i} item={item} tds={tab.ths} openModal={handleShowItemModal} decimals={decimals} />)}
+                                    {filteredItems1000.map((item, i) => <TableRow key={i} item={item} tds={tab.ths} openModal={handleShowItemModal} decimals={decimals} />)}
                                 </tbody>
                             </Table>
                         </Tab>
