@@ -5,7 +5,7 @@ import SortableTable from "./util/table/SortableTable"
 
 export const Regions = () => {
 
-    const { regions, countries, upgrades, isLoading } = useSelector(state => state.app)
+    const { regions, countries, upgrades, loading } = useSelector(state => state.app)
 
     const ths = [
         { txt: "Name", attrPath: [], target: "name" },
@@ -42,7 +42,7 @@ export const Regions = () => {
     })
 
     return <>
-        {!isLoading && <SortableTable items={items} ths={ths} component="region" key={items.length} />}
+        {!loading.isLoading && <SortableTable items={items} ths={ths} component="region" key={items.length} />}
     </>
 }
 

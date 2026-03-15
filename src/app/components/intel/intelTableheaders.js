@@ -2,6 +2,7 @@ import {
     GiAppleCore,
     GiBattery50,
     GiBatteryPack,
+    GiBoxUnpacking,
     GiBroadsword,
     GiBulletImpacts,
     GiCardboardBoxClosed,
@@ -80,6 +81,7 @@ const thsMisc = [
     /* { icon: { component: GiCharacter }, title: "User Level", txt: 'level', attrPath: ["leveling"], target: "level" },
     { icon: { component: GiStarMedal }, title: "User Total XP", txt: 'xp', attrPath: ["leveling"], target: "totalXp" }, */
     { icon: { component: GiStarMedal }, title: "User Military Rank", txt: 'militaryRank', attrPath: [], target: "militaryRank" },
+    { icon: { component: GiBoxUnpacking }, title: "User Cases", txt: "Cases Opened", attrPath: ["rankings", "userCasesOpened"], target: "value" }
 ]
 
 export const intelTabs = [

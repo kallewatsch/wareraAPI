@@ -15,7 +15,7 @@ import { addUsers } from "../../slices/usersSlice"
 
 export const Intel = (props) => {
 
-    const { countries, users, userIds } = useSelector(state => state.app)
+    const { countries, users, userIds, loading } = useSelector(state => state.app)
     const [showModal, setShowModal] = useState(false)
     const [country, setCountry] = useState('')
     const [key, setKey] = useState('users')
@@ -23,6 +23,7 @@ export const Intel = (props) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        if (loading.isLoading) return;
         const countryUserIds = userIds.filter(x => x.countryId == country?._id).map(x => x.userId)
         const exisintUserIds = users.map(user => user._id)
         const missingUserIds = countryUserIds.filter(id => !exisintUserIds.includes(id))

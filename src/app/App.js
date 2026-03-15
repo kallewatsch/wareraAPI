@@ -1,13 +1,12 @@
 import React, { useEffect } from "react"
 import { createHashRouter, RouterProvider } from "react-router-dom"
-import { useSelector, useDispatch } from "react-redux"
+import { useDispatch } from "react-redux"
 import Container from "react-bootstrap/Container"
-import Spinner from "react-bootstrap/Spinner"
-import { endpoints, useGetAllCountriesQuery, useGetGameConfigQuery, useGetRegionsQuery, useLazyGetAnythingBatchedPostQuery, useLazyGetAnythingBatchedQuery, useLazyGetMusPaginatedQuery } from "./api"
-import { setConfig, setCountries, setIsLoading, setMus, setRegions, setToast, setUpgrades, setUserIds, setUsers } from "./appSlice"
+import { useGetAllCountriesQuery, useGetGameConfigQuery, useGetRegionsQuery, useLazyGetAnythingBatchedPostQuery, useLazyGetMusPaginatedQuery } from "./api"
+import { setConfig, setCountries, setIsLoading, setIsLoadingFulFilled, setIsLoadingPending, setIsLoadingRejected, setMus, setRegions, setToast, setUpgrades, setUserIds } from "./appSlice"
 import Search from "./components/search/Search"
 import Countries from "./components/Countries"
-import Companies from "./components/companies/Companies"
+//import Companies from "./components/companies/Companies"
 import Regions from "./components/Regions"
 import FreeMUs from "./components/FreeMUs"
 import Navigation from "./components/Navigation"
@@ -20,6 +19,7 @@ import WareraEvents from "./components/events/WareraEvents"
 import CasesSimulator from "./components/cases/CasesSimulator"
 import ToastContainer from "./components/ToastContainer"
 import WorldUsers from "./components/WorldUsers"
+import LoadingSpinner from "./components/LoadingSpinner"
 import "./App.css"
 
 const router = createHashRouter(
@@ -90,7 +90,7 @@ export const App = () => {
     const { data: configData, error: configError, isLoading: configIsLoading } = useGetGameConfigQuery()
     const [getMUsPaginated] = useLazyGetMusPaginatedQuery()
     const [getAnythingBatched] = useLazyGetAnythingBatchedPostQuery() //useLazyGetAnythingBatchedQuery() // if it won't properly change back to GET
-    const { isLoading } = useSelector(state => state.app)
+    //const { isLoading } = useSelector(state => state.app)
     const dispatch = useDispatch()
 
     // TODO: calculate and check if url is below max size. check POST body aswell
@@ -106,49 +106,66 @@ export const App = () => {
     }
 
     useEffect(() => {
-        if (configIsLoading) return;
+        if (configIsLoading) {
+            dispatch(setIsLoadingPending({ request: { requestId: "initialLoadConfig", type: "config", items: 1 } }))
+            return
+        }
         try {
             if (configError) {
+                dispatch(setIsLoadingRejected({ request: { requestId: "initialLoadConfig", type: "config" } }))
                 dispatch(setToast({ show: true, content: JSON.stringify(configError, null, 2), bg: "danger" }))
 
             } else {
+                dispatch(setIsLoadingFulFilled({ request: { requestId: "initialLoadConfig", type: "config" } }))
                 const { result: { data: config } } = configData
                 dispatch(setConfig(config))
             }
-
         } catch (err) {
+            dispatch(setIsLoadingRejected({ request: { requestId: "initialLoadConfig", type: "config" } }))
             dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
         }
     }, [configIsLoading])
 
     useEffect(() => {
-        if (regionsIsLoading) return;
+        if (regionsIsLoading) {
+            dispatch(setIsLoadingPending({ request: { requestId: "initialLoadRegions", type: "regions", items: 1 } }))
+            return
+        }
         try {
             if (regionsError) {
+                dispatch(setIsLoadingRejected({ request: { requestId: "initialLoadRegions", type: "regions" } }))
                 dispatch(setToast({ show: true, content: JSON.stringify(configError, null, 2), bg: "danger" }))
 
             } else {
                 const { result: { data: regions } } = regionsData
+                dispatch(setIsLoadingFulFilled({ request: { requestId: "initialLoadRegions", type: "regions" } }))
                 dispatch(setRegions(regions))
             }
 
         } catch (err) {
+            dispatch(setIsLoadingRejected({ request: { requestId: "initialLoadRegions", type: "regions" } }))
             dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
         }
     }, [regionsIsLoading])
 
     useEffect(() => {
-        if (countriesIsLoading) return;
+        if (countriesIsLoading) {
+            dispatch(setIsLoadingPending({ request: { requestId: "initialLoadCountries", type: "countries", items: 1 } }))
+            return
+        }
         try {
             if (countriesError) {
+                dispatch(setIsLoadingRejected({ request: { requestId: "initialLoadCountries", type: "countries" } }))
                 dispatch(setToast({ show: true, content: JSON.stringify(countriesError, null, 2), bg: "danger" }))
 
             } else {
                 const { result: { data: countries } } = countriesData
+                dispatch(setIsLoadingFulFilled({ request: { requestId: "initialLoadCountries", type: "countries" } }))
                 dispatch(setCountries(countries))
             }
 
         } catch (err) {
+            dispatch(setIsLoadingRejected({ request: { requestId: "initialLoadCountries", type: "countries" } }))
             dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
         }
     }, [countriesIsLoading])
@@ -157,6 +174,7 @@ export const App = () => {
         if (!fooEffects.loadRegionUpgrades) return;
         if (!regionsData) return;
         const asyncFunc = async () => {
+            dispatch(setIsLoadingPending({ request: { requestId: "initialLoadRegionUpgrades", type: "regionUpgrades", items: 1 } }))
             try {
                 //const { result: { data: regions } } = regionsData
                 const regions = regionsData?.result?.data
@@ -190,10 +208,12 @@ export const App = () => {
                     allUpgrades = [...allUpgrades, ...bunkersResult, ...basesResult, ...pacificationCentersResult]
                 }
                 const allUpgradesFlat = allUpgrades.flat()
+                dispatch(setIsLoadingFulFilled({ request: { requestId: "initialLoadRegionUpgrades", type: "regionUpgrades", items: 1 } }))
                 dispatch(setUpgrades(allUpgradesFlat))
 
             } catch (err) {
                 console.log(err)
+                dispatch(setIsLoadingRejected({ request: { requestId: "initialLoadRegionUpgrades", type: "regionUpgrades", items: 1 } }))
                 dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
             }
         }
@@ -203,6 +223,7 @@ export const App = () => {
     useEffect(() => {
         if (!fooEffects.loadMusEffect) return;
         const asyncGetMus = async () => {
+            dispatch(setIsLoadingPending({ request: { requestId: "initialLoadMus", type: "mus", items: 1 } }))
             try {
                 let { result: { data: { items, nextCursor }, error } } = await getMUsPaginated({ limit: 100 }).unwrap()
                 let allItems = [...items]
@@ -211,8 +232,10 @@ export const App = () => {
                     allItems = [...allItems, ...moreData.items]
                     nextCursor = moreData.nextCursor
                 }
+                dispatch(setIsLoadingFulFilled({ request: { requestId: "initialLoadMus", type: "mus", items: 1 } }))
                 dispatch(setMus(allItems))
             } catch (err) {
+                dispatch(setIsLoadingRejected({ request: { requestId: "initialLoadMus", type: "mus", items: 1 } }))
                 dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
             }
         }
@@ -222,7 +245,10 @@ export const App = () => {
     // TODO: proper variable names
     useEffect(() => {
         if (!fooEffects.loadUsersEffect) return;
-        if (countriesIsLoading) return;
+        if (countriesIsLoading) {
+            dispatch(setIsLoadingPending({ request: { requestId: "initialLoadUserIds", type: "userIds", items: 1 } }))
+            return
+        }
         const asyncGetWorldUsers = async () => {
             try {
                 const method = 'POST'
@@ -269,28 +295,30 @@ export const App = () => {
 
                     countryUserIds = shit.filter(item => item.nextCursor)
                 }
-                const foobar = Object.groupBy(blaUsersByCountry.flat(), ({countryId}) => countryId)
+                const foobar = Object.groupBy(blaUsersByCountry.flat(), ({ countryId }) => countryId)
                 const baz = Object.keys(foobar).flatMap(countryId => {
-                    return foobar[countryId].flatMap(x => x.users).map(userId => ({countryId, userId}))
+                    return foobar[countryId].flatMap(x => x.users).map(userId => ({ countryId, userId }))
                 })
-
+                dispatch(setIsLoadingFulFilled({ request: { requestId: "initialLoadUserIds", type: "userIds", items: 1 } }))
                 dispatch(setUserIds(baz))
                 const finishedAt = Date.now()
                 console.log(`finished after ${(finishedAt - startedAt) / 1000} seconds`)
 
             } catch (err) {
                 console.log(err)
+                dispatch(setIsLoadingRejected({ request: { requestId: "initialLoadUserIds", type: "userIds", items: 1 } }))
                 dispatch(setToast({ show: true, content: 'Whoops', bg: "danger" }))
             }
-            finally {
+            /* finally {
                 dispatch(setIsLoading(false))
-            }
+            } */
         }
         asyncGetWorldUsers()
     }, [countriesIsLoading])
 
     return (
-        <>{isLoading && <div id="loadingSpinner" >Loading... <i>Initial Load might take some time</i><Spinner /></div>}
+        <>{/* {isLoading && <div id="loadingSpinner" >Loading... <i>Initial Load might take some time</i><Spinner /></div>} */}
+            <LoadingSpinner />
             <Container>
                 <Navigation />
                 <ToastContainer />

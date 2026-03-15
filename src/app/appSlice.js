@@ -1,7 +1,7 @@
 import { combineReducers } from '@reduxjs/toolkit'
 import { countriesSlice } from "./slices/countriesSlice"
 import { musSlice } from "./slices/musSlice"
-import { isLoadingSlice } from "./slices/isLoadingSlice"
+import { loadingSlice } from "./slices/loadingSlice"
 import { userIdsSlice } from "./slices/userIdsSlice"
 import { usersSlice } from "./slices/usersSlice"
 import { regionsSlice } from "./slices/regionsSlice"
@@ -15,7 +15,7 @@ import { upgradesSlice } from "./slices/upgradesSlice"
 
 export const { setCountries } = countriesSlice.actions
 export const { addMus, setMus } = musSlice.actions
-export const { setIsLoading } = isLoadingSlice.actions
+export const { setIsLoading, setIsLoadingPending, setIsLoadingRejected, setIsLoadingFulFilled } = loadingSlice.actions
 export const { setUserIds } = userIdsSlice.actions
 export const { setUsers, addUsers } = usersSlice.actions
 export const { setRegions } = regionsSlice.actions
@@ -29,7 +29,7 @@ export const { setUpgrades } = upgradesSlice.actions
 export const appReducer = combineReducers({
     countries: countriesSlice.reducer,
     mus: musSlice.reducer,
-    isLoading: isLoadingSlice.reducer,
+    loading: loadingSlice.reducer,
     userIds: userIdsSlice.reducer,
     users: usersSlice.reducer,
     regions: regionsSlice.reducer,

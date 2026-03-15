@@ -39,7 +39,7 @@ const thsBla = [
         attrPath: ["extended", "foods", "noFood"], target: "totalAvailableCountryDmg"
     },
     {
-        icon: { component: GiDeadlyStrike, className: "icon-epic" }, title: "Country Total Available Damage", txt: "Available Damage (No Food)",
+        icon: { component: GiDeadlyStrike, className: "icon-epic" }, title: "Country Total Available Damage Fish", txt: "Available Damage (Fish)",
         attrPath: ["extended", "foods", "fish"], target: "totalAvailableCountryDmg"
     },
 ]

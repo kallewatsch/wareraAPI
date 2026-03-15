@@ -1,12 +1,13 @@
 import React, { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { addUsers } from "../slices/usersSlice";
-import SortableTable from "./util/table/SortableTable"
-
+import SortableTableWithTabs from "./util/table/SortableTableWithTabs"
+import { intelTabs } from "./intel/intelTableheaders";
+import { extendUser } from "../utils/userStuff"
 
 export const WorldUsers = (props) => {
 
-    const { users, userIds } = useSelector(state => state.app)
+    const { users, userIds, loading } = useSelector(state => state.app)
 
     const dispatch = useDispatch()
 
@@ -15,6 +16,7 @@ export const WorldUsers = (props) => {
         const worldUserIds = userIds.map(x => x.userId)
         const exisintUserIds = users?.map(user => user._id) || []
         const missingUserIds = worldUserIds.filter(id => !exisintUserIds.includes(id))
+        console.log({missingUserIds})
         if (missingUserIds.length) {
             dispatch(addUsers({ userIds: missingUserIds, chunksize: 800 }))
         }
@@ -26,12 +28,15 @@ export const WorldUsers = (props) => {
         { txt: "Country", attrPath: [], target: "country" },
         { txt: "Level", attrPath: ["leveling"], target: "level" },
         { txt: "Military Rank", attrPath: [], target: "militaryRank" },
+        { txt: "Cases Opened", attrPath: ["rankings", "userCasesOpened"], target: "value" }
     ]
 
+    const extendedWorldUsers = users.map(user => extendUser(user))
+
     return <>
-        {users
-            ? <SortableTable items={users} ths={ths} component="user" key={users.length} />
-            : 'LOADING USERS'}
+        {!loading.isLoading && users?.length
+            ? <SortableTableWithTabs items={extendedWorldUsers} tabs={intelTabs} component="user" key={users.length} />
+            : `LOADING ${userIds?.length - users?.length} USERS`}
     </>
 
 }

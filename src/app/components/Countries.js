@@ -10,7 +10,7 @@ import { countriesTabs } from "./countriesTableheaders"
 
 export const Countries = () => {
 
-    const { countries, users, userIds, regions, upgrades, isLoading } = useSelector(state => state.app)
+    const { countries, users, userIds, regions, upgrades, loading } = useSelector(state => state.app)
 
     const dispatch = useDispatch()
 
@@ -31,7 +31,7 @@ export const Countries = () => {
 
     // TODO: handle sortabletable rendering differently. (outdated data atm, because effect. useState vs rtk (rtk prob better, but harder))
     return <>
-        {!isLoading && countries?.length && <Row>
+        {!loading.isLoading && countries?.length && <Row>
             <h5>Countries</h5>
             <SortableTableWithTabs items={[...extendedCountries]} tabs={tabs} component="country" /* key={`${thMode}`} */ />
         </Row>}

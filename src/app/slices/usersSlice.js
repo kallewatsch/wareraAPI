@@ -10,8 +10,9 @@ export const addUsers = createAsyncThunk('users/addUsers', async ({ userIds, chu
     try {
         let allUsers = []
         const ep = 'user.getUserLite'
-        while (userIds.length) {
-            const chunk = userIds.splice(0, chunksize)
+        const _userIds = [...userIds]
+        while (_userIds.length) {
+            const chunk = _userIds.splice(0, chunksize)
             const payloadPost = {
                 endpoints: chunk.map(item => ep),
                 obj: Object.fromEntries(chunk.map((val, i) => [i, { userId: val }]))
@@ -38,12 +39,14 @@ export const usersSlice = createSlice({
         builder
             .addCase(addUsers.fulfilled, (state, action) => {
                 const filtered = action.payload.filter(user => state.every(existingUser => existingUser._id != user._id))
-                return [...state, ...filtered]
+                return filtered.length ? [...state, ...filtered] : state
             })
             .addCase(addUsers.pending, (state, action) => {
+                console.log(action)
                 return state
             })
             .addCase(addUsers.rejected, (state, action) => {
+                console.log(action)
                 return state
             })
     }

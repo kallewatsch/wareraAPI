@@ -47,13 +47,13 @@ export const CountryPolitics = (props) => {
         getGovernmentById({ countryId })
     }, [countryId])
 
-    useEffect(() => {
+    /* useEffect(() => {
         const exisintUserIds = users.map(user => user._id)
         const missingUserIds = govUserIds.filter(id => !exisintUserIds.includes(id))
         if (missingUserIds.length) {
             dispatch(addUsers({ userIds: missingUserIds, chunksize: 800 }))
         }
-    }, [govUserIds])
+    }, [govUserIds]) */
 
     const nowVal = (unrest.bar / unrest.barMax) * 100
 
