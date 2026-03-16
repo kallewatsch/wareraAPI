@@ -12,9 +12,9 @@ export const getExpectedDamage = (skills, useEquipment = true) => {
         _criticalChance: criticalChance?.[key] || 0
     }
 
-    const avgDmgMiss = (_attack / 2) * (_precision / 100)
-    const avgHit = _attack * (_precision / 100)
-    const avgCrit = (_attack + (_criticalDamages / 100) * _attack) * (_criticalChance / 100)
+    const avgDmgMiss = (_attack / 2) * (1 - (_precision / 100))
+    const avgHit = _attack * (_precision / 100) * (1 - (_criticalChance / 100))
+    const avgCrit = (_attack + (_criticalDamages / 100) * _attack) * (_criticalChance / 100) *  (_precision / 100)
 
     return avgDmgMiss + avgHit + avgCrit
 
@@ -30,7 +30,10 @@ export const getExpectedAttackCost = (skills, useEquipment = true) => {
         _armor: armor?.[key] || 0
     }
 
-    return (attackBaseCost - ((_armor / 100) * attackBaseCost)) * (1 - (_dodge / 100))
+    const avgDodge = (attackBaseCost - ((_armor / 100) * attackBaseCost)) * (1 - (_dodge / 100))
+    const avgNoDodge = attackBaseCost - ((_armor / 100) * attackBaseCost)
+
+    return avgDodge //+ avgNoDodge//(attackBaseCost - ((_armor / 100) * attackBaseCost)) * (1 - (_dodge / 100))
 }
 
 export const getCanAttackTimes = (skills, useEquipment = true) => {

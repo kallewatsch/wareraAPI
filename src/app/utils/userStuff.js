@@ -14,25 +14,25 @@ export const extendUser = (user) => {
         {
             extended: {
                 expDmg: getExpectedDamage({ ...user?.skills }),
-                expAttCost: getExpectedAttackCost({ ...user?.skills }, false),
-                //canAttackTimes: getCanAttackTimes({ ...user?.skills }, false),
-                //availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimes({ ...user?.skills }, false),
+                expAttCost: getExpectedAttackCost({ ...user?.skills }, true),
+                //canAttackTimes: getCanAttackTimes({ ...user?.skills }, true),
+                //availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimes({ ...user?.skills }, true),
                 foods: {
                     noFood: {
-                        canAttackTimes: getCanAttackTimesFood({ ...user?.skills }, false, 0),
-                        availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimesFood({ ...user?.skills }, false, 0),
+                        canAttackTimes: getCanAttackTimesFood({ ...user?.skills }, true, 0),
+                        availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimesFood({ ...user?.skills }, true, 0),
                     },
                     bread: {
-                        canAttackTimes: getCanAttackTimesFood({ ...user?.skills }, false, 10),
-                        availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimesFood({ ...user?.skills }, false, 10),
+                        canAttackTimes: getCanAttackTimesFood({ ...user?.skills }, true, 10),
+                        availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimesFood({ ...user?.skills }, true, 10),
                     },
                     steak: {
-                        canAttackTimes: getCanAttackTimesFood({ ...user?.skills }, false, 20),
-                        availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimesFood({ ...user?.skills }, false, 20),
+                        canAttackTimes: getCanAttackTimesFood({ ...user?.skills }, true, 20),
+                        availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimesFood({ ...user?.skills }, true, 20),
                     },
                     fish: {
-                        canAttackTimes: getCanAttackTimesFood({ ...user?.skills }, false, 30),
-                        availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimesFood({ ...user?.skills }, false, 30),
+                        canAttackTimes: getCanAttackTimesFood({ ...user?.skills }, true, 30),
+                        availableDmg: getExpectedDamage({ ...user?.skills }) * getCanAttackTimesFood({ ...user?.skills }, true, 30),
                     }
                 },
                 hoursUntilLastOnline: getHoursUntilLastOnline(user?.dates?.lastConnectionAt)
