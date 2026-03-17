@@ -21,6 +21,7 @@ import ToastContainer from "./components/ToastContainer"
 import WorldUsers from "./components/WorldUsers"
 import LoadingSpinner from "./components/LoadingSpinner"
 import "./App.css"
+import SkillBuild from "./components/skillbuild/SkillBuild"
 
 const router = createHashRouter(
     [
@@ -79,6 +80,10 @@ const router = createHashRouter(
         {
             path: "/worldusers",
             element: <WorldUsers />
+        },
+        {
+            path: "/skillbuild",
+            element: <SkillBuild />
         },
     ]
 )

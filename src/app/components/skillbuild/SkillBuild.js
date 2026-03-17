@@ -33,8 +33,10 @@ export const SkillBuild = (props) => {
 
     const expDmg = getExpectedDamage(_skills)
     const expCost = getExpectedAttackCost(_skills)
-    const canAttackTimes = getCanAttackTimesFood({health: {currentBarValue: health}, hunger: {currentBarValue: hunger}}) //
-    const availableDmg = canAttackTimes * expDmg
+    const canAttackTimesNoFood = getCanAttackTimesFood({ health: { currentBarValue: health }, hunger: { currentBarValue: hunger } }, true, 0)
+    const canAttackTimesBreadFood = getCanAttackTimesFood({ health: { currentBarValue: health }, hunger: { currentBarValue: hunger } }, true, 10)
+    const canAttackTimesSteakFood = getCanAttackTimesFood({ health: { currentBarValue: health }, hunger: { currentBarValue: hunger } }, true, 20)
+    const canAttackTimesFishFood = getCanAttackTimesFood({ health: { currentBarValue: health }, hunger: { currentBarValue: hunger } }, true, 30)
 
     const totalSkillPoints = Object.keys(skills).map((key, i) => {
         const skill = skills[key]
@@ -43,7 +45,21 @@ export const SkillBuild = (props) => {
     }).reduce((acc, curr) => acc + curr, 0)
 
     const simpleStatsProps = {
-        expDmg, expCost, canAttackTimes, availableDmg
+        data: {
+            expDmg, expCost,
+            canAttackTimes: {
+                noFood: canAttackTimesNoFood,
+                bread: canAttackTimesBreadFood,
+                steak: canAttackTimesSteakFood,
+                fish: canAttackTimesFishFood
+            },
+            availableDmg: {
+                noFood: canAttackTimesNoFood * expDmg,
+                bread: canAttackTimesBreadFood * expDmg,
+                steak: canAttackTimesSteakFood * expDmg,
+                fish: canAttackTimesFishFood * expDmg
+            }
+        }
     }
 
     return (
@@ -63,6 +79,7 @@ export const SkillBuild = (props) => {
             </Row>
             <Row>
                 <Col>
+                    <h6>component coming soon</h6>
                     <SimpleStats {...simpleStatsProps} />
                 </Col>
             </Row>

@@ -6,6 +6,7 @@ import { BsFillMoonStarsFill, BsFillSunFill } from "react-icons/bs";
 
 const routes = [
     "worldusers",
+    "skillbuild",
     "freemus",
     "search",
     "countries",
