@@ -11,6 +11,7 @@ import { searchSlice } from "./slices/searchSlice"
 import { configSlice } from "./slices/configSlice"
 import { toastSlice } from "./slices/toastSlice"
 import { upgradesSlice } from "./slices/upgradesSlice"
+import { skillbuildSlice } from "./slices/skillbuildSlice"
 
 
 export const { setCountries } = countriesSlice.actions
@@ -25,6 +26,16 @@ export const { setSearchResult } = searchSlice.actions
 export const { setConfig } = configSlice.actions
 export const { setToast } = toastSlice.actions
 export const { setUpgrades } = upgradesSlice.actions
+export const {
+    resetAll,
+    resetSkills,
+    resetEquipment,
+    resetFood,
+    setSkill,
+    setEquipment,
+    setEquipmentItem,
+    setEquipmentItemValue,
+} = skillbuildSlice.actions
 
 export const appReducer = combineReducers({
     countries: countriesSlice.reducer,
@@ -38,7 +49,8 @@ export const appReducer = combineReducers({
     search: searchSlice.reducer,
     config: configSlice.reducer,
     toast: toastSlice.reducer,
-    upgrades: upgradesSlice.reducer
+    upgrades: upgradesSlice.reducer,
+    skillbuild: skillbuildSlice.reducer,
 })
 
 export default appReducer
