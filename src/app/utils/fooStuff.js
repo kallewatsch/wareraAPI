@@ -14,7 +14,7 @@ export const getExpectedDamage = (skills, useEquipment = true) => {
 
     const avgDmgMiss = (_attack / 2) * (1 - (_precision / 100))
     const avgHit = _attack * (_precision / 100) * (1 - (_criticalChance / 100))
-    const avgCrit = (_attack + (_criticalDamages / 100) * _attack) * (_criticalChance / 100) *  (_precision / 100)
+    const avgCrit = (_attack + (_criticalDamages / 100) * _attack) * (_criticalChance / 100) * (_precision / 100)
 
     return avgDmgMiss + avgHit + avgCrit
 
@@ -30,8 +30,10 @@ export const getExpectedAttackCost = (skills, useEquipment = true) => {
         _armor: armor?.[key] || 0
     }
 
-    const avgDodge = (attackBaseCost - ((_armor / 100) * attackBaseCost)) * (1 - (_dodge / 100))
-    const avgNoDodge = attackBaseCost - ((_armor / 100) * attackBaseCost)
+    const hpCost = Math.max(1, (attackBaseCost - ((_armor / 100) * attackBaseCost)))
+
+    const avgDodge = hpCost * (1 - (_dodge / 100))
+    //const avgNoDodge = attackBaseCost - ((_armor / 100) * attackBaseCost)
 
     return avgDodge //+ avgNoDodge//(attackBaseCost - ((_armor / 100) * attackBaseCost)) * (1 - (_dodge / 100))
 }
@@ -44,7 +46,7 @@ export const getCanAttackTimes = (skills, useEquipment = true) => {
     return Math.floor(health / attackCost)
 }
 
-export const getCanAttackTimesFood = (skills, useEquipment = true, food=0) => {
+export const getCanAttackTimesFood = (skills, useEquipment = true, food = 0) => {
     const hunger = skills?.hunger?.currentBarValue || 0
     const healthRegen = Math.floor(hunger) * food
     const health = skills?.health?.currentBarValue || 0
@@ -59,7 +61,7 @@ export const getPrice = (money, quantity) => {
 
 export const getTransactionUser = (users, id) => {
     const user = users.find(user => user._id == id)
-    return  user?.username
+    return user?.username
 }
 
 export const getObjKeyViaAttrPath = (obj, attrPath, key) => {
