@@ -35,6 +35,7 @@ export const {
     setEquipment,
     setEquipmentItem,
     setEquipmentItemValue,
+    setFood,
 } = skillbuildSlice.actions
 
 export const appReducer = combineReducers({

@@ -28,10 +28,12 @@ export const initialStateFood = {
     fish: 0
 }
 
+export const initialStateFoodSimple = "noFood"
+
 export const initialState = {
     skills: initialStateSkills,
     equipment: initialStateEquipment,
-    food: initialStateFood
+    food: initialStateFoodSimple
 }
 
 export const skillbuildSlice = createSlice({
@@ -80,6 +82,12 @@ export const skillbuildSlice = createSlice({
             return {
                 ...state,
                 equipment: _equipment
+            }
+        },
+        setFood(state,  action) {
+            return {
+                ...state,
+                food: action.payload
             }
         }
     }

@@ -1,9 +1,9 @@
 .skill .progress {
-    width: 400px;
+    width: 200px;
     height: 25px;
 }
 
-.skill .progress-bar {
+.skill .progress-bar, .skill-list span {
     font-weight: bold;
     font-size: 1.5em;
     font-style: italic;
@@ -13,14 +13,7 @@
     place-self: start center;
 }
 
-/* .skillbuild-equipment img {
+.skillbuild-equipment img {
     width: 64px;
     height: 64px;
-} */
-
-
-
-/* .skill {
-    place-self: stretch stretch;
-    width: 100%;
-} */
+}

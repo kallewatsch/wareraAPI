@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { FormControl, FormSelect, Row, Col, InputGroup, Image } from "react-bootstrap"
+import { FormControl, FormSelect, Row, Col, InputGroup, Image, ListGroup, ListGroupItem } from "react-bootstrap"
 import IconWithPopoverOverlay from "../util/IconWithPopoverOverlay"
 import { GiBroadsword, GiCrosshair, GiHeadshot, GiHelmetHeadShot, GiLoveMystery, GiRunningNinja, GiShield } from "react-icons/gi"
 import { setEquipmentItem, setEquipmentItemValue } from "../../appSlice"
@@ -52,32 +52,34 @@ export const EquipmentItem = (props) => {
 
     return (
         <>
-            <Row>
-                <Col>
-                    <FormSelect value={rareness} onChange={handleChangeRareness}>
-                        {options}
-                    </FormSelect>
-                </Col>
-            </Row>
-            <Row>
+            <Row className="miau123">
                 <Col lg={2}>
                     <Image src={imgSrc} className={rareness} thumbnail />
                 </Col>
                 <Col lg={10}>
-                    {inputs && Object.keys(inputs).map((key, i) => {
-                        const val = inputs[key]
-                        const Icon = icons[key]
-                        return (
-                            <InputGroup key={i}>
-                                <InputGroup.Text>
-                                    <IconWithPopoverOverlay title={key}>
-                                        <Icon size="2em" />
-                                    </IconWithPopoverOverlay>
-                                </InputGroup.Text>
-                                <FormControl key={i} value={val} onChange={(event) => handleChangeItemValue(event, key)} type="number" />
-                            </InputGroup>
-                        )
-                    })}
+                     <FormSelect size="sm" value={rareness} onChange={handleChangeRareness} className="item-select">
+                        {options}
+                    </FormSelect>
+                    <ListGroup horizontal>
+
+                        {inputs && Object.keys(inputs).map((key, i) => {
+                            const val = inputs[key]
+                            const Icon = icons[key]
+                            return (
+                                <ListGroupItem key={i}>
+                                    <InputGroup >
+                                        <InputGroup.Text>
+                                            <IconWithPopoverOverlay title={key}>
+                                                <Icon size="1.5em" />
+                                            </IconWithPopoverOverlay>
+                                        </InputGroup.Text>
+                                        <FormControl size="sm" key={i} value={val} onChange={(event) => handleChangeItemValue(event, key)} type="number" />
+                                    </InputGroup>
+                                </ListGroupItem>
+
+                            )
+                        })}
+                    </ListGroup>
                 </Col>
             </Row>
 
