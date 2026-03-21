@@ -7,9 +7,8 @@ import Button from "react-bootstrap/Button"
 import InputGroup from "react-bootstrap/InputGroup"
 import ListGroup from "react-bootstrap/ListGroup"
 import { BsSearch } from "react-icons/bs";
-import { useLazySearchAnythingQuery } from "../../api"
-import { setIsLoading, setSearchResult, setToast } from "../../appSlice"
 import SearchResult from "./SearchResult"
+import { getSearchResult } from "../../slices/searchSlice"
 
 export const resultArrayNames = [
     "countryIds",
@@ -21,7 +20,6 @@ export const resultArrayNames = [
 
 export const Search = () => {
 
-    const [searchAnything] = useLazySearchAnythingQuery()
     const { search } = useSelector(state => state.app)
     const [searchText, setSearchText] = useState('')
 
@@ -31,16 +29,8 @@ export const Search = () => {
         setSearchText(event.target.value)
     }
 
-    const handleSearch = async event => {
-        dispatch(setIsLoading(true))
-        try {
-            const { result: { data, error } } = await searchAnything({ searchText }).unwrap()
-            data && dispatch(setSearchResult(data))
-        } catch (err) {
-            dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
-        } finally {
-            dispatch(setIsLoading(false))
-        }
+    const handleSearch = event => {
+        dispatch(getSearchResult({searchText}))
     }
 
     const handleEnterPress = async event => {

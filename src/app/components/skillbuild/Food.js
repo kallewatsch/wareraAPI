@@ -3,7 +3,7 @@ import { ListGroup, ListGroupItem, Button } from "react-bootstrap"
 import IconWithPopoverOverlay from "../util/IconWithPopoverOverlay"
 import { GiAppleCore, GiBread, GiFishCooked, GiSteak } from "react-icons/gi"
 import { useDispatch, useSelector } from "react-redux"
-import { setFood } from "../../appSlice"
+import { setFood } from "../../slices/skillbuildSlice"
 
 
 export const Food = (props) => {
@@ -18,7 +18,7 @@ export const Food = (props) => {
 
     return (
         <>
-            <h6>Set Food</h6>
+            {/* <h6>Set Food</h6> */}
             <ListGroup horizontal>
                 <ListGroupItem>
                     <IconWithPopoverOverlay title="No Food">

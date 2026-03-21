@@ -1,7 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { addUsers } from './usersSlice'
+import { createSlice, isFulfilled, isPending, isRejected } from "@reduxjs/toolkit"
 
-export const initialState = { isLoading: false, requests: [] }
+export const initialState = { isLoading: false, pending: [] }
 
 export const loadingSlice = createSlice({
     name: 'loading',
@@ -12,48 +11,34 @@ export const loadingSlice = createSlice({
                 ...state,
                 isLoading: action.payload
             }
-        },
-        setIsLoadingPending(state, action) {
-            const { type, requestId: id, items } = action.payload.request
-            return {
-                isLoading: true,
-                requests: [...state.requests, { type, id, items }]
-            }
-        },
-        setIsLoadingRejected(state, action) {
-            return {
-                isLoading: state.requests.filter(item => item.id != action.payload.request.requestId).length > 0,
-                requests: state.requests.filter(item => item.id != action.payload.request.requestId)
-            }
-        },
-        setIsLoadingFulFilled(state, action) {
-            return {
-                isLoading: state.requests.filter(item => item.id != action.payload.request.requestId).length > 0,
-                requests: state.requests.filter(item => item.id != action.payload.request.requestId)
-            }
         }
+
     },
     extraReducers: (builder) => {
         builder
-            .addCase(addUsers.pending, (state, action) => {
+            .addMatcher(isPending, (state, action) => {
                 return {
-                    isLoading: true,
-                    requests: [...state.requests, { type: 'users', id: action.meta.requestId, items: action.meta.arg.userIds.length }]
+                    ...state,
+                    pending: [...state.pending, action.meta.requestId]
                 }
             })
-            .addCase(addUsers.rejected, (state, action) => {
+            .addMatcher(isRejected, (state, action) => {
+                const otherRequests = [...state.pending].filter(x => x != action.meta.requestId)
                 return {
-                    isLoading: state.requests.filter(item => item.id != action.meta.requestId).length > 0,
-                    requests: state.requests.filter(item => item.id != action.meta.requestId)
+                    isLoading: otherRequests.length > 0,
+                    pending: otherRequests
                 }
             })
-            .addCase(addUsers.fulfilled, (state, action) => {
+            .addMatcher(isFulfilled, (state, action) => {
+                const otherRequests = [...state.pending].filter(x => x != action.meta.requestId)
                 return {
-                    isLoading: state.requests.filter(item => item.id != action.meta.requestId).length > 0,
-                    requests: state.requests.filter(item => item.id != action.meta.requestId)
+                    isLoading: otherRequests.length > 0,
+                    pending: otherRequests
                 }
             })
     }
 })
+
+export const { setIsLoading } = loadingSlice.actions
 
 export default loadingSlice.reducer

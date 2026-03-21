@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useDispatch } from "react-redux"
 import { useLazyGetTransactionsQuery, useLazyGetAnythingBatchedPostQuery } from "../../api"
-import { setIsLoading, setToast } from "../../appSlice"
+import {  setToast } from "../../slices/toastSlice"
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 import SimpleStats from "../SimpleStats"
@@ -29,7 +29,7 @@ export const UserInventory = (props) => {
     const handleGetInventory = async event => {
         const headers = { "X-API-KEY": apiKey }
         const transactionType = "trading"
-        dispatch(setIsLoading(true))
+        //dispatch(getTran)
         try {
 
             let { result: { data: { items, nextCursor } } } = await getTransactions({ data: { userId, transactionType, limit: 100 }, headers }).unwrap()
@@ -40,7 +40,7 @@ export const UserInventory = (props) => {
                 nextCursor = moreData.nextCursor
             }
             setTransactions(allTransactions)
-            let allItems = []
+            /* let allItems = []
             allTransactions.forEach(t => {
                 const { sellerId, buyerId } = t
                 if (!allItems.includes(sellerId)) {
@@ -49,9 +49,9 @@ export const UserInventory = (props) => {
                 if (!allItems.includes(buyerId)) {
                     allItems.push(buyerId)
                 }
-            })
+            }) */
 
-            let allUsers = []
+            /* let allUsers = []
             const ep = 'user.getUserLite'
             while (allItems.length) {
                 const chunk = allItems.splice(0, 800)
@@ -62,11 +62,9 @@ export const UserInventory = (props) => {
                 const someUsers = await getAnythingBatched(payloadPost).unwrap()
                 allUsers = [...allUsers, ...someUsers]
             }
-            setUsers(allUsers)
+            setUsers(allUsers) */
         } catch (err) {
             dispatch(setToast({show: true, content: JSON.stringify(err, null, 2), bg: "danger"}))
-        } finally {
-            dispatch(setIsLoading(false))
         }
     }
 

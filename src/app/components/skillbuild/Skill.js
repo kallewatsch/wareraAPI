@@ -1,6 +1,6 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { setSkill } from "../../appSlice"
+import { setSkill } from "../../slices/skillbuildSlice"
 import ListGroup from "react-bootstrap/ListGroup"
 import ListGroupItem from "react-bootstrap/ListGroupItem"
 import ProgressBar from "react-bootstrap/ProgressBar"

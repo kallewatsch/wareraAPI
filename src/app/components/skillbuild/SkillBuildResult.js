@@ -27,13 +27,13 @@ export const SkillBuildResult = (props) => {
 
     const { weapon, gloves, helmet, chest, pants, boots } = equipment
 
-    const health = 50 + (skills.health * 10)
+    const health = 100 + (skills.health * 10)
     const hunger = 4 + skills.hunger
-    const attack = 100 + (skills.attack * 20) + weapon.values.attack
+    const attack = 100 + (skills.attack * 25) + weapon.values.attack
     const precision = 50 + (skills.precision * 5) + gloves.values.precision
     const criticalChance = 10 + (skills.criticalChance * 5) + weapon.values.criticalChance
     const criticalDamages = 100 + (skills.criticalDamages * 20) + helmet.values.criticalDamages
-    const armor = (skills.armor * 4) + chest.values.armor + pants.values.armor
+    const armor = (skills.armor * 6) + chest.values.armor + pants.values.armor
     const dodge = (skills.dodge * 4) + boots.values.dodge
 
     const _skills = {
@@ -53,11 +53,11 @@ export const SkillBuildResult = (props) => {
 
     switch (food) {
         case "fish":
-            foodValue = 30
+            foodValue = 20
             foodIconClassName = "icon-epic"
             break
         case "steak":
-            foodValue = 20
+            foodValue = 15
             foodIconClassName = "icon-blue"
             break
         case "bread":
@@ -71,7 +71,7 @@ export const SkillBuildResult = (props) => {
     }
 
     const canAttackTimesFood = getCanAttackTimesFood(
-        { health: { currentBarValue: health }, hunger: { currentBarValue: hunger }, armor: { total: armor }, dodge: { total: dodge } },
+        { health: { currentBarValue: health, value: health }, hunger: { currentBarValue: hunger }, armor: { total: armor }, dodge: { total: dodge } },
         true,
         foodValue
     )
@@ -94,7 +94,13 @@ export const SkillBuildResult = (props) => {
         ["Critical Chance", criticalChance, <GiHeadshot />],
         ["Critical Damage", criticalDamages, <GiHelmetHeadShot />],
         ["Armor", armor, <GiShield />],
-        ["Dodge", dodge, <GiRunningNinja />]
+        ["Dodge", dodge, <GiRunningNinja />],
+        ["Required Level", requiredLevel, <GiCharacter />],
+        ["Total Skill Points", totalSkillPoints, <GiSpellBook />],
+        ["Expected Damage Per Attack", expDmg.toFixed(2), <GiBulletImpacts />],
+        ["Expected Health Cost Per Attack", expCost.toFixed(2), <GiMedicalDrip />],
+        ["Can Attack Times No Food", canAttackTimesFood, <GiMachineGunMagazine className={foodIconClassName} />],
+        ["Expected Damage No Food", dmgFood.toFixed(2), <GiDeadlyStrike className={foodIconClassName} />]
     ].map((x, i) => {
         const [title, value, icon] = x
         return (
@@ -124,10 +130,11 @@ export const SkillBuildResult = (props) => {
         <IconContext.Provider value={{ size: "2em" }}>
             <ListGroup horizontal className="skill-list">
                 {listGroupItems1}
+
             </ListGroup>
-            <ListGroup horizontal className="skill-list">
+            {/* <ListGroup horizontal className="skill-list">
                 {listGroupItems2}
-            </ListGroup>
+            </ListGroup> */}
         </IconContext.Provider>
     )
 

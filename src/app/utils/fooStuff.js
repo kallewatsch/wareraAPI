@@ -1,23 +1,39 @@
+export const getOverflowDamage = (value) => {
+    return value > 100 ?  Math.floor(value - 100) * 4 : 0
+}
+
+
 export const getExpectedDamage = (skills, useEquipment = true) => {
+        /* 
+    - Skills exceeding their cap now grant bonuses to other skills.
+- Precision above 100%: overflow converted to +4 attack per overflow point.
+- Critical chance above 100%: overflow converted to +4 critical damage per overflow point.
+    */
     const {
         attack, precision, criticalChance, criticalDamages
     } = skills || {}
 
     const key = useEquipment ? "total" : "value"
 
-    const { _attack, _precision, _criticalDamages, _criticalChance } = {
-        _attack: attack?.[key] || 0,
+    //console.log(key, attack[key], precision[key], criticalChance[key], criticalDamages[key])
+
+    const { _attackOld, _precision, _criticalDamagesOld, _criticalChance } = {
+        _attackOld: attack?.[key] || 0,
         _precision: precision?.[key] || 0,
-        _criticalDamages: criticalDamages?.[key] || 0,
+        _criticalDamagesOld: criticalDamages?.[key] || 0,
         _criticalChance: criticalChance?.[key] || 0
     }
+
+
+    const _attack = _attackOld + getOverflowDamage(_precision)
+    const _criticalDamages = _criticalDamagesOld + getOverflowDamage(_criticalChance)
 
     const avgDmgMiss = (_attack / 2) * (1 - (_precision / 100))
     const avgHit = _attack * (_precision / 100) * (1 - (_criticalChance / 100))
     const avgCrit = (_attack + (_criticalDamages / 100) * _attack) * (_criticalChance / 100) * (_precision / 100)
-
     return avgDmgMiss + avgHit + avgCrit
-
+    /* const avgDmgHit = (_attack * (_precision / 100)) + ((_criticalChance / 100) * (_criticalDamages/100) * _attack)
+    return avgDmgMiss + avgDmgHit */
 }
 
 export const getExpectedAttackCost = (skills, useEquipment = true) => {
@@ -30,9 +46,13 @@ export const getExpectedAttackCost = (skills, useEquipment = true) => {
         _armor: armor?.[key] || 0
     }
 
-    const hpCost = Math.max(1, (attackBaseCost - ((_armor / 100) * attackBaseCost)))
+    //const hpCost = Math.max(1, (attackBaseCost - ((_armor / 100) * attackBaseCost)))
+    // no more armor cap patch version 0.24.0-beta
+    const armorNew = _armor / (_armor + 40)
+    const dodgeNew = _dodge / (_dodge + 40)
+    const hpCost = attackBaseCost - ((armorNew /* / 100 */) * attackBaseCost)
 
-    const avgDodge = hpCost * (1 - (_dodge / 100))
+    const avgDodge = hpCost * (1 - (dodgeNew /* / 100 */))
     //const avgNoDodge = attackBaseCost - ((_armor / 100) * attackBaseCost)
 
     return avgDodge //+ avgNoDodge//(attackBaseCost - ((_armor / 100) * attackBaseCost)) * (1 - (_dodge / 100))
@@ -47,8 +67,15 @@ export const getCanAttackTimes = (skills, useEquipment = true) => {
 }
 
 export const getCanAttackTimesFood = (skills, useEquipment = true, food = 0) => {
+    /* 
+     - - Bread: 10 → 10% of max HP.
+  - Steak: 20 → 15% of max HP.
+  - Cooked Fish: 30 → 20% of max HP.
+    */
     const hunger = skills?.hunger?.currentBarValue || 0
-    const healthRegen = Math.floor(hunger) * food
+    const maxHealth = skills?.health?.value || 0
+    const healthRegen = (maxHealth * (food/100)) * Math.floor(hunger)
+    //const healthRegen = Math.floor(hunger) * food
     const health = skills?.health?.currentBarValue || 0
     const totalHealth = healthRegen + health
     const attackCost = getExpectedAttackCost(skills, useEquipment)

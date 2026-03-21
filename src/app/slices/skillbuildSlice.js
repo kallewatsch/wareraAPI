@@ -13,13 +13,13 @@ export const initialStateSkills = {
 }
 
 export const initialStateEquipment = {
-    weapon: { rareness: "common", values: { attack: 40, criticalChance: 5 } },
-    ammo: { rareness: "uncommon", values: { modifier: 5 } },
-    helmet: { rareness: "common", values: { criticalDamages: 10 } },
-    chest: { rareness: "common", values: { armor: 5 } },
-    pants: { rareness: "common", values: { armor: 5 } },
-    gloves: { rareness: "common", values: { precision: 5 } },
-    boots: { rareness: "common", values: { dodge: 5 } }
+    weapon: { rareness: "noItem", values: { attack: 0, criticalChance: 0 } },
+    ammo: { rareness: "noItem", values: { modifier: 0 } },
+    helmet: { rareness: "noItem", values: { criticalDamages: 0 } },
+    chest: { rareness: "noItem", values: { armor: 0 } },
+    pants: { rareness: "noItem", values: { armor: 0 } },
+    gloves: { rareness: "noItem", values: { precision: 0 } },
+    boots: { rareness: "noItem", values: { dodge: 0 } }
 }
 
 export const initialStateFood = {
@@ -31,6 +31,7 @@ export const initialStateFood = {
 export const initialStateFoodSimple = "noFood"
 
 export const initialState = {
+    hasBest: false,
     skills: initialStateSkills,
     equipment: initialStateEquipment,
     food: initialStateFoodSimple
@@ -40,6 +41,12 @@ export const skillbuildSlice = createSlice({
     name: 'skillbuild',
     initialState,
     reducers: {
+        setHasBest(state, action) {
+            return {
+                ...state,
+                hasBest: action.payload
+            }
+        },
         resetAll(state, action) {
             return initialState
         },
@@ -51,6 +58,12 @@ export const skillbuildSlice = createSlice({
         },
         resetFood(state, action) {
             return { ...state, food: initialStateFood }
+        },
+        setSkills(state, action) {
+            return {
+                ...state,
+                skills: action.payload
+            }
         },
         setSkill(state, action) {
             const { name, value } = action.payload
@@ -84,7 +97,7 @@ export const skillbuildSlice = createSlice({
                 equipment: _equipment
             }
         },
-        setFood(state,  action) {
+        setFood(state, action) {
             return {
                 ...state,
                 food: action.payload
@@ -93,6 +106,19 @@ export const skillbuildSlice = createSlice({
     }
 })
 
+export const {
+    setHasBest,
+    resetAll,
+    resetSkills,
+    resetEquipment,
+    resetFood,
+    setSkills,
+    setSkill,
+    setEquipment,
+    setEquipmentItem,
+    setEquipmentItemValue,
+    setFood
+} = skillbuildSlice.actions
 
 
 export default skillbuildSlice.reducer

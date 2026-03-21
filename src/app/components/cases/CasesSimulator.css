@@ -42,3 +42,7 @@
 .common {
     background-color: gray !important;
 }
+
+.noItem {
+    opacity: 0;
+}

@@ -29,4 +29,9 @@ export const warplanerSlice = createSlice({
     }
 })
 
+export const {
+    setWarPlaner,
+    resetWarPlaner
+} = warplanerSlice.actions
+
 export default warplanerSlice.reducer

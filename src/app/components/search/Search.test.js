@@ -4,7 +4,6 @@ import userEvent from "@testing-library/user-event"
 import { renderWithProviders } from "../../../test-utils"
 import { server } from "../../../mocks/server"
 import { searchAnythingHandlers } from "../../../mocks/handlers"
-import { setIsLoading, setSearchResult } from "../../appSlice"
 import Search from "./Search"
 
 

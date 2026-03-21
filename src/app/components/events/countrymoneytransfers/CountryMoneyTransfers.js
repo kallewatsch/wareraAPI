@@ -44,7 +44,7 @@ export const CountryMoneyTransfers = (props) => {
                         money,
                         date
                     }
-                    return <MoneyTransfer {...moneyTransferProps} />
+                    return <MoneyTransfer key={i} {...moneyTransferProps} />
                 })}
             </ol>
             {/* <Row>

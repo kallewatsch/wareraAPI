@@ -1,14 +1,13 @@
 import React, { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { useLazyGetEventsPaginatedQuery } from "../../api"
 import { getValueFromArrayItem } from "../../utils/arrayStuff"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import CountrySelectModal from "../util/CountrySelectModal"
-import { setIsLoading, setToast } from "../../appSlice"
 import CountryMoneyTransfers from "./countrymoneytransfers/CountryMoneyTransfers"
+import { getEvents } from "../../slices/wareraEventsSlice"
 
 const eventTypes = [
     'countryMoneyTransfer',
@@ -37,12 +36,10 @@ const eventTypes = [
 
 export const WareraEvents = () => {
 
-    const { countries } = useSelector(state => state.app)
+    const { countries, wareraEvents: events } = useSelector(state => state.app)
     const [filterEvents, setFilterEvents] = useState([])
-    const [events, setEvents] = useState([])
     const [showModal, setShowModal] = useState(true)
     const [countryId, setCountryId] = useState('')
-    const [getEvents] = useLazyGetEventsPaginatedQuery()
 
     const dispatch = useDispatch()
 
@@ -60,29 +57,9 @@ export const WareraEvents = () => {
         }
     }
 
-    const handleGetEvents = async event => {
-
-        let allEvents = []
-
-        try {
-            dispatch(setIsLoading(true))
-            const payload = { limit: 100, countryId, eventTypes: filterEvents }
-            let { result: { data: { items, nextCursor }, error } } = await getEvents(payload).unwrap()
-            allEvents = [...items]
-            while (nextCursor) {
-                const anotherPayload = { limit: 100, countryId, eventTypes: filterEvents, cursor: nextCursor }
-                let { result: { data: moreData }, error } = await getEvents(anotherPayload).unwrap()
-                allEvents = [...allEvents, ...moreData.items]
-                nextCursor = moreData.nextCursor
-            }
-        } catch (err) {
-            dispatch(setToast({ show: true, content: JSON.stringify(err, null, 2), bg: "danger" }))
-        } finally {
-            dispatch(setIsLoading(false))
-        }
-        setEvents(allEvents)
+    const handleGetEvents = event => {
+        dispatch(getEvents({countryId, filterEvents}))
     }
-
 
     const checkBoxes = eventTypes.map((x, i) => <Form.Check inline key={i} id={x} label={x} onChange={handleChange} />)
     const modalProps = {

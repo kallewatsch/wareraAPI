@@ -28,6 +28,14 @@ describe("fooStuff", () => {
                 criticalDamages: { total: 100, value: 100 },
                 criticalChance: { total: 10, value: 10 }
             }, useEquipment: false, expected: 47.5
+        },
+        {
+            skills: {
+                attack: { total: 100, value: 10 },
+                precision: { total: 50, value: 100 },
+                criticalDamages: { total: 100, value: 100 },
+                criticalChance: { total: 10, value: 100 }
+            }, useEquipment: false, expected: 20
         }
     ])('getExpectedDamage $skills $useEquipment returns $expected', ({ skills, useEquipment, expected }) => {
         expect(getExpectedDamage(skills, useEquipment)).toEqual(expected)

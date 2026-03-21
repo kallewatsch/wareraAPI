@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { FormControl, FormSelect, Row, Col, InputGroup, Image, ListGroup, ListGroupItem } from "react-bootstrap"
 import IconWithPopoverOverlay from "../util/IconWithPopoverOverlay"
 import { GiBroadsword, GiCrosshair, GiHeadshot, GiHelmetHeadShot, GiLoveMystery, GiRunningNinja, GiShield } from "react-icons/gi"
-import { setEquipmentItem, setEquipmentItemValue } from "../../appSlice"
+import { setEquipmentItem, setEquipmentItemValue } from "../../slices/skillbuildSlice"
 import { equipmentItemValues } from "./Equipment"
 
 
@@ -24,7 +24,7 @@ export const EquipmentItem = (props) => {
     const dispatch = useDispatch()
 
     const options = [
-        "mythic", "legendary", "epic", "rare", "uncommon", "common"
+        "mythic", "legendary", "epic", "rare", "uncommon", "common", "noItem"
     ].map((x, i) => <option key={i} value={x}>{x}</option>)
 
     const handleChangeRareness = event => {

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import Table from "react-bootstrap/Table"
-import { setWarPlaner } from "../../appSlice"
+import { setWarPlaner } from "../../slices/warplanerSlice"
 import { rankingValueToHumanReadable, getRankingSum, sortCountryByRankingKey } from "../../utils/arrayStuff"
 import "./CountriesTable.css"
 

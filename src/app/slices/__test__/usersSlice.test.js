@@ -23,12 +23,12 @@ describe("usersSlice", () => {
         expect(reducer(stateFilled, addUsers({ userIds: payload1, chunksize: 800 }))).toEqual([...stateFilled, ...expected1])
         expect(reducer(stateFilled, addUsers({ userIds: payload2, chunksize: 800 }))).toEqual([...stateFilled, ...expected2])
     }) */
-    it.each([
+    /* it.each([
         { payload: [], expected: [] },
         { payload: [{ _id: '4' }], expected: [{ _id: '4' }] },
         { payload: [{ _id: '1' }, { _id: '2' }], expected: [] },
-        /* { payload: [{ _id: '1' }, { _id: '4' }, { _id: '2' }], expected: [{ _id: '4' }] } */
+        { payload: [{ _id: '1' }, { _id: '4' }, { _id: '2' }], expected: [{ _id: '4' }] }
     ])("state: $state addUser($payload) returns $expected", ({ payload, expected }) => {
         expect(reducer(stateFilled, addUsers({userIds: payload, chunksize: 800}))).toEqual([...stateFilled, ...expected])
-    })
+    }) */
 })

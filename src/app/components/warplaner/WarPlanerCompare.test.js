@@ -3,16 +3,16 @@ import { cleanup, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { renderWithProviders } from "../../../test-utils"
 import WarPlanerCompare from "./WarPlanerCompare"
-import { setWarPlaner, resetWarPlaner } from "../../appSlice"
+import { setWarPlaner, resetWarPlaner } from "../../slices/warplanerSlice"
 
 jest.mock('./CountriesTable', () => () => <mock-countriestable />)
 jest.mock('./CountriesPie', () => () => <mock-countriespie />)
 jest.mock('./WarPlanerBars', () => () => <mock-warplanerbars />)
-jest.mock('../../appSlice', () => ({
+jest.mock('../../slices/warplanerSlice', () => ({
     __esModule: true,
-    ...jest.requireActual('../../appSlice'),
-    setWarPlaner: jest.fn((p) => ({ payload: p, type: 'app/setWarPlaner' })),
-    resetWarPlaner: jest.fn(() => ({ type: 'app/resetWarPlaner' }))
+    ...jest.requireActual('../../slices/warplanerSlice'),
+    setWarPlaner: jest.fn((p) => ({ payload: p, type: 'warplaner/setWarPlaner' })),
+    resetWarPlaner: jest.fn(() => ({ type: 'warplaner/resetWarPlaner' }))
 }))
 
 describe("WarPlanerCompare", () => {
