@@ -87,6 +87,12 @@ export const SkillBuildResult = (props) => {
 
 
     const listGroupItems1 = [
+        ["Required Level", requiredLevel, <GiCharacter />],
+        ["Total Skill Points", totalSkillPoints, <GiSpellBook />],
+        ["Expected Damage Per Attack", expDmg.toFixed(2), <GiBulletImpacts />],
+        ["Expected Health Cost Per Attack", expCost.toFixed(2), <GiMedicalDrip />],
+        [`Can Attack Times with Food ${food}`, canAttackTimesFood, <GiMachineGunMagazine className={foodIconClassName} />],
+        [`Expected Damage with Food ${food}`, dmgFood.toFixed(2), <GiDeadlyStrike className={foodIconClassName} />],
         ["Attack", attack, <GiBroadsword />],
         ["Health", health, <GiHearts />],
         ["Hunger", hunger, <GiShinyApple />],
@@ -94,13 +100,7 @@ export const SkillBuildResult = (props) => {
         ["Critical Chance", criticalChance, <GiHeadshot />],
         ["Critical Damage", criticalDamages, <GiHelmetHeadShot />],
         ["Armor", armor, <GiShield />],
-        ["Dodge", dodge, <GiRunningNinja />],
-        ["Required Level", requiredLevel, <GiCharacter />],
-        ["Total Skill Points", totalSkillPoints, <GiSpellBook />],
-        ["Expected Damage Per Attack", expDmg.toFixed(2), <GiBulletImpacts />],
-        ["Expected Health Cost Per Attack", expCost.toFixed(2), <GiMedicalDrip />],
-        ["Can Attack Times No Food", canAttackTimesFood, <GiMachineGunMagazine className={foodIconClassName} />],
-        ["Expected Damage No Food", dmgFood.toFixed(2), <GiDeadlyStrike className={foodIconClassName} />]
+        ["Dodge", dodge, <GiRunningNinja />]
     ].map((x, i) => {
         const [title, value, icon] = x
         return (

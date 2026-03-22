@@ -6,74 +6,9 @@ import EquipmentItem from "./EquipmentItem"
 import imgs from "../../imgs"
 import { FormSelect } from "react-bootstrap"
 import { setEquipment } from "../../slices/skillbuildSlice"
+import { equipmentItemValues, imgSrcWeapons } from "./config"
+import { GiBoots, GiChestArmor, GiGloves, GiMp5K, GiStahlhelm, GiTrousers } from "react-icons/gi"
 
-
-export const equipmentItemValues = {
-    weapon: {
-        mythic: { attack: 280, criticalChance: 40 },
-        legendary: { attack: 160, criticalChance: 30 },
-        epic: { attack: 120, criticalChance: 20 },
-        rare: { attack: 90, criticalChance: 15 },
-        uncommon: { attack: 60, criticalChance: 10 },
-        common: { attack: 40, criticalChance: 5 },
-        noItem: { attack: 0, criticalChance: 0}
-    },
-    helmet: {
-        mythic: { criticalDamages: 80 },
-        legendary: { criticalDamages: 60 },
-        epic: { criticalDamages: 40 },
-        rare: { criticalDamages: 30 },
-        uncommon: { criticalDamages: 20 },
-        common: { criticalDamages: 10 },
-        noItem: { criticalDamages: 0 }
-    },
-    chest: {
-        mythic: { armor: 60 },
-        legendary: { armor: 45 },
-        epic: { armor: 30 },
-        rare: { armor: 20 },
-        uncommon: { armor: 10 },
-        common: { armor: 5 },
-        noItem: { armor: 0 }
-    },
-    pants: {
-        mythic: { armor: 60 },
-        legendary: { armor: 45 },
-        epic: { armor: 30 },
-        rare: { armor: 20 },
-        uncommon: { armor: 10 },
-        common: { armor: 5 },
-        noItem: { armor: 0 }
-    },
-    gloves: {
-        mythic: { precision: 40 },
-        legendary: { precision: 30 },
-        epic: { precision: 20 },
-        rare: { precision: 15 },
-        uncommon: { precision: 10 },
-        common: { precision: 5 },
-        noItem: { precision: 0 }
-    },
-    boots: {
-        mythic: { dodge: 40 },
-        legendary: { dodge: 30 },
-        epic: { dodge: 20 },
-        rare: { dodge: 15 },
-        uncommon: { dodge: 10 },
-        common: { dodge: 5 },
-        noItem: { dodge: 0 }
-    }
-}
-
-const imgSrcWeapons = {
-    mythic: imgs.imgJet,
-    legendary: imgs.imgTank,
-    epic: imgs.imgSniper,
-    rare: imgs.imgRifle,
-    uncommon: imgs.imgGun,
-    common: imgs.imgKnife,
-    noItem: imgs.imgCase1
-}
 
 export const Equipment = (props) => {
 
@@ -84,13 +19,42 @@ export const Equipment = (props) => {
     const imgSrcWeapon = equipment.weapon.rareness
 
     const items = [
-        { name: "weapon", imgSrc: imgSrcWeapons[imgSrcWeapon] },
-        /* { name: "ammo", imgSrc: imgs.imgLightAmmo }, */
-        { name: "helmet", imgSrc: imgs.imgHelmet },
-        { name: "chest", imgSrc: imgs.imgChest },
-        { name: "pants", imgSrc: imgs.imgPants },
-        { name: "gloves", imgSrc: imgs.imgGloves },
-        { name: "boots", imgSrc: imgs.imgBoots }
+        {
+            name: "weapon",
+            imgSrc: imgSrcWeapons[imgSrcWeapon],
+            item: equipment.weapon,
+            icon: GiMp5K
+        },
+        {
+            name: "helmet",
+            imgSrc: imgs.imgHelmet,
+            item: equipment.helmet,
+            icon: GiStahlhelm
+        },
+        {
+            name: "chest",
+            imgSrc: imgs.imgChest,
+            item: equipment.chest,
+            icon: GiChestArmor
+        },
+        {
+            name: "pants",
+            imgSrc: imgs.imgPants,
+            item: equipment.pants,
+            icon: GiTrousers
+        },
+        {
+            name: "gloves",
+            imgSrc: imgs.imgGloves,
+            item: equipment.gloves,
+            icon: GiGloves
+        },
+        {
+            name: "boots",
+            imgSrc: imgs.imgBoots,
+            item: equipment.boots,
+            icon: GiBoots
+        }
     ]
 
     const rarenessArr = ["noItem", "mythic", "legendary", "epic", "rare", "uncommon", "common"]
@@ -100,15 +64,17 @@ export const Equipment = (props) => {
         const items = Object.keys(equipmentItemValues).map((key, i) => {
             return [key, { values: equipmentItemValues[key][value], rareness: value }]
         })
-        const baz = Object.fromEntries(items)
-        dispatch(setEquipment(baz))
+        const _equipment = Object.fromEntries(items)
+        dispatch(setEquipment(_equipment))
     }
 
     return (
         <ListGroup className="skillbuild-equipment">
-            <FormSelect onChange={handleChange}>
-                {rarenessArr.map((x, i) => <option key={i} value={x}>{x}</option>)}
-            </FormSelect>
+            <ListGroupItem>
+                <FormSelect onChange={handleChange}>
+                    {rarenessArr.map((x, i) => <option key={i} value={x}>{x}</option>)}
+                </FormSelect>
+            </ListGroupItem>
             {items.map((item, i) => <ListGroupItem key={i}><EquipmentItem {...item} /></ListGroupItem>)}
         </ListGroup>
     )

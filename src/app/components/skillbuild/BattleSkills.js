@@ -1,7 +1,17 @@
 import React from "react"
 import ListGroup from "react-bootstrap/ListGroup"
 import ListGroupItem from "react-bootstrap/ListGroupItem"
-import { GiBoxUnpacking, GiBroadsword, GiCrosshair, GiHeadshot, GiHearts, GiHelmetHeadShot, GiRunningNinja, GiShield, GiShinyApple } from "react-icons/gi"
+import {
+    GiBoxUnpacking,
+    GiBroadsword,
+    GiCrosshair,
+    GiHeadshot,
+    GiHearts,
+    GiHelmetHeadShot,
+    GiRunningNinja,
+    GiShield,
+    GiShinyApple
+} from "react-icons/gi"
 import IconWithPopoverOverlay from "../util/IconWithPopoverOverlay"
 import Skill from "./Skill"
 

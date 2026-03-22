@@ -23,25 +23,37 @@ export const Food = (props) => {
                 <ListGroupItem>
                     <IconWithPopoverOverlay title="No Food">
                         <Button onClick={event => handleSetFood(event, "noFood")}
-                            variant={food == "noFood" ? 'success' : 'secondary'}><GiAppleCore /></Button>
+                            variant={food == "noFood" ? 'success' : 'secondary'}
+                            aria-label="noFood">
+                            <GiAppleCore size="2em" />
+                        </Button>
                     </IconWithPopoverOverlay>
                 </ListGroupItem>
                 <ListGroupItem>
                     <IconWithPopoverOverlay title="Bread Food">
                         <Button onClick={event => handleSetFood(event, "bread")}
-                            variant={food == "bread" ? 'success' : 'secondary'}><GiBread /></Button>
+                            variant={food == "bread" ? 'success' : 'secondary'}
+                            aria-label="breadFood">
+                            <GiBread size="2em" />
+                        </Button>
                     </IconWithPopoverOverlay>
                 </ListGroupItem>
                 <ListGroupItem>
                     <IconWithPopoverOverlay title="Steak Food">
                         <Button onClick={event => handleSetFood(event, "steak")}
-                            variant={food == "steak" ? 'success' : 'secondary'}><GiSteak /></Button>
+                            variant={food == "steak" ? 'success' : 'secondary'}
+                            aria-label="steakFood">
+                            <GiSteak size="2em" />
+                        </Button>
                     </IconWithPopoverOverlay>
                 </ListGroupItem>
                 <ListGroupItem>
                     <IconWithPopoverOverlay title="Fish Food">
                         <Button onClick={event => handleSetFood(event, "fish")}
-                            variant={food == "fish" ? 'success' : 'secondary'}><GiFishCooked /></Button>
+                            variant={food == "fish" ? 'success' : 'secondary'}
+                            aria-label="fishFood">
+                            <GiFishCooked size="2em" />
+                        </Button>
                     </IconWithPopoverOverlay>
                 </ListGroupItem>
             </ListGroup>

@@ -40,10 +40,14 @@ export const Skill = (props) => {
         <>
             <ListGroup horizontal className="skill">
                 <ListGroupItem>
-                    <Button onClick={handleMin}><FaAngleDoubleLeft /></Button>
+                    <Button onClick={handleMin} aria-label="minimum">
+                        <FaAngleDoubleLeft />
+                    </Button>
                 </ListGroupItem>
                 <ListGroupItem>
-                    <Button onClick={handleMinus}><FaAngleLeft /></Button>
+                    <Button onClick={handleMinus} aria-label="minus">
+                        <FaAngleLeft />
+                    </Button>
                 </ListGroupItem>
                 <ListGroupItem>
                     {icon}
@@ -54,10 +58,14 @@ export const Skill = (props) => {
                     </ProgressBar>
                 </ListGroupItem>
                 <ListGroupItem>
-                    <Button onClick={handlePlus}><FaAngleRight /></Button>
+                    <Button onClick={handlePlus} aria-label="plus">
+                        <FaAngleRight />
+                    </Button>
                 </ListGroupItem>
                 <ListGroupItem>
-                    <Button onClick={handleMax}><FaAngleDoubleRight /></Button>
+                    <Button onClick={handleMax} aria-label="maximum">
+                        <FaAngleDoubleRight />
+                    </Button>
                 </ListGroupItem>
             </ListGroup>
         </>
