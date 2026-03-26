@@ -13,7 +13,9 @@ import { upgradesSlice } from "./slices/upgradesSlice"
 import { skillbuildSlice } from "./slices/skillbuildSlice"
 import { wareraEventsSlice } from "./slices/wareraEventsSlice"
 import { userInventorySlice } from './slices/userInventorySlice'
+import { partiesSlice } from './slices/partiesSlice'
 import { loadingSlice } from './slices/loadingSlice'
+import { apikeySlice } from './slices/apikeySlice'
 
 
 export const appReducer = combineReducers({
@@ -31,7 +33,9 @@ export const appReducer = combineReducers({
     skillbuild: skillbuildSlice.reducer,
     wareraEvents: wareraEventsSlice.reducer,
     userInventory: userInventorySlice.reducer,
+    parties: partiesSlice.reducer,
     loading: loadingSlice.reducer,
+    apikey: apikeySlice.reducer,
 })
 
 export default appReducer

@@ -6,10 +6,10 @@ import Equipment from "./Equipment"
 import { useDispatch, useSelector } from "react-redux"
 import SkillBuildResult from "./SkillBuildResult"
 import Food from "./Food"
-import { getCanAttackTimesFood, getExpectedAttackCost, getExpectedDamage } from "../../utils/fooStuff"
+import { getCanAttackTimesFood, getExpectedAttackCost, getExpectedDamage, getMilitaryRankBonus } from "../../utils/fooStuff"
 import { resetAll, setHasBest, setSkills } from "../../slices/skillbuildSlice"
 import { setIsLoading } from "../../slices/loadingSlice"
-import { Button, FormControl, InputGroup } from "react-bootstrap"
+import { Button, FormControl, FormSelect, InputGroup } from "react-bootstrap"
 
 // TODO: in order: no equpiment option; add ammo bonus to dmg; add military rank bonus to dmg;
 export const getFoodVal = food => {
@@ -39,7 +39,7 @@ export const foo = () => {
 
 }
 
-export const getBestSkillBuild = ({ playerLevel, criteria, food, equipment }) => {
+export const getBestSkillBuild = ({ playerLevel, criteria, food, equipment, buffs }) => {
     const startedAt = Date.now()
     const skillCount = 8
     const totalSkillPoints = playerLevel * 4
@@ -105,7 +105,7 @@ export const getBestSkillBuild = ({ playerLevel, criteria, food, equipment }) =>
         const dodgeTotal = dodgeVal + equipmentVal.dodge
         const precisionTotal = precisionVal + equipmentVal.precision
         const criticalChanceTotal = criticalChanceVal + equipmentVal.criticalChance
-        const attackTotal = attackVal + equipmentVal.attack
+        const attackTotal = Math.round((attackVal + equipmentVal.attack) * buffs)
         const criticalDamagesTotal = criticalDamagesVal + equipmentVal.criticalDamages
 
         //console.log(healthTotal, hungerTotal, armorTotal, dodgeTotal, precisionTotal, criticalChanceTotal, attackTotal, criticalDamagesTotal)
@@ -142,8 +142,13 @@ export const getBestSkillBuild = ({ playerLevel, criteria, food, equipment }) =>
 
 export const SkillBuild = (props) => {
 
+
     const { /* skills, */ equipment, food, hasBest } = useSelector(state => state.app.skillbuild)
     const [playerLevel, setPlayerLevel] = useState(10)
+    const [rankBoost, setRankBoost] = useState(0)
+    const [ammoBoost, setAmmoBoost] = useState(10)
+    const [pillBoost, setPillBoost] = useState(0)
+    const buffs = (1 + (rankBoost / 100)) * (1 + ammoBoost / 100) * (1 + (pillBoost / 100))
 
     const dispatch = useDispatch()
 
@@ -153,11 +158,10 @@ export const SkillBuild = (props) => {
 
             const foodVal = getFoodVal(food)
             setTimeout(() => {
-                const best = getBestSkillBuild({ playerLevel, criteria: undefined, food: foodVal, equipment })
+                const best = getBestSkillBuild({ playerLevel, criteria: undefined, food: foodVal, equipment, buffs })
                 dispatch(setSkills(best))
                 dispatch(setHasBest(true))
                 dispatch(setIsLoading(false))
-                //setHasBest(true)
             }, 100)
         } catch (err) {
             console.log(err)
@@ -165,11 +169,23 @@ export const SkillBuild = (props) => {
         }
     }
 
-    const handleChange = event => {
+    const handleChangePlayerLevel = event => {
         const _value = event?.target?.value || 0
         const val = parseInt(_value)
         const value = val <= 95 ? val : 95
         setPlayerLevel(value)
+    }
+
+    const handleChangeRankBoost = event => {
+        setRankBoost(event.target.value)
+    }
+
+    const handleChangeAmmoBoost = event => {
+        setAmmoBoost(event.target.value)
+    }
+
+    const handleChangePillBoost = event => {
+        setPillBoost()
     }
 
     const handleReset = event => {
@@ -184,15 +200,21 @@ export const SkillBuild = (props) => {
                     <Col>
                         <Button onClick={handleClick}>Get Best Build</Button>
                         <InputGroup>
-                            <InputGroup.Text>Set Player Level (current: {playerLevel})</InputGroup.Text>
-                            <FormControl onChange={handleChange} value={playerLevel} />
-                            <InputGroup.Text>Set Food (current: {food})</InputGroup.Text>
+                            <InputGroup.Text>Player Level</InputGroup.Text>
+                            <FormControl size="sm" onChange={handleChangePlayerLevel} value={playerLevel} type="number" />
+                            <InputGroup.Text>Ammo</InputGroup.Text>
+                            <FormSelect size="sm" onChange={handleChangeAmmoBoost} value={ammoBoost}>
+                                <option value={0}>no Ammo</option>
+                                <option value={10}>light Ammo</option>
+                                <option value={20}>medium Ammo</option>
+                                <option value={40}>heavy Ammo</option>
+                            </FormSelect>
+                            <InputGroup.Text>Military Rank Boost %</InputGroup.Text>
+                            <FormControl size="sm" onChange={handleChangeRankBoost} value={rankBoost} type="number" />
+                            <InputGroup.Text>Food</InputGroup.Text>
                             <Food />
                         </InputGroup>
                         <Equipment />
-
-                        {/* <Food /> */}
-
                     </Col>
                 </Row>)
                 : (<><Row>

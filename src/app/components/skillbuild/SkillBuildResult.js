@@ -21,6 +21,7 @@ import {
 } from "react-icons/gi"
 import { IconContext } from "react-icons"
 
+
 export const SkillBuildResult = (props) => {
 
     const { skills, equipment, food } = useSelector(state => state.app.skillbuild)
@@ -110,31 +111,11 @@ export const SkillBuildResult = (props) => {
         )
     })
 
-    const listGroupItems2 = [
-        ["Required Level", requiredLevel, <GiCharacter />],
-        ["Total Skill Points", totalSkillPoints, <GiSpellBook />],
-        ["Expected Damage Per Attack", expDmg.toFixed(2), <GiBulletImpacts />],
-        ["Expected Health Cost Per Attack", expCost.toFixed(2), <GiMedicalDrip />],
-        ["Can Attack Times No Food", canAttackTimesFood, <GiMachineGunMagazine className={foodIconClassName} />],
-        ["Expected Damage No Food", dmgFood.toFixed(2), <GiDeadlyStrike className={foodIconClassName} />],
-    ].map((x, i) => {
-        const [title, value, icon] = x
-        return (
-            <ListGroupItem key={i}>
-                <IconWithPopoverOverlay title={title}><span>{icon} {value}</span></IconWithPopoverOverlay>
-            </ListGroupItem>
-        )
-    })
-
     return (
         <IconContext.Provider value={{ size: "2em" }}>
             <ListGroup horizontal className="skill-list">
                 {listGroupItems1}
-
             </ListGroup>
-            {/* <ListGroup horizontal className="skill-list">
-                {listGroupItems2}
-            </ListGroup> */}
         </IconContext.Provider>
     )
 

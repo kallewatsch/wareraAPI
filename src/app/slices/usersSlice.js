@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
 import { endpoints } from '../api'
 import { useDispatch } from 'react-redux'
 //import initialStateUsers from "../../mocks/states/initialStateUsers.json"
@@ -47,11 +47,48 @@ export const usersSlice = createSlice({
             .addCase(addUsers.rejected, (state, action) => {
                 return state
             })
+    },
+    selectors: {
+        selectUser: createSelector(
+            [
+                state => state,
+                (state, userId) => userId
+            ],
+            (state, userId) => state.find(user => user._id === userId)
+        ),
+        selectUsers: createSelector(
+            [
+                state => state,
+                (state, userIds) => userIds
+            ],
+            (users, userIds) => users.filter(user => userIds.includes(user._id))
+        ),
+        selectCountryUsers: createSelector(
+            [
+                state => state,
+                (state, countryId) => countryId
+            ],
+            (users, countryId) => users.filter(user => user.country === countryId)
+        ),
+        selectMuUsers: createSelector(
+            [
+                state => state,
+                (state, muId) => muId
+            ],
+            (users, muId) => users.filter(user => user.mu === muId)
+        )
     }
 })
 
 export const {
     setUsers
 } = usersSlice.actions
+
+export const {
+    selectUser,
+    selectUsers,
+    selectCountryUsers,
+    selectMuUsers
+} = usersSlice.selectors
 
 export default usersSlice.reducer

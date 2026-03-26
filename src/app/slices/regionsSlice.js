@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
 import { endpoints } from '../api'
 
 export const initialState = {}
@@ -26,11 +26,37 @@ export const regionsSlice = createSlice({
             .addCase(getRegions.fulfilled, (state, action) => {
                 return action.payload
             })
+    },
+    selectors: {
+        selectCountryCurrentRegions: createSelector(
+            [
+                state => Object.keys(state)
+                    .map((key, i) => state[key]),
+                (state, countryId) => countryId
+            ],
+            (regions, countryId) => regions
+                .filter(region => region.country === countryId)
+        ),
+        selectCountryInitialRegions: createSelector(
+            [
+                state => Object.keys(state)
+                    .map((key, i) => state[key]),
+                (state, countryId) => countryId
+            ],
+            (regions, countryId) => regions
+                .filter(region => region.initialCountry === countryId)
+        ),
     }
 })
 
 export const {
     setRegions
 } = regionsSlice.actions
+
+export const {
+    selectCountryCurrentRegions,
+    selectCountryInitialRegions,
+    selectFuckYou
+} = regionsSlice.selectors
 
 export default regionsSlice.reducer

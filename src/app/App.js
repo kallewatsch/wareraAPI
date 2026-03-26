@@ -7,6 +7,7 @@ import { getRegions } from "./slices/regionsSlice"
 import { getCountries } from "./slices/countriesSlice"
 import { getUpgrades } from "./slices/upgradesSlice"
 import { getUserIds } from "./slices/userIdsSlice"
+import { updateRequestsLastMinute } from "./slices/loadingSlice"
 import Container from "react-bootstrap/Container"
 import Search from "./components/search/Search"
 import Countries from "./components/Countries"
@@ -25,6 +26,7 @@ import ToastContainer from "./components/ToastContainer"
 import WorldUsers from "./components/WorldUsers"
 import LoadingSpinner from "./components/LoadingSpinner"
 import SkillBuild from "./components/skillbuild/SkillBuild"
+import ApiKeyModal from "./components/apikey/ApiKeyModal"
 import "./App.css"
 
 const router = createHashRouter(
@@ -108,6 +110,14 @@ export const App = () => {
         loadMusEffect: true,
         loadUsersEffect: true
     }
+
+    useEffect(() => {
+        const foo = setInterval(() => {
+            dispatch(updateRequestsLastMinute())
+        }, 5000);
+        return () => clearInterval(foo)
+    }, [])
+
     useEffect(() => {
         if (fooEffects.loadConfig) {
             dispatch(getConfig())
@@ -142,6 +152,7 @@ export const App = () => {
                 <Navigation />
                 <ToastContainer />
                 <RouterProvider router={router} />
+                <ApiKeyModal />
             </Container>
         </>
     )

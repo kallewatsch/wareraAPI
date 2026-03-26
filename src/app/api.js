@@ -5,8 +5,17 @@ const baseUrl = 'https://api2.warera.io/trpc'
 export const wareraApi = createApi({
     reducerPath: 'wareraApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: new URL(baseUrl, location.origin).href
+        baseUrl: new URL(baseUrl, location.origin).href,
+        prepareHeaders: (headers, { getState }) => {
+            const state = getState()
+            const { apiKey } = state.app.apikey
+            if (apiKey) {
+                headers.set("X-API-KEY", apiKey)
+            }
+            return headers
+        }
     }),
+    tagTypes: ['LiveBattle'],
     endpoints: (builder) => ({
         getCompanyById: builder.query({
             query: ({ companyId }) => {
@@ -99,13 +108,12 @@ export const wareraApi = createApi({
             }
         }),
         getBattleLive: builder.query({
-            query: ({ battleId }) => {
-                // TODO: there are multiple params
-                let trpcData = { battleId: battleId }
+            providesTags: ['LiveBattle'],
+            query: (data) => {
                 return {
                     url: 'battle.getLiveBattleData',
                     method: 'GET',
-                    params: { input: JSON.stringify(trpcData) }
+                    params: { input: JSON.stringify(data) }
                 }
             }
         }),
@@ -362,6 +370,15 @@ export const wareraApi = createApi({
             query: (data) => {
                 return {
                     url: 'party.getById',
+                    method: 'GET',
+                    params: { input: JSON.stringify(data) }
+                }
+            }
+        }),
+        getPartiesPaginated: builder.query({
+            query: (data) => {
+                return {
+                    url: 'party.getManyPaginated',
                     method: 'GET',
                     params: { input: JSON.stringify(data) }
                 }

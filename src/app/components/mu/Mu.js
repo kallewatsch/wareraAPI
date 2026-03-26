@@ -12,7 +12,7 @@ import "./Mu.css"
 //import MuTransaction from "./MuTransactions"
 import { GiFoundryBucket } from "react-icons/gi"
 import { ListGroupItem } from "react-bootstrap"
-import { addUsers } from "../../slices/usersSlice"
+import { addUsers, selectUsers } from "../../slices/usersSlice"
 import { CHUNKSIZES } from "../../config"
 
 
@@ -36,10 +36,20 @@ export const Mu = props => {
         ...otherProps
     } = props
 
+    console.log("dem propso", props)
+
     const { managers, commanders } = roles || { managers: [], commanders: [] }
 
     const { regions, users } = useSelector(state => state.app)
 
+    const donorIds =  investedMoneyByUsers ? Object.keys(investedMoneyByUsers) : []
+    console.log({donorIds})
+
+    const memberUsers = useSelector(state => selectUsers(state.app, members)).sort((a, b) => commanders.includes(a._id) ? -1 : commanders.includes(b._id) ? - 1 : 0)
+    const founderUsers = useSelector(state => selectUsers(state.app, managers))
+    const ownerUsers = useSelector(state => selectUsers(state.app, [owner]))
+    const donorUsers = useSelector(state => selectUsers(state.app, donorIds))
+    console.log(donorUsers)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -53,10 +63,10 @@ export const Mu = props => {
         }
     }, [])
 
-    const memberUsers = users.filter(user => members.includes(user._id))
+    /* const memberUsers = users.filter(user => members.includes(user._id))
         .sort((a, b) => commanders.includes(a._id) ? -1 : commanders.includes(b._id) ? - 1 : 0)
     const founderUsers = users.filter(user => managers.includes(user._id))
-    const ownerUsers = users.filter(user => owner == user._id)
+    const ownerUsers = users.filter(user => owner == user._id) */
     /* const donorUsers = users.filter(user => investedMoneyByUsers?.hasOwnProperty(user._id))
         .sort((a, b) => {
             const aVal = investedMoneyByUsers?.[a._id]
@@ -101,9 +111,9 @@ export const Mu = props => {
                     <Col>
                         <h6>Donors</h6>
                         {/* <MuTransaction muId={_id} /> */}
-                        {/* <ListGroup>
+                        <ListGroup>
                             {donorUsers.map((user, i) => <MuDonor key={i} username={user.username} amount={investedMoneyByUsers?.[user._id]} />)}
-                        </ListGroup> */}
+                        </ListGroup>
                     </Col>
                 </Row>
                 <SimpleStats {...otherProps} />

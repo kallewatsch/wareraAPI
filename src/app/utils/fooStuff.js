@@ -1,14 +1,37 @@
+
+export const getMilitaryRankBonus = (rank) => {
+    const normalBoni = Array.apply(null, Array(104))
+        .map((x, index) => {
+            const bonus = (index + 1) % 4 || index == 0 ? 0.25 : 0.5
+            return bonus
+        })
+    const generalBoni = Array.apply(null, Array(11))
+        .map((x, index) => {
+            const bonus = (index + 1) % 6 || index == 0 ? 0.25 : 0.5
+            return bonus
+        })
+    const commanderBoni = [0.5, 0.5, 0.5, 0.5]
+
+    const allBoni = [...normalBoni, ...generalBoni, ...commanderBoni].reduce((acc, curr, index) => {
+        acc.push(curr + (acc[index - 1] || 0));
+        return acc;
+    }, []);
+    const boni = [0, ...allBoni]
+    return boni.at(rank)
+
+}
+
 export const getOverflowDamage = (value) => {
-    return value > 100 ?  Math.floor(value - 100) * 4 : 0
+    return value > 100 ? Math.floor(value - 100) * 4 : 0
 }
 
 
 export const getExpectedDamage = (skills, useEquipment = true) => {
-        /* 
-    - Skills exceeding their cap now grant bonuses to other skills.
+    /* 
+- Skills exceeding their cap now grant bonuses to other skills.
 - Precision above 100%: overflow converted to +4 attack per overflow point.
 - Critical chance above 100%: overflow converted to +4 critical damage per overflow point.
-    */
+*/
     const {
         attack, precision, criticalChance, criticalDamages
     } = skills || {}
@@ -74,7 +97,7 @@ export const getCanAttackTimesFood = (skills, useEquipment = true, food = 0) => 
     */
     const hunger = skills?.hunger?.currentBarValue || 0
     const maxHealth = skills?.health?.value || 0
-    const healthRegen = (maxHealth * (food/100)) * Math.floor(hunger)
+    const healthRegen = (maxHealth * (food / 100)) * Math.floor(hunger)
     //const healthRegen = Math.floor(hunger) * food
     const health = skills?.health?.currentBarValue || 0
     const totalHealth = healthRegen + health
